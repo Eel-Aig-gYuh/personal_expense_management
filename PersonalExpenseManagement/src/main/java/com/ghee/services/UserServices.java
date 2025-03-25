@@ -56,11 +56,19 @@ public class UserServices {
             String message = callableStatement.getString(10);
 
             Utils.getAlert(message, success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR).show();
-            
+
             return success;
         }
     }
 
+    /**
+     * Hàm đăng nhập.
+     *
+     * @param username
+     * @param password
+     * @return
+     * @throws SQLException
+     */
     public Users loginUser(String username, String password) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
             if (username.trim() == null) {
@@ -72,32 +80,68 @@ public class UserServices {
 
             callableStatement.setString(1, username);
 
-            try (ResultSet rs = callableStatement.executeQuery()) {
-                if (rs.next()) {
-                    Users user = new Users();
+            ResultSet rs = callableStatement.executeQuery();
 
-                    String hashedPassword = rs.getString("password");
-                    System.out.printf("Password trong DB: ", hashedPassword);
+            if (rs.next()) {
+                Users user = new Users();
 
-                    // Kiểm tra mật khẩu
-                    if (hashedPassword != null && BCrypt.checkpw(password, hashedPassword)) {
-                        user.setId(rs.getInt("id"));
-                        user.setUsername(rs.getString("username"));
-                        user.setPassword(hashedPassword); // Lưu mật khẩu đã mã hóa
-                        user.setFirstName(rs.getString("first_name"));
-                        user.setLastName(rs.getString("last_name"));
-                        user.setAvatar(rs.getString("avatar"));
-                        user.setEmail(rs.getString("email"));
-                        user.setRole(rs.getString("role"));
-                        user.setCreatedAt(rs.getDate("created_at"));
-                        return user;
-                    }
+                String hashedPassword = rs.getString("password");
+                System.out.printf("Password trong DB: ", hashedPassword);
+
+                // Kiểm tra mật khẩu
+                if (hashedPassword != null && BCrypt.checkpw(password, hashedPassword)) {
+                    user.setId(rs.getInt("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(hashedPassword); // Lưu mật khẩu đã mã hóa
+                    user.setFirstName(rs.getString("first_name"));
+                    user.setLastName(rs.getString("last_name"));
+                    user.setAvatar(rs.getString("avatar"));
+                    user.setEmail(rs.getString("email"));
+                    user.setRole(rs.getString("role"));
+                    user.setCreatedAt(rs.getDate("created_at"));
+                    return user;
                 }
             }
-
         } catch (SQLException ex) {
             Utils.getAlert("Lỗi kết nối sql: ", Alert.AlertType.ERROR).show();
         }
+        return null;
+    }
+
+    /**
+     *
+     */
+    public Users getUserById(int user_id) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String message;
+            if (user_id < 0) {
+                message = "Vui lòng nhập thông tin user_id hợp lệ !";
+
+                Utils.getAlert(message, Alert.AlertType.WARNING).show();
+                return null;
+            }
+
+            String procedureCall = "{CALL GetUserById(?, ?)}";
+
+            CallableStatement stm = conn.prepareCall(procedureCall);
+            stm.setInt(1, user_id);
+
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                Users user = new Users();
+                user.setId(rs.getInt("id"));
+                user.setUsername(rs.getString("username"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setAvatar(rs.getString("avatar"));
+                user.setEmail(rs.getString("email"));
+                user.setRole(rs.getString("role"));
+                user.setCreatedAt(rs.getDate("created_at"));
+                return user;
+            }
+        }
+
         return null;
     }
 }
