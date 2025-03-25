@@ -26,8 +26,8 @@ public class WalletServices {
             
             stm.setInt(1, userId);
             
-            stm.registerOutParameter(1, Types.BOOLEAN);
-            stm.registerOutParameter(2, Types.VARCHAR);
+            stm.registerOutParameter(2, Types.BOOLEAN);
+            stm.registerOutParameter(3, Types.VARCHAR);
             
             ResultSet rs = stm.executeQuery();
             
@@ -42,9 +42,9 @@ public class WalletServices {
             // boolean success = stm.getBoolean(2);
             String message = stm.getString(3);
             
-            Utils.getAlert(message, Alert.AlertType.CONFIRMATION).show();
+            System.out.println(message);
         } catch (SQLException ex) {
-            Utils.getAlert("Lỗi kết nối sql: " + ex.getMessage(), Alert.AlertType.ERROR).show();
+            System.err.println(ex.getMessage());
         }
         return null;
     }

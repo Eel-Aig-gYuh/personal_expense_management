@@ -4,7 +4,6 @@
  */
 package com.ghee.services;
 
-import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Users;
 import java.sql.CallableStatement;
@@ -12,7 +11,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import javafx.scene.control.Alert;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
@@ -55,8 +53,8 @@ public class UserServices {
             boolean success = callableStatement.getBoolean(9);
             String message = callableStatement.getString(10);
 
-            Utils.getAlert(message, success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR).show();
-
+            System.out.println(message);
+            
             return success;
         }
     }
@@ -103,7 +101,7 @@ public class UserServices {
                 }
             }
         } catch (SQLException ex) {
-            Utils.getAlert("Lỗi kết nối sql: ", Alert.AlertType.ERROR).show();
+            System.out.println("Lỗi kết nối sql.");
         }
         return null;
     }
@@ -117,7 +115,7 @@ public class UserServices {
             if (user_id < 0) {
                 message = "Vui lòng nhập thông tin user_id hợp lệ !";
 
-                Utils.getAlert(message, Alert.AlertType.WARNING).show();
+                System.out.println(message);
                 return null;
             }
 
