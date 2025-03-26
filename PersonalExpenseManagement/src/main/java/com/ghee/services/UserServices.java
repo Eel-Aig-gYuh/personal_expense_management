@@ -53,7 +53,7 @@ public class UserServices {
             boolean success = callableStatement.getBoolean(9);
             String message = callableStatement.getString(10);
 
-            System.out.println(message);
+            System.out.println(success ? "SUCCESS: ": "FAILURE: " + message);
             
             return success;
         }
@@ -103,43 +103,6 @@ public class UserServices {
         } catch (SQLException ex) {
             System.out.println("Lỗi kết nối sql.");
         }
-        return null;
-    }
-
-    /**
-     *
-     */
-    public Users getUserById(int user_id) throws SQLException {
-        try (Connection conn = JdbcUtils.getConn()) {
-            String message;
-            if (user_id < 0) {
-                message = "Vui lòng nhập thông tin user_id hợp lệ !";
-
-                System.out.println(message);
-                return null;
-            }
-
-            String procedureCall = "{CALL GetUserById(?, ?)}";
-
-            CallableStatement stm = conn.prepareCall(procedureCall);
-            stm.setInt(1, user_id);
-
-            ResultSet rs = stm.executeQuery();
-
-            if (rs.next()) {
-                Users user = new Users();
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setFirstName(rs.getString("first_name"));
-                user.setLastName(rs.getString("last_name"));
-                user.setAvatar(rs.getString("avatar"));
-                user.setEmail(rs.getString("email"));
-                user.setRole(rs.getString("role"));
-                user.setCreatedAt(rs.getDate("created_at"));
-                return user;
-            }
-        }
-
         return null;
     }
 }

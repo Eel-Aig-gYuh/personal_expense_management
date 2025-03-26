@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.TransactionCreatePageController">
+   <children>
+      <HBox prefHeight="52.0" prefWidth="600.0">
+         <children>
+            <Button mnemonicParsing="false" text="Hủy" />
+            <Label text="Thêm Giao Dịch" />
+         </children>
+      </HBox>
+      <HBox prefHeight="32.0" prefWidth="600.0">
+         <children>
+            <Label text="Ví" />
+            <ComboBox prefWidth="150.0" />
+         </children>
+      </HBox>
+      <HBox prefHeight="32.0" prefWidth="600.0">
+         <children>
+            <Label text="VND " />
+            <TextField />
+         </children>
+      </HBox>
+      <HBox prefHeight="32.0" prefWidth="600.0">
+         <children>
+            <Label text="Chọn Ngân sách" />
+            <ComboBox prefWidth="150.0" promptText="Chọn ngân sách" />
+         </children>
+      </HBox>
+      <Label text="Chi tiết" />
+      <TextArea prefHeight="133.0" prefWidth="600.0" />
+      <DatePicker />
+      <Button mnemonicParsing="false" text="Lưu" />
+   </children>
+</VBox>

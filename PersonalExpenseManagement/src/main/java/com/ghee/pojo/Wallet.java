@@ -8,8 +8,6 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.NamedQueries;
@@ -38,7 +36,6 @@ public class Wallet implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -49,9 +46,9 @@ public class Wallet implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
     private Date createdAt;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false)
-    private Users userId;
+    private Users users;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "walletId")
     private Set<Transaction> transactionSet;
 
@@ -92,12 +89,12 @@ public class Wallet implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Users getUserId() {
-        return userId;
+    public Users getUsers() {
+        return users;
     }
 
-    public void setUserId(Users userId) {
-        this.userId = userId;
+    public void setUsers(Users users) {
+        this.users = users;
     }
 
     public Set<Transaction> getTransactionSet() {

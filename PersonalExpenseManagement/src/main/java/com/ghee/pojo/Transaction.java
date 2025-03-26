@@ -60,11 +60,8 @@ public class Transaction implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date createdAt;
     @JoinColumn(name = "budget_id", referencedColumnName = "id")
-    @ManyToOne
-    private Budget budgetId;
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Category categoryId;
+    private Budget budgetId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Users userId;
@@ -141,14 +138,6 @@ public class Transaction implements Serializable {
 
     public void setBudgetId(Budget budgetId) {
         this.budgetId = budgetId;
-    }
-
-    public Category getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Category categoryId) {
-        this.categoryId = categoryId;
     }
 
     public Users getUserId() {

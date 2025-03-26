@@ -28,13 +28,11 @@ import javafx.stage.Stage;
  */
 public class HomePageController implements Initializable {
 
-    @FXML
-    private Label welcomeLabel;
-    @FXML
-    private Label soDuLabel;
+    @FXML private Label welcomeLabel;
+    @FXML private Label soDuLabel;
 
-    @FXML
-    private Button loginButton;
+    @FXML private Button loginButton;
+    @FXML private Button btnAddBudget;
 
     private final WalletServices walletServices = new WalletServices();
 
@@ -83,6 +81,22 @@ public class HomePageController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang đăng ký !";
+            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+        }
+    }
+    
+    public void goToCreateBudgetPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetCreatePage.fxml"));
+            Parent root = loader.load();
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnAddBudget.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua trang tạo ngân sách !";
+            
+            System.err.println("Chi tiết lỗi: " + ex.getMessage());
             Utils.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }

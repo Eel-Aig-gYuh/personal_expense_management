@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import javafx.scene.control.Alert;
 
 /**
  *
@@ -21,30 +20,30 @@ import javafx.scene.control.Alert;
 public class WalletServices {
     public Wallet getWalletById(int userId) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-            String procedureCall = "{GetWalletByUserId (?, ?, ?)}";
-            CallableStatement stm = conn.prepareCall(procedureCall);
+            String procedureCall = "{Call GetWalletByUserId (?, ?)}";
+            CallableStatement callableStatement = conn.prepareCall(procedureCall);
             
-            stm.setInt(1, userId);
+            callableStatement.setInt(1, userId);
             
-            stm.registerOutParameter(2, Types.BOOLEAN);
-            stm.registerOutParameter(3, Types.VARCHAR);
+            callableStatement.registerOutParameter(2, Types.VARCHAR);
             
-            ResultSet rs = stm.executeQuery();
+            callableStatement.execute();
+            
+            ResultSet rs = callableStatement.getResultSet();
             
             if (rs.next()) {
                 Wallet wallet = new Wallet(rs.getInt("id"), rs.getDouble("so_du"), rs.getDate("created_at"));
                 
-                wallet.setUserId(Utils.getCurrentUser());
+                wallet.setUsers(Utils.getCurrentUser());
                 
                 return wallet;
             }
             
-            // boolean success = stm.getBoolean(2);
-            String message = stm.getString(3);
+            String message = callableStatement.getString(2);
             
             System.out.println(message);
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
+            System.err.println("ERROR: " + ex.getMessage());
         }
         return null;
     }
