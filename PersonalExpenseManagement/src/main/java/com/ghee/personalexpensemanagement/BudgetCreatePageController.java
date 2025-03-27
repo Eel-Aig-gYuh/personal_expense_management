@@ -34,18 +34,16 @@ import javafx.scene.control.TextField;
  */
 public class BudgetCreatePageController implements Initializable {
 
-    @FXML
-    private Button btnCancel;
-    @FXML
-    private ComboBox<Category> cbCategories;
-    @FXML
-    private TextField txtTarget;
-    @FXML
-    private DatePicker dpStartDate;
-    @FXML
-    private DatePicker dpEndDate;
-    @FXML
-    private Button btnSave;
+    @FXML private Button btnCancel;
+    
+    @FXML private ComboBox<Category> cbCategories;
+    
+    @FXML private TextField txtTarget;
+    
+    @FXML private DatePicker dpStartDate;
+    @FXML private DatePicker dpEndDate;
+    
+    @FXML private Button btnSave;
 
     private static CategoryServices categoryServices = new CategoryServices();
     private static BudgetServices budgetServices = new BudgetServices();
@@ -92,6 +90,7 @@ public class BudgetCreatePageController implements Initializable {
             Users currentUser = Utils.getCurrentUser();
 
             Double target = Double.valueOf(this.txtTarget.getText());
+            Double amount = 0.00;
 
             Date startDate = java.sql.Date.valueOf(this.dpStartDate.getValue());
             Date endDate = java.sql.Date.valueOf(this.dpEndDate.getValue());
@@ -99,7 +98,7 @@ public class BudgetCreatePageController implements Initializable {
 
             DatePickerUtils.setVietnameseDateFormat(createdAt);
 
-            Budget budget = new Budget(categoryId, currentUser, target, startDate, endDate, createdAt);
+            Budget budget = new Budget(categoryId, currentUser, amount, target, startDate, endDate, createdAt);
 
             var success = budgetServices.createBudget(budget);
 

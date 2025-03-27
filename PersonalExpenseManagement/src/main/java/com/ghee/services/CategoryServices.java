@@ -6,7 +6,6 @@ package com.ghee.services;
 
 import com.ghee.pojo.Category;
 import com.ghee.pojo.JdbcUtils;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +18,24 @@ import java.util.List;
  * @author giahu
  */
 public class CategoryServices {
+    public Category getCategoryById(int category_id) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "SELECT * FROM category WHERE id = ?";
+            
+            PreparedStatement stm = conn.prepareCall(query);
+            
+            stm.setInt(1, category_id);
+            
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Category category = new Category(rs.getInt("id"), rs.getString("type"), rs.getString("name"));
+                
+                return category;
+            }
+        }
+        return null;
+    }
+    
     public List<Category> getCategoriesByUserId(int user_id) throws SQLException {
         List<Category> cates = new ArrayList<>();
         

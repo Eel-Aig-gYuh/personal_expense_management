@@ -21,24 +21,24 @@
       <HBox prefHeight="32.0" prefWidth="600.0">
          <children>
             <Label text="Ví" />
-            <ComboBox prefWidth="150.0" />
+            <ComboBox fx:id="cbWallets" prefWidth="150.0" />
          </children>
       </HBox>
       <HBox prefHeight="32.0" prefWidth="600.0">
          <children>
             <Label text="VND " />
-            <TextField />
+            <TextField fx:id="txtTarget" promptText="00.0" />
          </children>
       </HBox>
       <HBox prefHeight="32.0" prefWidth="600.0">
          <children>
             <Label text="Chọn Ngân sách" />
-            <ComboBox prefWidth="150.0" promptText="Chọn ngân sách" />
+            <ComboBox fx:id="cbCategories" prefWidth="150.0" promptText="Chọn ngân sách" />
          </children>
       </HBox>
       <Label text="Chi tiết" />
-      <TextArea prefHeight="133.0" prefWidth="600.0" />
-      <DatePicker />
-      <Button mnemonicParsing="false" text="Lưu" />
+      <TextArea fx:id="txtDescription" prefHeight="133.0" prefWidth="600.0" />
+      <DatePicker fx:id="dpTransactionDate" />
+      <Button fx:id="btnSave" mnemonicParsing="false" text="Lưu" />
    </children>
 </VBox>

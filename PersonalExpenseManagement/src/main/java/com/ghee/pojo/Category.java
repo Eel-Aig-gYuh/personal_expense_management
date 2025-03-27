@@ -49,6 +49,8 @@ public class Category implements Serializable {
     @ManyToOne(optional = false)
     private Users userId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
+    private Set<Transaction> transactionSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
     private Set<Budget> budgetSet;
 
     public Category() {
@@ -96,6 +98,14 @@ public class Category implements Serializable {
         this.userId = userId;
     }
 
+    public Set<Transaction> getTransactionSet() {
+        return transactionSet;
+    }
+
+    public void setTransactionSet(Set<Transaction> transactionSet) {
+        this.transactionSet = transactionSet;
+    }
+
     public Set<Budget> getBudgetSet() {
         return budgetSet;
     }
@@ -126,7 +136,7 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return this.name;
+        return "com.ghee.pojo.Category[ id=" + id + " ]";
     }
     
 }

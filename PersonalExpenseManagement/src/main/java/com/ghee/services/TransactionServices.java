@@ -25,7 +25,7 @@ public class TransactionServices {
             CallableStatement callableStatement = conn.prepareCall(produceCall);
             
             callableStatement.setInt(1, transaction.getUserId().getId()); // user_id
-            callableStatement.setInt(2, transaction.getBudgetId().getId()); // budget_id
+            callableStatement.setInt(2, transaction.getCategoryId().getId()); // category_id
             callableStatement.setInt(3, transaction.getWalletId().getId()); // wallet_id
             callableStatement.setDouble(4, transaction.getAmount()); // amount
             callableStatement.setDate(5, new java.sql.Date(transaction.getTransactionDate().getTime())); // transaction_date

@@ -32,7 +32,7 @@
       </ScrollPane>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" text="Thêm giao dịch" />
+            <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" text="Thêm giao dịch" />
             <Button fx:id="btnAddBudget" mnemonicParsing="false" onAction="#goToCreateBudgetPage" text="Thêm ngân sách" />
          </children>
       </HBox>

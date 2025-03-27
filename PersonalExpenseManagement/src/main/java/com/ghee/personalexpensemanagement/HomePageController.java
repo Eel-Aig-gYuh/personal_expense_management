@@ -33,6 +33,7 @@ public class HomePageController implements Initializable {
 
     @FXML private Button loginButton;
     @FXML private Button btnAddBudget;
+    @FXML private Button btnAddTransaction;
 
     private final WalletServices walletServices = new WalletServices();
 
@@ -92,6 +93,22 @@ public class HomePageController implements Initializable {
 
             // chuyển trang qua account 
             Stage stage = (Stage) btnAddBudget.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua trang tạo ngân sách !";
+            
+            System.err.println("Chi tiết lỗi: " + ex.getMessage());
+            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+        }
+    }
+    
+    public void goToCreateTransactionPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("transactionCreatePage.fxml"));
+            Parent root = loader.load();
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnAddTransaction.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang tạo ngân sách !";

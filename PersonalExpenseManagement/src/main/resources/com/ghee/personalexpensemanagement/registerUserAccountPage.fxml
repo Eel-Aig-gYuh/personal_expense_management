@@ -30,7 +30,7 @@
       <HBox prefHeight="37.0" prefWidth="600.0">
          <children>
             <Label text="Nhập lại mật khẩu:  " />
-            <TextField />
+            <TextField fx:id="confirmPasswordField" />
          </children>
       </HBox>
       <HBox prefHeight="41.0" prefWidth="600.0">

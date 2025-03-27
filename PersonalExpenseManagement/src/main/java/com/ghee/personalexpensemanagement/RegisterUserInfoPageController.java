@@ -6,6 +6,7 @@ package com.ghee.personalexpensemanagement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ghee.config.AppConfigs;
 import com.ghee.config.CloudinaryConfig;
 import java.io.File;
 import java.io.IOException;
@@ -112,7 +113,12 @@ public class RegisterUserInfoPageController implements Initializable {
         Date createAt = new Date();
         
         if (firstname.trim().equals("") || lastname.trim().equals("") || email.trim().equals("")) {
-            Utils.getAlert("Vui lòng điền đầy đủ thông tin !", Alert.AlertType.WARNING).show();
+            Utils.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
+            return ;
+        }
+        
+        if (!email.contains("@")) {
+            Utils.getAlert(AppConfigs.ERROR_EMAIL_PATTERN, Alert.AlertType.WARNING).showAndWait();
             return ;
         }
         
