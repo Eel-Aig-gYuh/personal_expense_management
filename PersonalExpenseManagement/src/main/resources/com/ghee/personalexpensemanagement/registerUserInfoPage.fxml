@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -11,13 +12,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="575.0" prefWidth="628.0" styleClass="VBox" stylesheets="@../../../styles/registeruserinfopage.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.RegisterUserInfoPageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="844.0" prefWidth="653.0" styleClass="VBox" stylesheets="@../../../styles/registeruserinfopage.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.RegisterUserInfoPageController">
    <children>
       <Label styleClass="subject" text="Cập nhật tài khoản" />
       <HBox prefHeight="53.0" prefWidth="600.0">
          <children>
-            <Label text="Nhập thông tin" />
-            <Label text="Nhập tài khoản" />
+            <Label text="Nhập thông tin" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font></Label>
+            <Label text="Nhập tài khoản" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font></Label>
          </children>
       </HBox>
       <HBox prefHeight="63.0" prefWidth="608.0">
@@ -34,13 +41,13 @@
       </HBox>
       <HBox prefHeight="37.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Label styleClass="label-description" text="Nhập tên: " />
+            <Label styleClass="label-description" text="Nhập tên:                 " />
             <TextField fx:id="firstnameField" styleClass="label-input" />
          </children>
       </HBox>
       <HBox prefHeight="37.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Label styleClass="label-description" text="Nhập email: " />
+            <Label styleClass="label-description" text="Nhập email:            " />
             <TextField fx:id="emailField" styleClass="label-input" />
          </children>
       </HBox>

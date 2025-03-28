@@ -11,7 +11,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="VBox" stylesheets="@../../../styles/loginUser.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.LoginUserController">
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="731.0" prefWidth="592.0" scaleShape="false" styleClass="VBox" stylesheets="@../../../styles/loginUser.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.LoginUserController">
    <children>
       <Label fx:id="lbLogin" styleClass="subject" text="Đăng nhập" />
       <HBox prefHeight="28.0" prefWidth="600.0" styleClass="HBox">
@@ -23,14 +24,19 @@
       <HBox prefHeight="28.0" prefWidth="600.0" styleClass="HBox">
          <children>
             <Label styleClass="label-description" text="Mật khẩu:   " />
-            <TextField fx:id="passwordField" prefHeight="31.0" prefWidth="184.0" styleClass="label-input" />
+            <PasswordField styleClass="label-input" />
          </children>
       </HBox>
-      <Text onMouseClicked="#goToRegisterPage" strokeType="OUTSIDE" strokeWidth="0.0" text="Bạn chưa có tài khoản? Đăng ký ngay" />
       <HBox prefHeight="70.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Button alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#login" styleClass="HBox" text="Đăng nhập" />
+            <Button alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#login" text="Đăng nhập" />
          </children>
       </HBox>
+      <Text fill="#f5eeee" onMouseClicked="#goToRegisterPage" strokeType="OUTSIDE" strokeWidth="0.0" text="Bạn chưa có tài khoản? Đăng ký ngay">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <Button alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#login" styleClass="button_secondary" text="Đăng ký" />
    </children>
 </VBox>
