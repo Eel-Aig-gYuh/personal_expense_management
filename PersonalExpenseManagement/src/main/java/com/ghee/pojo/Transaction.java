@@ -53,9 +53,6 @@ public class Transaction implements Serializable {
     @Column(name = "description")
     private String description;
     @Basic(optional = false)
-    @Column(name = "type")
-    private String type;
-    @Basic(optional = false)
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
     private Date createdAt;
@@ -76,11 +73,13 @@ public class Transaction implements Serializable {
         this.id = id;
     }
 
-    public Transaction(Integer id, double amount, Date transactionDate, String type, Date createdAt) {
-        this.id = id;
+    public Transaction(Users userId, Category categoryId, Wallet walletId, double amount, Date transactionDate, String description, Date createdAt) {
+        this.userId = userId;
+        this.categoryId = categoryId;
+        this.walletId = walletId;
         this.amount = amount;
         this.transactionDate = transactionDate;
-        this.type = type;
+        this.description = description;
         this.createdAt = createdAt;
     }
 
@@ -114,14 +113,6 @@ public class Transaction implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Date getCreatedAt() {
