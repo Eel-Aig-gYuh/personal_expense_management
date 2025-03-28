@@ -136,7 +136,7 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ghee.pojo.Category[ id=" + id + " ]";
+        return this.name + " ; Loại: " + this.type;
     }
     
 }
