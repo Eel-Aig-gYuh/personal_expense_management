@@ -1,7 +1,43 @@
 /*
- * Empty Stylesheet file.
- */
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Mar 24, 2025, 7:18:13 PM
+    Author     : HP
+*/
+.VBox{
+    -fx-background-color: lightskyblue;
+    -fx-alignment: center;
+    -fx-padding: 10 10 10 10; /* Cách viền trên 20px */
+    -fx-spacing: 20;
+}
 
-.mainFxmlClass {
+.HBox{
+    -fx-alignment: center;
+    -fx-spacing: 10px; 
+    -fx-padding: 10px;
+    
+}
 
+
+.subject {
+    -fx-font-weight: bold; /* In đậm */
+    -fx-font-size: 30px;   /* Kích thước chữ */
+    -fx-alignment: center;  /* Căn giữa nội dung */
+
+}
+
+.label-description {
+    -fx-font-weight: bold; /* In đậm nhãn mô tả */
+    -fx-min-width: 150px; /* Độ rộng tối thiểu để căn chỉnh thẳng hàng */
+    -fx-text-alignment: right; /* Căn phải để thẳng cột */
+}
+
+.label-input {
+    -fx-border-color: gray; /* Viền mô phỏng ô nhập */
+    -fx-border-width: 1px;
+    -fx-padding: 5px 10px; /* Lề trong để tạo khoảng cách đẹp */
+    -fx-min-width: 200px; /* Độ rộng tối thiểu để thống nhất kích thước */
+    -fx-background-color: white; /* Nền trắng để giống ô nhập */
 }
