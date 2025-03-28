@@ -1,0 +1,8 @@
+/*
+ * Login Stylesheet file.
+ */
+
+Label.Subject {
+    -fx-font-size: 30;
+    -fx-font-weight: bold
+}
