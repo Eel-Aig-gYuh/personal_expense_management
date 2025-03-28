@@ -12,6 +12,7 @@ import com.ghee.services.CategoryServices;
 import com.ghee.services.TransactionServices;
 import com.ghee.services.WalletServices;
 import com.ghee.utils.DatePickerUtils;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -21,13 +22,17 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -90,13 +95,14 @@ public class TransactionCreatePageController implements Initializable {
             
             String description = this.txtDescription.getText();
             
-            Transaction transaction = new Transaction(currentUser, categoryId, walletId, amount, transactionDate, description, createdAt);
+            Transaction transaction = new Transaction(currentUser, categoryId, walletId, amount, transactionDate, description, categoryId.getType(), createdAt);
             
             try {
                 boolean success = transactionServices.addTransaction(transaction);
                 
                 if (success) {
                     Utils.getAlert("Thêm giao dịch thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                    goToHomePage();
                 }
                 
             } catch (SQLException ex) {
@@ -106,6 +112,20 @@ public class TransactionCreatePageController implements Initializable {
             
         } catch (NumberFormatException numberFormatException) {
             Utils.getAlert("Vui lòng điền thông tin ngân sách là số!", Alert.AlertType.ERROR).showAndWait();
+        }
+    }
+    
+    public void goToHomePage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("homePage.fxml"));
+            Parent root = loader.load();
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnSave.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua trang chủ !";
+            Utils.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
     

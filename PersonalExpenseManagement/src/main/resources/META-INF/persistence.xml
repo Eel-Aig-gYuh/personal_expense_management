@@ -3,10 +3,13 @@
   <persistence-unit name="com.ghee_PersonalExpenseManagement_jar_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.ghee.pojo.Category</class>
-    <class>com.ghee.pojo.Transaction</class>
     <class>com.ghee.pojo.Budget</class>
     <class>com.ghee.pojo.Wallet</class>
     <class>com.ghee.pojo.Users</class>
+    <class>com.ghee.pojo.Wallet_1</class>
+    <class>com.ghee.pojo.Transaction</class>
+    <class>com.ghee.pojo.Users_1</class>
+    <class>com.ghee.pojo.Category_1</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/personalexpensemanagementdb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

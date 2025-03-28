@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.TransactionCreatePageController">
    <children>
       <HBox prefHeight="52.0" prefWidth="600.0">
@@ -20,7 +19,7 @@
       </HBox>
       <HBox prefHeight="32.0" prefWidth="600.0">
          <children>
-            <Label text="Ví" />
+            <Label text="Ví " />
             <ComboBox fx:id="cbWallets" prefWidth="150.0" />
          </children>
       </HBox>
@@ -39,6 +38,6 @@
       <Label text="Chi tiết" />
       <TextArea fx:id="txtDescription" prefHeight="133.0" prefWidth="600.0" />
       <DatePicker fx:id="dpTransactionDate" />
-      <Button fx:id="btnSave" mnemonicParsing="false" text="Lưu" />
+      <Button fx:id="btnSave" mnemonicParsing="false" onAction="#addTransaction" text="Lưu" />
    </children>
 </VBox>

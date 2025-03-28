@@ -10,22 +10,25 @@ import com.ghee.pojo.Users;
 import com.ghee.services.BudgetServices;
 import com.ghee.services.CategoryServices;
 import com.ghee.utils.DatePickerUtils;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -104,6 +107,7 @@ public class BudgetCreatePageController implements Initializable {
 
             if (success) {
                 Utils.getAlert("Tạo ngân sách thành công!", Alert.AlertType.CONFIRMATION).showAndWait();
+                goToHomePage();
             }
             else {
                 Utils.getAlert("Tạo ngân sách không thành công!", Alert.AlertType.WARNING).showAndWait();
@@ -114,4 +118,18 @@ public class BudgetCreatePageController implements Initializable {
         }
     }
 
+    
+    public void goToHomePage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("homePage.fxml"));
+            Parent root = loader.load();
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnSave.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua trang chủ !";
+            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+        }
+    }
 }
