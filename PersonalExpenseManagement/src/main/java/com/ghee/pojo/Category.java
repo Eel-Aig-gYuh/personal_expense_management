@@ -11,6 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -43,12 +45,13 @@ public class Category implements Serializable {
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
-    private Set<UserCategory> userCategorySet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
-    private Set<BudgetCategory> budgetCategorySet;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Users userId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
     private Set<Transaction> transactionSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
+    private Set<Budget> budgetSet;
 
     public Category() {
     }
@@ -87,20 +90,12 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public Set<UserCategory> getUserCategorySet() {
-        return userCategorySet;
+    public Users getUserId() {
+        return userId;
     }
 
-    public void setUserCategorySet(Set<UserCategory> userCategorySet) {
-        this.userCategorySet = userCategorySet;
-    }
-
-    public Set<BudgetCategory> getBudgetCategorySet() {
-        return budgetCategorySet;
-    }
-
-    public void setBudgetCategorySet(Set<BudgetCategory> budgetCategorySet) {
-        this.budgetCategorySet = budgetCategorySet;
+    public void setUserId(Users userId) {
+        this.userId = userId;
     }
 
     public Set<Transaction> getTransactionSet() {
@@ -109,6 +104,14 @@ public class Category implements Serializable {
 
     public void setTransactionSet(Set<Transaction> transactionSet) {
         this.transactionSet = transactionSet;
+    }
+
+    public Set<Budget> getBudgetSet() {
+        return budgetSet;
+    }
+
+    public void setBudgetSet(Set<Budget> budgetSet) {
+        this.budgetSet = budgetSet;
     }
 
     @Override
@@ -133,7 +136,7 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return this.name;
+        return "com.ghee.pojo.Category[ id=" + id + " ]";
     }
     
 }

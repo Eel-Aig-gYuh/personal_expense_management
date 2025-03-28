@@ -36,7 +36,6 @@ public class LoginUserController implements Initializable {
     private Button loginButton;
 
     private UserServices s = null;
-    
 
     /**
      * Initializes the controller class.
@@ -49,29 +48,32 @@ public class LoginUserController implements Initializable {
         this.s = new UserServices();
     }
 
-    public void login() throws IOException{
+    public void login() throws IOException {
         String username = this.usernameField.getText().trim();
         String password = this.passwordField.getText().trim();
-        
-        if ("".equals(username.trim()) || "".equals(password.trim())){
+
+        if ("".equals(username.trim()) || "".equals(password.trim())) {
             String message = username.equals("") ? "Vui lòng điền tài khoản !" : "Vui lòng điền mật khẩu !";
-            Utils.getAlert(message, Alert.AlertType.CONFIRMATION).show();
+            Utils.getAlert(message, Alert.AlertType.CONFIRMATION).showAndWait();
+            return;
         }
-        
+
         try {
             Users user = s.loginUser(username, password);
-            
-            if (user == null) {
-                Utils.getAlert("Đăng nhập thành công !", Alert.AlertType.CONFIRMATION).show();
+
+            if (user != null) {
+                Utils.setCurrentUser(user);
+
+                Utils.getAlert("Đăng nhập thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+
                 goToHomePage();
+            } else {
+                Utils.getAlert("Thông tin tài khoản hoặc mật khẩu không chính xác !", Alert.AlertType.CONFIRMATION).showAndWait();
             }
-            else {
-                Utils.getAlert("Thông tin tài khoản hoặc mật khẩu không chính xác !", Alert.AlertType.CONFIRMATION).show();
-            }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             Utils.getAlert("Lỗi SQL", Alert.AlertType.ERROR).show();
         }
-        
+
     }
 
     public void goToHomePage() throws IOException {
@@ -84,7 +86,8 @@ public class LoginUserController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang chủ !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            System.out.println(ex.getMessage());
+            Utils.getAlert(message, Alert.AlertType.ERROR).showAndWait();
         }
     }
 

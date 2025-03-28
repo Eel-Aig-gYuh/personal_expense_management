@@ -5,7 +5,6 @@
 package com.ghee.pojo;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,13 +14,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 /**
  *
@@ -32,7 +29,6 @@ import java.util.Set;
 @NamedQueries({
     @NamedQuery(name = "Budget.findAll", query = "SELECT b FROM Budget b"),
     @NamedQuery(name = "Budget.findById", query = "SELECT b FROM Budget b WHERE b.id = :id"),
-    @NamedQuery(name = "Budget.findByName", query = "SELECT b FROM Budget b WHERE b.name = :name"),
     @NamedQuery(name = "Budget.findByAmount", query = "SELECT b FROM Budget b WHERE b.amount = :amount"),
     @NamedQuery(name = "Budget.findByTarget", query = "SELECT b FROM Budget b WHERE b.target = :target"),
     @NamedQuery(name = "Budget.findByStartDate", query = "SELECT b FROM Budget b WHERE b.startDate = :startDate"),
@@ -46,9 +42,6 @@ public class Budget implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @Column(name = "name")
-    private String name;
     @Basic(optional = false)
     @Column(name = "amount")
     private double amount;
@@ -67,10 +60,9 @@ public class Budget implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
     private Date createdAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "budgetId")
-    private Set<BudgetCategory> budgetCategorySet;
-    @OneToMany(mappedBy = "budgetId")
-    private Set<Transaction> transactionSet;
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Category categoryId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Users userId;
@@ -82,9 +74,9 @@ public class Budget implements Serializable {
         this.id = id;
     }
 
-    public Budget(Integer id, String name, double amount, double target, Date startDate, Date endDate, Date createdAt) {
-        this.id = id;
-        this.name = name;
+    public Budget(Category categoryId, Users userId, double amount, double target, Date startDate, Date endDate, Date createdAt) {
+        this.categoryId = categoryId;
+        this.userId = userId;
         this.amount = amount;
         this.target = target;
         this.startDate = startDate;
@@ -98,14 +90,6 @@ public class Budget implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getAmount() {
@@ -148,20 +132,12 @@ public class Budget implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Set<BudgetCategory> getBudgetCategorySet() {
-        return budgetCategorySet;
+    public Category getCategoryId() {
+        return categoryId;
     }
 
-    public void setBudgetCategorySet(Set<BudgetCategory> budgetCategorySet) {
-        this.budgetCategorySet = budgetCategorySet;
-    }
-
-    public Set<Transaction> getTransactionSet() {
-        return transactionSet;
-    }
-
-    public void setTransactionSet(Set<Transaction> transactionSet) {
-        this.transactionSet = transactionSet;
+    public void setCategoryId(Category categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Users getUserId() {

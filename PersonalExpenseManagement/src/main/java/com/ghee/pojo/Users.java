@@ -53,6 +53,7 @@ public class Users implements Serializable {
     @Basic(optional = false)
     @Column(name = "password")
     private String password;
+    @Basic(optional = false)
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
@@ -69,10 +70,10 @@ public class Users implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
     private Date createdAt;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "userId")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
     private Wallet wallet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<UserCategory> userCategorySet;
+    private Set<Category> categorySet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Transaction> transactionSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
@@ -175,12 +176,12 @@ public class Users implements Serializable {
         this.wallet = wallet;
     }
 
-    public Set<UserCategory> getUserCategorySet() {
-        return userCategorySet;
+    public Set<Category> getCategorySet() {
+        return categorySet;
     }
 
-    public void setUserCategorySet(Set<UserCategory> userCategorySet) {
-        this.userCategorySet = userCategorySet;
+    public void setCategorySet(Set<Category> categorySet) {
+        this.categorySet = categorySet;
     }
 
     public Set<Transaction> getTransactionSet() {

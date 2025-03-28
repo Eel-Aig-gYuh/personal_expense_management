@@ -4,7 +4,6 @@
  */
 package com.ghee.services;
 
-import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Users;
 import java.sql.CallableStatement;
@@ -12,7 +11,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import javafx.scene.control.Alert;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
@@ -55,12 +53,20 @@ public class UserServices {
             boolean success = callableStatement.getBoolean(9);
             String message = callableStatement.getString(10);
 
-            Utils.getAlert(message, success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR).show();
+            System.out.println(success ? "SUCCESS: ": "FAILURE: " + message);
             
             return success;
         }
     }
 
+    /**
+     * Hàm đăng nhập.
+     *
+     * @param username
+     * @param password
+     * @return
+     * @throws SQLException
+     */
     public Users loginUser(String username, String password) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
             if (username.trim() == null) {
@@ -72,31 +78,30 @@ public class UserServices {
 
             callableStatement.setString(1, username);
 
-            try (ResultSet rs = callableStatement.executeQuery()) {
-                if (rs.next()) {
-                    Users user = new Users();
+            ResultSet rs = callableStatement.executeQuery();
 
-                    String hashedPassword = rs.getString("password");
-                    System.out.printf("Password trong DB: ", hashedPassword);
+            if (rs.next()) {
+                Users user = new Users();
 
-                    // Kiểm tra mật khẩu
-                    if (hashedPassword != null && BCrypt.checkpw(password, hashedPassword)) {
-                        user.setId(rs.getInt("id"));
-                        user.setUsername(rs.getString("username"));
-                        user.setPassword(hashedPassword); // Lưu mật khẩu đã mã hóa
-                        user.setFirstName(rs.getString("first_name"));
-                        user.setLastName(rs.getString("last_name"));
-                        user.setAvatar(rs.getString("avatar"));
-                        user.setEmail(rs.getString("email"));
-                        user.setRole(rs.getString("role"));
-                        user.setCreatedAt(rs.getDate("created_at"));
-                        return user;
-                    }
+                String hashedPassword = rs.getString("password");
+                System.out.printf("Password trong DB: ", hashedPassword);
+
+                // Kiểm tra mật khẩu
+                if (hashedPassword != null && BCrypt.checkpw(password, hashedPassword)) {
+                    user.setId(rs.getInt("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(hashedPassword); // Lưu mật khẩu đã mã hóa
+                    user.setFirstName(rs.getString("first_name"));
+                    user.setLastName(rs.getString("last_name"));
+                    user.setAvatar(rs.getString("avatar"));
+                    user.setEmail(rs.getString("email"));
+                    user.setRole(rs.getString("role"));
+                    user.setCreatedAt(rs.getDate("created_at"));
+                    return user;
                 }
             }
-
         } catch (SQLException ex) {
-            Utils.getAlert("Lỗi kết nối sql: ", Alert.AlertType.ERROR).show();
+            System.out.println("Lỗi kết nối sql.");
         }
         return null;
     }

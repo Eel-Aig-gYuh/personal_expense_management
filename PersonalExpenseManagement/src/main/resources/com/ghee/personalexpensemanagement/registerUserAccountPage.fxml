@@ -33,7 +33,7 @@
       <HBox prefHeight="37.0" prefWidth="600.0" styleClass="HBox">
          <children>
             <Label styleClass="label-description" text="Nhập lại mật khẩu:  " />
-            <TextField styleClass="label-input" />
+            <TextField styleClass="label-input" fx:id="confirmPasswordField" />
          </children>
       </HBox>
       <HBox prefHeight="41.0" prefWidth="600.0" styleClass="HBox">

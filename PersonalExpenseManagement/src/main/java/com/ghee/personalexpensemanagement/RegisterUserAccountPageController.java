@@ -4,6 +4,7 @@
  */
 package com.ghee.personalexpensemanagement;
 
+import com.ghee.config.AppConfigs;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
 import java.io.IOException;
@@ -36,26 +37,29 @@ public class RegisterUserAccountPageController implements Initializable {
     private String avatarUrl;
     private String role;
     private Date createdAt;
-    
+
     @FXML
     private TextField usernameField;
     @FXML
     private TextField passwordField;
-    
+    @FXML
+    private TextField confirmPasswordField;
+
     private UserServices s = null;
-    
+
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.s = new UserServices();
-        
-    }    
-    
-    public void setUserData(String firstname, String lastname, String email, String avatarUrl, String role, Date createAt){
+
+    }
+
+    public void setUserData(String firstname, String lastname, String email, String avatarUrl, String role, Date createAt) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -63,29 +67,56 @@ public class RegisterUserAccountPageController implements Initializable {
         this.role = role;
         this.createdAt = createAt;
     }
-    
+
     /**
      * Thêm user vào db.
-     * @param e 
+     *
+     * @param e
+     * @throws java.lang.Exception
      */
-    public void addUserHandler(ActionEvent e) {
+    public void addUserHandler(ActionEvent e) throws Exception {
         String username = this.usernameField.getText();
         String password = this.passwordField.getText();
+        String confirmPassword = this.confirmPasswordField.getText();
+
+        // check lenght
+        if (username.length() <= AppConfigs.LENGHT_OF_ACCOUNT || password.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
+            Utils.getAlert(AppConfigs.ERROR_LENGHT_OF_ACCOUNT, Alert.AlertType.ERROR).showAndWait();
+            return;
+        }
+
+        // check password && confirm
+        if (!password.equals(confirmPassword)) {
+            Utils.getAlert(AppConfigs.ERROR_PASS_AND_CONFIRM, Alert.AlertType.ERROR).showAndWait();
+            return;
+        }
         
-        Users user = new Users(username, password, firstname, lastname, email, role, createdAt);
+        if (!password.matches(AppConfigs.PASSWORD_PATTERN)) {
+            Utils.getAlert(AppConfigs.ERROR_PASS_PATTERN, Alert.AlertType.ERROR).showAndWait();
+            return;
+        }
         
+        
+
         try {
+            Users user = new Users(username, password, firstname, lastname, email, role, createdAt);
+
             var success = s.registerUser(user);
-            
+
             if (success) {
+                Utils.getAlert("Đăng ký thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
                 goToLoginPage();
+            } else {
+                Utils.getAlert("Đăng ký không thành công !", Alert.AlertType.WARNING).showAndWait();
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(RegisterUserAccountPageController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.err.println("ERROR: " + ex.getMessage());
         }
     }
-    
+
     public void goToLoginPage() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("loginUser.fxml"));
@@ -99,7 +130,7 @@ public class RegisterUserAccountPageController implements Initializable {
             Utils.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
-    
+
     public void goBack() throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("registerUserInfoPage.fxml"));
