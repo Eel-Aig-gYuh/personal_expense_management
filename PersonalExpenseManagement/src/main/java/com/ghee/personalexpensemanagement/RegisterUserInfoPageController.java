@@ -105,14 +105,14 @@ public class RegisterUserInfoPageController implements Initializable {
     
   
     public void goToAccountPage() throws IOException {
-        String firstname = this.firstnameField.getText();
-        String lastname = this.lastnameField.getText();
-        String email = this.emailField.getText();
+        String firstname = this.firstnameField.getText().trim();
+        String lastname = this.lastnameField.getText().trim();
+        String email = this.emailField.getText().trim();
         
         String role = "User";
         Date createAt = new Date();
         
-        if (firstname.trim().equals("") || lastname.trim().equals("") || email.trim().equals("")) {
+        if (firstname.equals("") || lastname.equals("") || email.equals("")) {
             Utils.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
             return ;
         }
