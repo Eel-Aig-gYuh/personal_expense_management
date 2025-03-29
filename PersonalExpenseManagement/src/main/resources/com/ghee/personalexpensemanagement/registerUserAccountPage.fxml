@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -9,13 +10,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="VBox" stylesheets="@../../../styles/registeruseraccountpage.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.RegisterUserAccountPageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="747.0" prefWidth="641.0" styleClass="VBox" stylesheets="@../../../styles/registeruseraccountpage.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.RegisterUserAccountPageController">
    <children>
       <Label styleClass="subject" text="Đăng ký tài khoản" />
       <HBox prefHeight="53.0" prefWidth="600.0">
          <children>
-            <Label text="Nhập thông tin" />
-            <Label text="Nhập tài khoản" />
+            <Label text="Nhập thông tin" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font></Label>
+            <Label prefHeight="30.0" prefWidth="164.0" text="Nhập tài khoản" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font></Label>
          </children>
       </HBox>
       <HBox prefHeight="37.0" prefWidth="600.0" styleClass="HBox">
@@ -26,21 +33,21 @@
       </HBox>
       <HBox prefHeight="37.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Label styleClass="label-description" text="Nhập mật khẩu:  " />
-            <TextField fx:id="passwordField" styleClass="label-input" />
+            <Label styleClass="label-description" text="Nhập mật khẩu:         " />
+            <PasswordField styleClass="label-input" />
          </children>
       </HBox>
       <HBox prefHeight="37.0" prefWidth="600.0" styleClass="HBox">
          <children>
             <Label styleClass="label-description" text="Nhập lại mật khẩu:  " />
-            <TextField styleClass="label-input" fx:id="confirmPasswordField" />
+            <PasswordField styleClass="label-input" />
          </children>
       </HBox>
       <HBox prefHeight="41.0" prefWidth="600.0" styleClass="HBox">
          <children>
             <Button mnemonicParsing="false" onAction="#addUserHandler" text="Đăng ký tài khoản" />
-            <Button mnemonicParsing="false" onAction="#goBack" text="Trở về" />
          </children>
       </HBox>
+      <Button mnemonicParsing="false" onAction="#goBack" styleClass="button_secondary" text="Trở về" />
    </children>
 </VBox>
