@@ -36,7 +36,7 @@ CREATE TABLE `budget` (
   KEY `category_id` (`category_id`),
   CONSTRAINT `budget_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `budget_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,6 +45,7 @@ CREATE TABLE `budget` (
 
 LOCK TABLES `budget` WRITE;
 /*!40000 ALTER TABLE `budget` DISABLE KEYS */;
+INSERT INTO `budget` VALUES (1,2,1,0,1000000,'2025-03-28','2025-03-30','2025-03-28');
 /*!40000 ALTER TABLE `budget` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +65,7 @@ CREATE TABLE `category` (
   UNIQUE KEY `type` (`type`,`name`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `category_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,6 +74,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES (1,1,'Chi','Ăn uống'),(2,1,'Chi','Hóa đơn & Tiện ích'),(3,1,'Chi','Đi lại');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,6 +93,7 @@ CREATE TABLE `transaction` (
   `amount` double NOT NULL,
   `transaction_date` date NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
+  `type` enum('Thu','Chi') COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -131,7 +134,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,6 +143,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'admin123','$2a$10$RflQxlHaDEnGA.bLiwg9h.uz7TlTtKWVDlD3FcYV2UWpGkGWIMx2C','Huy','Lê Gia',NULL,'giahuyle1030@gmail.com','Admin','2025-03-28'),(2,'testuser111','$2a$10$FImJ2PiOQ/Jr1loGv8pkFu7z.l6pESqywPeyYsjsOqtCvec.Ukdd2','Hưng','Lê Thị',NULL,'hung.lt@gmail.com','User','2025-03-28'),(3,'usertest112','$2a$10$DFQvIHNhuPD8kv5gKXZdQ.tjWfS/WKDrHsRAke899F7e6u.w0uP0S','Tài','Trần Ngọc',NULL,'tai.tn@gmail.com','User','2025-03-29');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,8 +169,371 @@ CREATE TABLE `wallet` (
 
 LOCK TABLES `wallet` WRITE;
 /*!40000 ALTER TABLE `wallet` DISABLE KEYS */;
+INSERT INTO `wallet` VALUES (1,0,'2025-03-28'),(2,0,'2025-03-28'),(3,0,'2025-03-29');
 /*!40000 ALTER TABLE `wallet` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'personalexpensemanagementdb'
+--
+/*!50003 DROP PROCEDURE IF EXISTS `CreateBudget` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateBudget`(
+	in p_user_id int,
+    in p_category_id int,
+    in p_target double,
+    in p_start_date date,
+    in p_end_date date,
+    in p_created_at date,
+    out p_success boolean,
+    out p_message varchar(255)
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+		SET p_success = false;
+        SET p_message = 'Lỗi: Không thể tạo ngân sách. Vui lòng kiểm tra lại thông tin.';
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+    -- Kiểm tra ngày hợp lệ
+    IF p_start_date > p_end_date OR p_end_date > CURDATE() THEN
+        SET p_success = false;
+        SET p_message = 'Lỗi: Khoảng thời gian không hợp lệ!';
+        ROLLBACK;
+    END IF;
+
+    -- Tính tổng chi tiêu trong khoảng thời gian (nếu có giao dịch)
+    SET @total_expense = (
+        SELECT COALESCE(SUM(amount), 0)
+        FROM Transaction
+        WHERE user_id = p_user_id
+        AND type = 'Chi'
+        AND transaction_date BETWEEN p_start_date AND p_end_date
+    );
+
+    -- Kiểm tra target không nhỏ hơn tổng chi tiêu
+    IF p_target < @total_expense THEN
+        SET p_success = false;
+        SET p_message = 'Lỗi: Ngân sách không được nhỏ hơn tổng chi tiêu hiện tại (' || @total_expense || ')!';
+        ROLLBACK;
+    END IF;
+
+    -- Thêm ngân sách
+    INSERT INTO Budget (user_id, category_id, amount, target, start_date, end_date, created_at)
+    VALUES (p_user_id, p_category_id, 0.00, p_target, p_start_date, p_end_date, p_created_at);
+
+	SET p_success = true;
+    SET p_message = 'Tạo ngân sách thành công!';
+    COMMIT;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `CreateTransaction` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateTransaction`(
+	in p_user_id int,
+    in p_category_id int,
+    in p_wallet_id int,
+    in p_type enum('Thu', 'Chi'),
+    in p_amount int,
+    in p_transaction_date date,
+    in p_description text,
+    in p_created_at date,
+    out p_success boolean,
+    out p_message varchar(255)
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+		SET p_success = false;
+        SET p_message = 'Lỗi: Không thể thêm giao dịch. Vui lòng kiểm tra lại thông tin.';
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+    -- Kiểm tra số tiền không âm
+    IF p_amount < 0 THEN
+		SET p_success = false;
+        SET p_message = 'Lỗi: Số tiền không được âm!';
+        ROLLBACK;
+    END IF;
+
+    -- Kiểm tra ngày giao dịch không vượt quá ngày hiện tại
+    IF p_transaction_date > CURDATE() THEN
+		SET p_success = false;
+        SET p_message = 'Lỗi: Ngày giao dịch không được vượt quá ngày hiện tại!';
+        ROLLBACK;
+    END IF;
+
+    -- Kiểm tra danh mục có tồn tại không
+    IF NOT EXISTS (SELECT * FROM category WHERE id = p_category_id) THEN
+		SET p_success = false;
+        SET p_message = 'Lỗi: Danh mục không tồn tại!';
+        ROLLBACK;
+    END IF;
+
+    -- Kiểm tra ví có tồn tại và thuộc user không
+    IF NOT EXISTS (SELECT * FROM wallet WHERE id = p_wallet_id AND user_id = p_user_id) THEN
+		SET p_success = false;
+        SET p_message = 'Lỗi: Ví không tồn tại hoặc không thuộc người dùng!';
+        ROLLBACK;
+    END IF;
+
+    -- Thêm giao dịch
+    INSERT INTO transaction (user_id, category_id, wallet_id, amount, transaction_date, description, type, created_at)
+    VALUES (p_user_id, p_category_id, p_wallet_id, p_amount, p_transaction_date, p_description, p_type, p_created_at);
+
+    -- Cập nhật số dư ví
+    IF p_type = 'Thu' THEN
+        UPDATE wallet SET so_du = so_du + p_amount WHERE id = p_wallet_id;
+    ELSE
+        UPDATE wallet SET so_du = so_du - p_amount WHERE id = p_wallet_id;
+    END IF;
+
+    -- Nếu giao dịch thuộc ngân sách, cập nhật amount của Budget
+    -- Cập nhật ngân sách
+    -- Cập nhật amount của tất cả ngân sách liên quan
+	UPDATE budget b
+	SET b.amount = (
+		SELECT COALESCE(SUM(t.amount), 0)
+		FROM transaction t
+		WHERE t.user_id = p_user_id
+		AND t.category_id = p_category_id
+		AND t.transaction_date BETWEEN b.start_date AND b.end_date
+	)
+	WHERE b.user_id = p_user_id
+	AND b.category_id = p_category_id
+	AND p_transaction_date BETWEEN b.start_date AND b.end_date;
+
+	SET p_success = true;
+    SET p_message = 'Thêm giao dịch thành công!';
+    COMMIT;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `GetWalletByUserId` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetWalletByUserId`(
+	in p_user_id int,
+    out p_message varchar(255)
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        SET p_message = 'Lỗi: Không thể lấy thông tin ví.';
+    END;
+
+    SELECT id, so_du, created_at
+    FROM Wallet
+    WHERE id = p_user_id;
+
+    SET p_message = 'Lấy thông tin ví thành công!';
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `LoginUser` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `LoginUser`(
+	in p_username varchar(255)
+)
+BEGIN
+	SELECT * FROM users WHERE username = p_username;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `RegisterUser` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RegisterUser`(
+	in username varchar(255),
+    in password varchar(255),
+    in first_name varchar(255), 
+    in last_name varchar(255),
+    in avatar varchar(255),
+    in email varchar(255),
+    in role varchar(5),
+    in created_at date,
+    out success boolean,
+    out message varchar(255)
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+		-- Kiểm tra username đã tồn tại chưa
+		IF EXISTS (SELECT 1 FROM users WHERE users.username = username) THEN
+			SET success = FALSE;
+			SET message = 'Lỗi: Tên tài khoản đã tồn tại!';
+			ROLLBACK;
+
+		-- Kiểm tra xem email đã tồn tại chưa
+		ELSEIF EXISTS (SELECT 1 FROM users WHERE users.email = email) THEN
+			SET success = FALSE;
+			SET message = 'Lỗi: Email đã được sử dụng!';
+			ROLLBACK;
+		
+        ELSE
+			SET success = FALSE;
+			SET message = 'Lỗi: Không thể đăng ký user. Vui lòng kiểm tra lại thông tin.';
+			ROLLBACK;
+		END IF;
+        
+    END;
+    
+    START TRANSACTION;
+
+    INSERT INTO users (username, password, first_name, last_name, avatar, email, role, created_at)
+    VALUES (username, password, first_name, last_name, avatar, email, role, created_at);
+
+	-- Lấy ID của user vừa thêm
+	SET @user_id = LAST_INSERT_ID();
+
+	-- Tạo ví cho user
+	INSERT INTO Wallet (id, so_du, created_at)
+	VALUES (@user_id, 0.0, created_at);
+
+    SET success = TRUE;
+    SET message = 'Đăng ký thành công!';
+    COMMIT;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `UpdateBudget` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateBudget`(
+    in p_budget_id int,
+    in p_user_id int,
+    in p_category_id int,
+    in p_target double,
+    in p_start_date date,
+    in p_end_date date,
+    in p_created_at date,
+    out p_success boolean,
+    out p_message varchar(255)
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+		SET p_success = false;
+        SET p_message = 'Lỗi: Không thể cập nhật ngân sách. Vui lòng kiểm tra lại thông tin.';
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+    -- Kiểm tra ngân sách có tồn tại không
+    IF NOT EXISTS (SELECT 1 FROM Budget WHERE id = p_budget_id AND user_id = p_user_id) THEN
+        SET p_success = false;
+        SET p_message = 'Lỗi: Ngân sách không tồn tại hoặc không thuộc người dùng!';
+        ROLLBACK;
+    END IF;
+
+    -- Kiểm tra ngày hợp lệ
+    IF p_start_date > p_end_date OR p_end_date > CURDATE() THEN
+        SET p_success = false;
+        SET p_message = 'Lỗi: Khoảng thời gian không hợp lệ!';
+        ROLLBACK;
+    END IF;
+
+    -- Lấy tổng chi tiêu hiện tại của ngân sách
+    SET @total_expense = (
+        SELECT COALESCE(SUM(amount), 0)
+        FROM Transaction
+        WHERE budget_id = p_budget_id
+        AND type = 'Chi'
+        AND transaction_date BETWEEN p_start_date AND p_end_date
+    );
+
+    -- Kiểm tra target không nhỏ hơn tổng chi tiêu
+    IF p_target < @total_expense THEN
+        SET p_success = false;
+        SET p_message = 'Lỗi: Ngân sách không được nhỏ hơn tổng chi tiêu hiện tại (' || @total_expense || ')!';
+        ROLLBACK;
+    END IF;
+
+    -- Cập nhật ngân sách
+    UPDATE Budget
+    SET	category_id = p_category_id,
+        target = p_target,
+        start_date = p_start_date,
+        end_date = p_end_date,
+        amount = @total_expense
+    WHERE id = p_budget_id;
+
+	SET p_success = true;
+    SET p_message = 'Cập nhật ngân sách thành công!';
+    COMMIT;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -177,4 +544,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-28 14:47:07
+-- Dump completed on 2025-03-29 15:33:17
