@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<<<<<<< Updated upstream
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-=======
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
->>>>>>> Stashed changes
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -41,21 +34,13 @@
       <HBox prefHeight="37.0" prefWidth="600.0" styleClass="HBox">
          <children>
             <Label styleClass="label-description" text="Nhập mật khẩu:         " />
-<<<<<<< Updated upstream
-            <PasswordField styleClass="label-input" />
-=======
             <PasswordField fx:id="passwordField" promptText="Nhập mật khẩu" styleClass="label-input" />
->>>>>>> Stashed changes
          </children>
       </HBox>
       <HBox prefHeight="37.0" prefWidth="600.0" styleClass="HBox">
          <children>
             <Label styleClass="label-description" text="Nhập lại mật khẩu:  " />
-<<<<<<< Updated upstream
-            <PasswordField styleClass="label-input" />
-=======
             <PasswordField fx:id="confirmPasswordField" promptText="Nhập lại mật khẩu" styleClass="label-input" />
->>>>>>> Stashed changes
          </children>
       </HBox>
       <HBox prefHeight="41.0" prefWidth="600.0" styleClass="HBox">
