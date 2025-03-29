@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<<<<<<< Updated upstream
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+=======
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+>>>>>>> Stashed changes
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -15,11 +22,11 @@
       <Label styleClass="subject" text="Đăng ký tài khoản" />
       <HBox prefHeight="53.0" prefWidth="600.0">
          <children>
-            <Label text="Nhập thông tin" textFill="WHITE">
+            <Label styleClass="hbox-title-1" text="Nhập thông tin" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font></Label>
-            <Label prefHeight="30.0" prefWidth="164.0" text="Nhập tài khoản" textFill="WHITE">
+            <Label prefHeight="30.0" prefWidth="164.0" styleClass="hbox-title-2" text="Nhập tài khoản" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font></Label>
@@ -34,13 +41,21 @@
       <HBox prefHeight="37.0" prefWidth="600.0" styleClass="HBox">
          <children>
             <Label styleClass="label-description" text="Nhập mật khẩu:         " />
+<<<<<<< Updated upstream
             <PasswordField styleClass="label-input" />
+=======
+            <PasswordField fx:id="passwordField" promptText="Nhập mật khẩu" styleClass="label-input" />
+>>>>>>> Stashed changes
          </children>
       </HBox>
       <HBox prefHeight="37.0" prefWidth="600.0" styleClass="HBox">
          <children>
             <Label styleClass="label-description" text="Nhập lại mật khẩu:  " />
+<<<<<<< Updated upstream
             <PasswordField styleClass="label-input" />
+=======
+            <PasswordField fx:id="confirmPasswordField" promptText="Nhập lại mật khẩu" styleClass="label-input" />
+>>>>>>> Stashed changes
          </children>
       </HBox>
       <HBox prefHeight="41.0" prefWidth="600.0" styleClass="HBox">

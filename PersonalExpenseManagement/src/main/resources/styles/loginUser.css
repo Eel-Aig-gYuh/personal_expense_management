@@ -34,7 +34,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 .label-description {
     -fx-font-weight: bold;
-    -fx-min-width: 180px;
+    -fx-min-width: 100px;
     -fx-text-alignment: right;
     -fx-text-fill: #ffffff;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
@@ -45,12 +45,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-color: #888888;
     -fx-border-width: 1px;
     -fx-padding: 8px 12px;
-    -fx-min-width: 220px;
+    -fx-min-width: 100px;
     -fx-background-color: #ffffff;
     -fx-border-color: #004e92;
     -fx-border-radius: 10px;
     -fx-padding: 10px 15px;
-    -fx-min-width: 280px;
     -fx-background-radius: 10px;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
     -fx-font-size: 20px;

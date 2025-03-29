@@ -24,6 +24,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-padding: 20px;
 }
 
+.hbox-title-1 {
+    -fx-background-color: #4C4C4C;
+    -fx-padding: 10;
+    -fx-alignment: center;
+}
+
+.hbox-title-2{
+    -fx-padding: 10;
+    -fx-alignment: center;
+}
+
 .subject {
     -fx-font-weight: bold;
     -fx-font-size: 42px;
