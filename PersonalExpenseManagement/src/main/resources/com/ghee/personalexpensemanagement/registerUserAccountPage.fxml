@@ -15,11 +15,11 @@
       <Label styleClass="subject" text="Đăng ký tài khoản" />
       <HBox prefHeight="53.0" prefWidth="600.0">
          <children>
-            <Label styleClass="hbox-title-1" text="Nhập thông tin" textFill="WHITE">
+            <Label styleClass="hbox-title-2" text="Nhập thông tin" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font></Label>
-            <Label prefHeight="30.0" prefWidth="164.0" styleClass="hbox-title-2" text="Nhập tài khoản" textFill="WHITE">
+            <Label prefHeight="30.0" prefWidth="164.0" styleClass="hbox-title-1" text="Nhập tài khoản" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font></Label>
