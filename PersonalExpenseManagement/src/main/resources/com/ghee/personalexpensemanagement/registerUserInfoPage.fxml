@@ -14,14 +14,14 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="844.0" prefWidth="653.0" styleClass="VBox" stylesheets="@../../../styles/registeruserinfopage.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.RegisterUserInfoPageController">
    <children>
-      <Label styleClass="subject" text="Cập nhật tài khoản" />
+      <Label styleClass="subject" text="Đăng ký tài khoản" />
       <HBox prefHeight="53.0" prefWidth="600.0">
          <children>
-            <Label text="Nhập thông tin" textFill="WHITE">
+            <Label styleClass="hbox-title-1" text="Nhập thông tin" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font></Label>
-            <Label text="Nhập tài khoản" textFill="WHITE">
+            <Label styleClass="hbox-title-2" text="Nhập tài khoản" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font></Label>
