@@ -21,24 +21,25 @@ public class TransactionServices {
 
     public boolean addTransaction(Transaction transaction) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-            String produceCall = "{Call CreateTransaction (?, ?, ?, ?, ?, ?, ?, ?)}";
+            String produceCall = "{Call CreateTransaction (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
             CallableStatement callableStatement = conn.prepareCall(produceCall);
             
             callableStatement.setInt(1, transaction.getUserId().getId()); // user_id
             callableStatement.setInt(2, transaction.getCategoryId().getId()); // category_id
             callableStatement.setInt(3, transaction.getWalletId().getId()); // wallet_id
-            callableStatement.setDouble(4, transaction.getAmount()); // amount
-            callableStatement.setDate(5, new java.sql.Date(transaction.getTransactionDate().getTime())); // transaction_date
-            callableStatement.setString(6, transaction.getDescription()); // description
-            callableStatement.setDate(7, new java.sql.Date(transaction.getCreatedAt().getTime())); // created_at
+            callableStatement.setString(4, transaction.getType()); // type
+            callableStatement.setDouble(5, transaction.getAmount()); // amount
+            callableStatement.setDate(6, new java.sql.Date(transaction.getTransactionDate().getTime())); // transaction_date
+            callableStatement.setString(7, transaction.getDescription()); // description
+            callableStatement.setDate(8, new java.sql.Date(transaction.getCreatedAt().getTime())); // created_at
             
-            callableStatement.registerOutParameter(8, Types.VARCHAR);
-            callableStatement.registerOutParameter(9, Types.VARCHAR);
+            callableStatement.registerOutParameter(9, Types.BOOLEAN);
+            callableStatement.registerOutParameter(10, Types.VARCHAR);
             
             callableStatement.execute();
             
-            boolean success = callableStatement.getBoolean(8);
-            String message = callableStatement.getString(9);
+            boolean success = callableStatement.getBoolean(9);
+            String message = callableStatement.getString(10);
             
             System.out.println(success ? "SUCCESS: ": "FAILURE: " + message);
             

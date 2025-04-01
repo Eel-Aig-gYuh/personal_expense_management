@@ -76,10 +76,13 @@ public class Transaction implements Serializable {
         this.id = id;
     }
 
-    public Transaction(Integer id, double amount, Date transactionDate, String type, Date createdAt) {
-        this.id = id;
+    public Transaction(Users userId, Category categoryId, Wallet walletId, double amount, Date transactionDate,String description, String type, Date createdAt) {
+        this.userId = userId;
+        this.categoryId = categoryId;
+        this.walletId = walletId;
         this.amount = amount;
         this.transactionDate = transactionDate;
+        this.description = description;
         this.type = type;
         this.createdAt = createdAt;
     }

@@ -76,9 +76,9 @@ public class RegisterUserAccountPageController implements Initializable {
      * @throws java.lang.Exception
      */
     public void addUserHandler(ActionEvent e) throws Exception {
-        String username = this.usernameField.getText();
-        String password = this.passwordField.getText();
-        String confirmPassword = this.confirmPasswordField.getText();
+        String username = this.usernameField.getText().trim();
+        String password = this.passwordField.getText().trim();
+        String confirmPassword = this.confirmPasswordField.getText().trim();
 
         // check lenght
         if (username.length() <= AppConfigs.LENGHT_OF_ACCOUNT || password.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {

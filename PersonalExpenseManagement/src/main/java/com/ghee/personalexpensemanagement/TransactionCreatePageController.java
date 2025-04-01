@@ -4,32 +4,35 @@
  */
 package com.ghee.personalexpensemanagement;
 
-import com.ghee.pojo.Budget;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.Transaction;
 import com.ghee.pojo.Users;
 import com.ghee.pojo.Wallet;
-import com.ghee.services.BudgetServices;
 import com.ghee.services.CategoryServices;
 import com.ghee.services.TransactionServices;
+import com.ghee.services.WalletServices;
 import com.ghee.utils.DatePickerUtils;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -46,6 +49,7 @@ public class TransactionCreatePageController implements Initializable {
     @FXML private Button btnSave;
     
     private static CategoryServices categoryServices = new CategoryServices();
+    private static WalletServices walletServices = new WalletServices();
     private static TransactionServices transactionServices = new TransactionServices();
     
     /**
@@ -77,12 +81,13 @@ public class TransactionCreatePageController implements Initializable {
         }
     }
     
-    public void addTransaction(ActionEvent e) {
+    public void addTransaction(ActionEvent e) throws SQLException {
         try {
-            Category categoryId = this.cbCategories.getSelectionModel().getSelectedItem();
             Users currentUser = Utils.getCurrentUser();
+            Category categoryId = this.cbCategories.getSelectionModel().getSelectedItem();
+            Wallet walletId = walletServices.getWalletById(currentUser.getId());
             
-            Double target = Double.valueOf(this.txtTarget.getText());
+            Double amount = Double.valueOf(this.txtTarget.getText());
             
             Date transactionDate = java.sql.Date.valueOf(this.dpTransactionDate.getValue());
             Date createdAt = new Date();
@@ -90,10 +95,37 @@ public class TransactionCreatePageController implements Initializable {
             
             String description = this.txtDescription.getText();
             
-            // Transaction transaction = new Transaction(target, transactionDate, description, createdAt);
+            Transaction transaction = new Transaction(currentUser, categoryId, walletId, amount, transactionDate, description, categoryId.getType(), createdAt);
+            
+            try {
+                boolean success = transactionServices.addTransaction(transaction);
+                
+                if (success) {
+                    Utils.getAlert("Thêm giao dịch thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                    goToHomePage();
+                }
+                
+            } catch (SQLException ex) {
+                Utils.getAlert("Thêm không thành công !", Alert.AlertType.ERROR).showAndWait();
+                System.err.println("ERROR: " + ex.getMessage());
+            }
             
         } catch (NumberFormatException numberFormatException) {
             Utils.getAlert("Vui lòng điền thông tin ngân sách là số!", Alert.AlertType.ERROR).showAndWait();
+        }
+    }
+    
+    public void goToHomePage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("homePage.fxml"));
+            Parent root = loader.load();
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnSave.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua trang chủ !";
+            Utils.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
     
