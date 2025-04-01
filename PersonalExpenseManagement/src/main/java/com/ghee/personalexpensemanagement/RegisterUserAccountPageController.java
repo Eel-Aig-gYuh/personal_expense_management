@@ -79,6 +79,11 @@ public class RegisterUserAccountPageController implements Initializable {
         String username = this.usernameField.getText().trim();
         String password = this.passwordField.getText().trim();
         String confirmPassword = this.confirmPasswordField.getText().trim();
+        
+        if (username.equals("") || password.equals("") || confirmPassword.equals("")) {
+            Utils.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.ERROR).showAndWait();
+            return;
+        }
 
         // check lenght
         if (username.length() <= AppConfigs.LENGHT_OF_ACCOUNT || password.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
@@ -96,19 +101,20 @@ public class RegisterUserAccountPageController implements Initializable {
             Utils.getAlert(AppConfigs.ERROR_PASS_PATTERN, Alert.AlertType.ERROR).showAndWait();
             return;
         }
-        
-        
 
         try {
             Users user = new Users(username, password, firstname, lastname, email, role, createdAt);
 
-            var success = s.registerUser(user);
-
-            if (success) {
+            var results = s.registerUser(user);
+            var success = (boolean) results.get("success");
+            var msg = (String) results.get("message");
+            
+            if (!success) {
+                System.err.println(msg);
+                Utils.getAlert("Đăng ký không thành công ! " + msg, Alert.AlertType.WARNING).showAndWait();
+            } else {
                 Utils.getAlert("Đăng ký thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
                 goToLoginPage();
-            } else {
-                Utils.getAlert("Đăng ký không thành công !", Alert.AlertType.WARNING).showAndWait();
             }
 
         } catch (SQLException ex) {
@@ -136,6 +142,9 @@ public class RegisterUserAccountPageController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("registerUserInfoPage.fxml"));
             Parent root = loader.load();
+            
+            RegisterUserInfoPageController infoPageController = loader.getController();
+            infoPageController.setUserData(firstname, lastname, email, avatarUrl, role, createdAt);
 
             // chuyển trang qua account 
             Stage stage = (Stage) usernameField.getScene().getWindow();

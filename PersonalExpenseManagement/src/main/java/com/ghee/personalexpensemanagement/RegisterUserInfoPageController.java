@@ -34,20 +34,14 @@ import javafx.stage.Stage;
  */
 public class RegisterUserInfoPageController implements Initializable {
 
-    @FXML
-    private TextField lastnameField;
-    @FXML
-    private TextField firstnameField;
-    @FXML 
-    private TextField emailField;
+    @FXML private TextField lastnameField;
+    @FXML private TextField firstnameField;
+    @FXML private TextField emailField;
     
-    @FXML
-    private Button uploadAvatarButton;
-    @FXML
-    private Button nextPageButton;
+    @FXML private Button uploadAvatarButton;
+    @FXML private Button nextPageButton;
     
-    @FXML 
-    private ImageView avatar;
+    @FXML private ImageView avatar;
     
     private String avatarPath;
     private Cloudinary cloudinary;
@@ -61,6 +55,15 @@ public class RegisterUserInfoPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+    }
+    
+    public void setUserData(String firstname, String lastname, String email, String avatarUrl, String role, Date createAt) {
+        this.firstnameField.setText(firstname);
+        this.lastnameField.setText(lastname);
+        this.emailField.setText(email);
+        this.avatarPath = avatarUrl;
+        Image img = new Image(avatarPath);
+        this.avatar.setImage(img);
     }
     
     /**
@@ -127,8 +130,8 @@ public class RegisterUserInfoPageController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("registerUserAccountPage.fxml"));
             Parent root = loader.load();
 
+            // chuyển props qua page khác.
             RegisterUserAccountPageController accountPageController = loader.getController();
-
             accountPageController.setUserData(firstname, lastname, email, avatarPath, role, createAt);
 
             // chuyển trang qua account 

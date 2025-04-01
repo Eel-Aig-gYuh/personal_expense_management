@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
+import java.util.Map;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
@@ -25,7 +27,9 @@ public class UserServices {
      * @param user
      * @throws SQLException
      */
-    public boolean registerUser(Users user) throws SQLException {
+    public Map<String, Object> registerUser(Users user) throws SQLException {
+        Map<String, Object> results = new HashMap<>();
+        
         try (Connection conn = JdbcUtils.getConn()) {
             String procedureCall = "{CALL RegisterUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
             CallableStatement callableStatement = conn.prepareCall(procedureCall);
@@ -53,9 +57,10 @@ public class UserServices {
             boolean success = callableStatement.getBoolean(9);
             String message = callableStatement.getString(10);
 
-            System.out.println(success ? "SUCCESS: ": "FAILURE: " + message);
+            results.put("success", success);
+            results.put("message", message);
             
-            return success;
+            return results;
         }
     }
 
