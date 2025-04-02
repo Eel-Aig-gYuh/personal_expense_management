@@ -19,7 +19,12 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <HBox prefHeight="52.0" prefWidth="600.0" />
+       <HBox prefHeight="52.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#goToHomePage" text="Hủy" />
+            <Label text="Thêm Ngân Sách" />
+         </children>
+      </HBox>
       <HBox prefHeight="32.0" prefWidth="600.0">
          <children>
             <ComboBox fx:id="cbCategories" prefHeight="117.0" prefWidth="480.0" promptText="Chọn danh mục" styleClass="ComboBox" />

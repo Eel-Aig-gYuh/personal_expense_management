@@ -7,21 +7,103 @@ package com.ghee.services;
 import com.ghee.pojo.Budget;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.JdbcUtils;
+import com.ghee.pojo.Users;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 /**
  *
  * @author giahu
  */
 public class BudgetServices {
-    public boolean createBudget(Budget budget) {
+    
+    public double getTotalBudget(int userId, LocalDate startDate, LocalDate endDate) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "SELECT COALESCE(SUM(target), 0) AS total_budget " + 
+                           "FROM budget " +
+                           "WHERE user_id = ? AND start_date <= ? AND end_date >= ? ";
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setInt(1, userId);
+            stm.setDate(2, java.sql.Date.valueOf(endDate));
+            stm.setDate(3, java.sql.Date.valueOf(startDate));
+            
+            ResultSet rs = stm.executeQuery();
+            if (rs.next())
+                return rs.getDouble("total_budget");
+        }
+        return 0.0;
+    }
+    
+    public double getTotalSpent(int userId, LocalDate startDate, LocalDate endDate) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "SELECT COALESCE(SUM(amount), 0) AS total_spent " + 
+                           "FROM transaction t " +
+                           "JOIN category c ON t.category_id = c.id " +
+                           "WHERE t.user_id = ? AND t.type = 'Chi' AND t.transaction_date BETWEEN ? AND ?";
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setInt(1, userId);
+            stm.setDate(2, java.sql.Date.valueOf(startDate));
+            stm.setDate(3, java.sql.Date.valueOf(endDate));
+            
+            ResultSet rs = stm.executeQuery();
+            if (rs.next())
+                return rs.getDouble("total_spent");
+        }
+        return 0.0;
+    }
+    
+    public List<Budget> getBudgetByUserIdAndDateRange(int userId, LocalDate startDate, LocalDate endDate) throws SQLException {
+        List<Budget> budgets = new ArrayList<>();
+        CategoryServices categoryServices = new CategoryServices();
+        
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = " SELECT * FROM budget " + 
+                           " WHERE user_id = ? AND start_date <= ? AND end_date >= ? ";
+            PreparedStatement stm = conn.prepareCall(query);
+            stm.setInt(1, userId);
+            stm.setDate(2, java.sql.Date.valueOf(endDate));
+            stm.setDate(3, java.sql.Date.valueOf(startDate));
+            
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Budget budget = new Budget();
+                budget.setId(rs.getInt("id"));
+                
+                Users user = new Users(rs.getInt("user_id"));
+                budget.setUserId(user);
+                
+                Category category = categoryServices.getCategoryById(rs.getInt("category_id"));
+                budget.setCategoryId(category);
+                
+                budget.setAmount(rs.getDouble("amount"));
+                budget.setTarget(rs.getDouble("target"));
+                budget.setStartDate(rs.getDate("start_date"));
+                budget.setEndDate(rs.getDate("end_date"));
+                budget.setCreatedAt(rs.getDate("created_at"));
+                
+                budgets.add(budget);
+            }
+        }
+        return budgets;
+    }
+    
+    /**
+     * Tạo ngân sách mới
+     * @param budget
+     * @return
+     * @throws SQLException 
+     */
+    public Map<String, Object> createBudget(Budget budget) throws SQLException {
+        Map<String, Object> results = new HashMap<>();
+        
         try (Connection conn = JdbcUtils.getConn()) {
             String produceCall = "{Call CreateBudget (?, ?, ?, ?, ?, ?, ?, ?)}";
             CallableStatement callableStatement = conn.prepareCall(produceCall);
@@ -41,17 +123,22 @@ public class BudgetServices {
             boolean success = callableStatement.getBoolean(7);
             String message = callableStatement.getString(8);
             
-            System.out.println(success? "SUCCESS: ": "FAILURE: " + message);
+            results.put("success", success);
+            results.put("message", message);
             
-            return success;
-
-        } catch (SQLException ex) {
-            System.err.println("ERROR: " + ex.getMessage());
-            return false;
-        }
+        } 
+        return results;
     }
     
-    public boolean updateBudget(Budget budget) throws SQLException {
+    /**
+     * Cập nhật lại ngân sách
+     * @param budget
+     * @return
+     * @throws SQLException 
+     */
+    public Map<String, Object> updateBudget(Budget budget) throws SQLException {
+        Map<String, Object> results = new HashMap<>();
+        
         try (Connection conn = JdbcUtils.getConn()) {
             
             String produceCall = "{Call UpdateBudget (?, ?, ?, ?, ?, ?, ?, ?, ?)}";
@@ -73,14 +160,10 @@ public class BudgetServices {
             boolean success = callableStatement.getBoolean(7);
             String message = callableStatement.getString(8);
             
-            System.out.println(success? "SUCCESS: ": "FAILURE: " + message);
-            
-            return success;
-            
-            
-        } catch (SQLException ex) {
-            System.err.println("ERROR: " + ex.getMessage());
-            return false;
+            results.put("success", success);
+            results.put("message", message); 
         }
+        
+        return results;
     }
 }

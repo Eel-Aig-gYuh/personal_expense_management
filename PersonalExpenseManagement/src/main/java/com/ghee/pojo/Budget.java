@@ -170,7 +170,7 @@ public class Budget implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ghee.pojo.Budget[ id=" + id + " ]";
+        return this.categoryId.getName();
     }
     
 }

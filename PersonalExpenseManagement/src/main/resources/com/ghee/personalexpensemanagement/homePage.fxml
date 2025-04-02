@@ -45,8 +45,10 @@
       </ScrollPane>
       <HBox prefHeight="46.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" styleClass="button_first" text="Thêm giao dịch" />
-            <Button fx:id="btnAddBudget" mnemonicParsing="false" onAction="#goToCreateBudgetPage" styleClass="button_secondary" text="Thêm ngân sách" />
+            <Button mnemonicParsing="false" text="Tổng quan" />
+            <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" text="Sổ giao dịch" />
+            <Button mnemonicParsing="false" onAction="#goToCreateTransactionPage" text="+" />
+            <Button fx:id="btnAddBudget" mnemonicParsing="false" onAction="#goToBudgetHomePage" text="Ngân sách" />
          </children>
       </HBox>
    </children>
