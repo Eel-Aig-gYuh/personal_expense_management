@@ -1,0 +1,6 @@
+test_case,user_id,start_date,end_date,expected_total_spent
+No Transactions,1,2023-01-01,2023-01-31,0.00
+Single Transaction,1,2023-02-01,2023-02-28,500.00
+Multiple Transactions,1,2023-03-01,2023-03-31,1250.75
+Mixed Transaction Types,1,2023-04-01,2023-04-30,800.00
+Outside Period,1,2024-01-01,2024-01-31,0.00

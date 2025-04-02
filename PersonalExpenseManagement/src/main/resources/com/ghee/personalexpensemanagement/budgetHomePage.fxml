@@ -9,26 +9,26 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.BudgetHomePageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="701.0" prefWidth="770.0" styleClass="VBox" stylesheets="@../../../styles/budgethomepage.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.BudgetHomePageController">
    <children>
-      <TabPane fx:id="tabPane" prefHeight="385.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" prefHeight="385.0" prefWidth="600.0" styleClass="tab-content" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Tháng này">
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Số tiền bạn có thể chi" />
-                        <Label fx:id="lblTotalAvailable" text="0.0" />
-                        <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" />
-                        <HBox prefHeight="41.0" prefWidth="600.0">
+                        <Label styleClass="label-description" text="Số tiền bạn có thể chi" />
+                        <Label fx:id="lblTotalAvailable" styleClass="label-description" text="0.0" />
+                        <ProgressBar fx:id="progressBar" prefHeight="56.0" prefWidth="203.0" progress="0.0" />
+                        <HBox prefHeight="41.0" prefWidth="600.0" styleClass="HBox">
                            <children>
-                              <Label fx:id="lblTotalBudget" text="1M  " />
-                              <Label fx:id="lblTotalSpent" text="0   " />
-                              <Label fx:id="lblDayLeft" text="28 ngày" />
+                              <Label fx:id="lblTotalBudget" styleClass="label-description" text="1M  " />
+                              <Label fx:id="lblTotalSpent" styleClass="label-description" text="0   " />
+                              <Label fx:id="lblDayLeft" styleClass="label-description" text="28 ngày" />
                            </children>
                         </HBox>
                         <Button fx:id="btnCreateBudget" mnemonicParsing="false" onAction="#goToCreateBudgetPage" text="Tạo ngân sách" />
-                        <ListView fx:id="listViewBudgets" prefHeight="147.0" prefWidth="600.0">
+                        <ListView fx:id="listViewBudgets" prefHeight="146.0" prefWidth="670.0" styleClass="ListView">
                             
                         </ListView>
                      </children>
@@ -39,18 +39,18 @@
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Số tiền bạn có thể chi" />
-                        <Label fx:id="lblTotalAvailable1" text="0.0" />
-                        <ProgressBar fx:id="progressBar1" prefWidth="200.0" progress="0.0" />
-                        <HBox prefHeight="41.0" prefWidth="600.0">
+                        <Label styleClass="label-description" text="Số tiền bạn có thể chi" />
+                        <Label fx:id="lblTotalAvailable1" styleClass="label-description" text="0.0" />
+                        <ProgressBar fx:id="progressBar1" prefHeight="59.0" prefWidth="200.0" progress="0.0" />
+                        <HBox prefHeight="41.0" prefWidth="600.0" styleClass="HBox">
                            <children>
-                              <Label fx:id="lblTotalBudget1" text="1M  " />
-                              <Label fx:id="lblTotalSpent1" text="0   " />
-                              <Label fx:id="lblDayLeft1" text="28 ngày" />
+                              <Label fx:id="lblTotalBudget1" styleClass="label-description" text="1M  " />
+                              <Label fx:id="lblTotalSpent1" styleClass="label-description" text="0   " />
+                              <Label fx:id="lblDayLeft1" styleClass="label-description" text="28 ngày" />
                            </children>
                         </HBox>
                         <Button fx:id="btnCreateBudget1" mnemonicParsing="false" onAction="#goToCreateBudgetPage" text="Tạo ngân sách" />
-                        <ListView fx:id="listViewBudgets1" prefHeight="147.0" prefWidth="600.0" />
+                        <ListView fx:id="listViewBudgets1" prefHeight="147.0" prefWidth="600.0" styleClass="ListView" />
                      </children>
                   </VBox>
                </content>
@@ -59,31 +59,31 @@
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Số tiền bạn có thể chi" />
-                        <Label fx:id="lblTotalAvailable11" text="0.0" />
-                        <ProgressBar fx:id="progressBar11" prefWidth="200.0" progress="0.0" />
-                        <HBox prefHeight="41.0" prefWidth="600.0">
+                        <Label styleClass="label-description" text="Số tiền bạn có thể chi" />
+                        <Label fx:id="lblTotalAvailable11" styleClass="label-description" text="0.0" />
+                        <ProgressBar fx:id="progressBar11" prefHeight="55.0" prefWidth="200.0" progress="0.0" />
+                        <HBox prefHeight="41.0" prefWidth="600.0" styleClass="HBox">
                            <children>
-                              <Label fx:id="lblTotalBudget11" text="1M  " />
-                              <Label fx:id="lblTotalSpent11" text="0   " />
-                              <Label fx:id="lblDayLeft11" text="28 ngày" />
+                              <Label fx:id="lblTotalBudget11" styleClass="label-description" text="1M  " />
+                              <Label fx:id="lblTotalSpent11" styleClass="label-description" text="0   " />
+                              <Label fx:id="lblDayLeft11" styleClass="label-description" text="28 ngày" />
                            </children>
                         </HBox>
                         <Button fx:id="btnCreateBudget11" mnemonicParsing="false" onAction="#goToCreateBudgetPage" text="Tạo ngân sách" />
-                        <ListView fx:id="listViewBudgets11" prefHeight="147.0" prefWidth="600.0" />
+                        <ListView fx:id="listViewBudgets11" prefHeight="147.0" prefWidth="600.0" styleClass="ListView" />
                      </children>
                   </VBox>
                </content>
             </Tab>
         </tabs>
       </TabPane>
-      <HBox prefHeight="55.0" prefWidth="600.0">
+      <HBox prefHeight="55.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Button mnemonicParsing="false" text="Tổng quan" />
-            <Button mnemonicParsing="false" text="Sổ giao dịch" />
-            <Button mnemonicParsing="false" text="+" />
-            <Button mnemonicParsing="false" text="Ngân sách" />
-            <Button mnemonicParsing="false" text="Button" />
+            <Button mnemonicParsing="false" styleClass="control-button" text="Tổng quan" />
+            <Button mnemonicParsing="false" styleClass="control-button" text="Sổ giao dịch" />
+            <Button mnemonicParsing="false" styleClass="control-button" text="+" />
+            <Button mnemonicParsing="false" styleClass="control-button" text="Ngân sách" />
+            <Button mnemonicParsing="false" styleClass="control-button" text="Button" />
          </children>
       </HBox>
    </children>

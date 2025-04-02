@@ -1,0 +1,11 @@
+testCase,username,password,firstName,lastName,avatar,email,expectedResult
+Valid user,user123456123,Valid@1234,John,Doe,avatar.jpg,user123123@example.com,true
+Username too short,user1,Valid@1234,John,Doe,avatar.jpg,user@example.com,false
+Empty username,,Valid@1234,John,Doe,avatar.jpg,user@example.com,false
+Weak password,user12345,weak,John,Doe,avatar.jpg,user@example.com,false
+Missing firstname,user123456,Valid@1234,,Doe,avatar.jpg,user@example.com,false
+Invalid email,user123456,Valid@1234,John,Doe,avatar.jpg,invalid-email,false
+All fields empty,,,,,,,false
+Boundary username,12345677,Valid@1234,John,Doe,avatar.jpg,user123222@example.com,true
+SQL injection,admin'--,Valid@1234,John,Doe,avatar.jpg,user@example.com,false
+XSS attempt,user123456,Valid@1234,<script>,Doe,avatar.jpg,user@example.com,false

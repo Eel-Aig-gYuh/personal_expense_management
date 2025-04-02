@@ -108,3 +108,39 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color: #0099cc;
     -fx-background-radius: 10;
 }
+
+/* CSS cho nhóm button điều khiển */
+.control-button {
+    -fx-background-color: rgba(0, 78, 146, 0.7); /* Màu xanh với độ trong suốt */
+    -fx-text-fill: white;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 7px;
+    -fx-border-width: 0;
+    -fx-min-width: 90px; /* Đảm bảo đủ rộng cho chữ */
+    -fx-min-height: 60px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 2, 0, 0, 1);
+}
+
+.control-button:hover {
+    -fx-background-color: rgba(0, 78, 146, 0.9);
+}
+
+.control-button:pressed {
+    -fx-background-color: rgba(0, 42, 92, 0.9);
+    -fx-translate-y: 1px;
+}
+
+/* Button đặc biệt (button +) */
+.plus-button {
+    -fx-background-color: rgba(74, 184, 74, 0.8); /* Màu xanh lá */
+    -fx-font-size: 16px;
+    -fx-min-width: 40px; /* Nhỏ hơn vì chỉ có dấu + */
+}
+
+.plus-button:hover {
+    -fx-background-color: rgba(74, 184, 74, 1.0);
+}
