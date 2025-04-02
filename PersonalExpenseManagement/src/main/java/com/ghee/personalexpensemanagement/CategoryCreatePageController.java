@@ -1,0 +1,131 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
+ */
+package com.ghee.personalexpensemanagement;
+
+import com.ghee.config.AppConfigs;
+import com.ghee.personalexpensemanagement.Utils;
+import com.ghee.pojo.Category;
+import com.ghee.pojo.Users;
+import com.ghee.services.CategoryServices;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javax.security.auth.Refreshable;
+
+/**
+ * FXML Controller class
+ *
+ * @author giahu
+ */
+public class CategoryCreatePageController implements Initializable {
+
+    @FXML private TextField txtName;
+    
+    @FXML private RadioButton rdoThu;
+    @FXML private RadioButton rdoChi;
+
+    @FXML private Button btnCancel;
+    @FXML private Button btnSave;
+    
+    private final CategoryServices categoryService = new CategoryServices();
+    
+    private String parentController;
+    
+    /**
+     * Initializes the controller class.
+     * @param url
+     * @param rb
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+    }    
+    
+    public void setParentController (String parentController) {
+        this.parentController = parentController;
+    }
+    
+    public void addCategory() {
+        try {
+            Users currentUser = Utils.getCurrentUser();
+            
+            if (currentUser != null) {
+                String name = txtName.getText().trim();
+                
+                if (name.equals("")) {
+                    Utils.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
+                    return ;
+                }
+                
+                String type = rdoChi.isSelected() ? "Chi" : "Thu";
+                
+                Category category = new Category(currentUser, type, name);
+                
+                var results = categoryService.createCategory(category);
+                
+                boolean success = (boolean) results.get("success");
+                String msg = (String) results.get("message");
+
+                if (success) {
+                    Utils.getAlert("Tạo danh mục thành công!", Alert.AlertType.CONFIRMATION).showAndWait();
+                    goBack();
+                } else {
+                    Utils.getAlert(msg, Alert.AlertType.WARNING).showAndWait();
+                }
+                
+            }
+            
+        } catch (SQLException ex) {
+            System.err.println("ERROR: " + ex.getMessage());
+        }
+    }
+    
+    public void goBack() {
+        if (this.parentController.equals("budgetCreatePage")) {
+            goToBudgetPage();
+        }
+        goToTransactionPage();
+    }
+    
+    public void goToBudgetPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetcreatepage.fxml"));
+            Parent root = loader.load();
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnSave.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua tạo ngân sách !";
+            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+        }
+    }
+    
+    public void goToTransactionPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("transactioncreatepage.fxml"));
+            Parent root = loader.load();
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnSave.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua tạo giao dịch !";
+            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+        }
+    }
+    
+}

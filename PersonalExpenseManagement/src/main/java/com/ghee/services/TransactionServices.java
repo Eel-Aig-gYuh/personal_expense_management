@@ -4,6 +4,7 @@
  */
 package com.ghee.services;
 
+import com.ghee.config.AppConfigs;
 import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Transaction;
@@ -12,6 +13,9 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
+import java.util.Map;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -19,7 +23,9 @@ import java.sql.Types;
  */
 public class TransactionServices {
 
-    public boolean addTransaction(Transaction transaction) throws SQLException {
+    public Map<String, Object> addTransaction(Transaction transaction) throws SQLException {
+        Map<String, Object> results = new HashMap<>();
+        
         try (Connection conn = JdbcUtils.getConn()) {
             String produceCall = "{Call CreateTransaction (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
             CallableStatement callableStatement = conn.prepareCall(produceCall);
@@ -27,10 +33,10 @@ public class TransactionServices {
             callableStatement.setInt(1, transaction.getUserId().getId()); // user_id
             callableStatement.setInt(2, transaction.getCategoryId().getId()); // category_id
             callableStatement.setInt(3, transaction.getWalletId().getId()); // wallet_id
-            callableStatement.setString(4, transaction.getType()); // type
-            callableStatement.setDouble(5, transaction.getAmount()); // amount
-            callableStatement.setDate(6, new java.sql.Date(transaction.getTransactionDate().getTime())); // transaction_date
-            callableStatement.setString(7, transaction.getDescription()); // description
+            callableStatement.setDouble(4, transaction.getAmount()); // amount
+            callableStatement.setDate(5, new java.sql.Date(transaction.getTransactionDate().getTime())); // transaction_date
+            callableStatement.setString(6, transaction.getDescription()); // description
+            callableStatement.setString(7, transaction.getType()); // type
             callableStatement.setDate(8, new java.sql.Date(transaction.getCreatedAt().getTime())); // created_at
             
             callableStatement.registerOutParameter(9, Types.BOOLEAN);
@@ -41,14 +47,15 @@ public class TransactionServices {
             boolean success = callableStatement.getBoolean(9);
             String message = callableStatement.getString(10);
             
-            System.out.println(success ? "SUCCESS: ": "FAILURE: " + message);
-            
-            return success;
-
+            results.put("success", success);
+            results.put("message", message);
+           
         }
         catch (SQLException ex) {
-            System.err.println("ERROR: " + ex.getMessage());
-            return false;
+            results.put("success", false);
+            results.put("message", AppConfigs.ERROR_DATABASE);
         }
+        
+        return results;
     }
 }

@@ -10,6 +10,8 @@ package com.ghee.config;
  */
 public class AppConfigs {
     
+    // ================ LOGIN / REGISTER
+    
     // ^ và $ đảm bảo kiểm tra toàn bộ chuỗi
     // .+ là kiểm tra không rỗng.
     public static String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*(),.?\":{}|<>]).+$";
@@ -22,4 +24,6 @@ public class AppConfigs {
     public static String ERROR_PASS_PATTERN = "Lỗi mật khẩu không đủ mạnh, phải có ít nhất 1 ký tự hoa, 1 ký tự thường, 1 số và 1 ký tự đặc biệt !";
     public static String ERROR_PASS_AND_CONFIRM = "Lỗi mật khẩu không trùng khớp, vui lòng nhập lại !";
     
+    // ================ DATABASE
+    public static String ERROR_DATABASE = "Lỗi kết nối database";
 }

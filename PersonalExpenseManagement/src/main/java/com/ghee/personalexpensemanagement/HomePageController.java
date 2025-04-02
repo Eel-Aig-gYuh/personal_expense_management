@@ -86,16 +86,16 @@ public class HomePageController implements Initializable {
         }
     }
     
-    public void goToCreateBudgetPage() {
+    public void goToBudgetHomePage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetCreatePage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetHomePage.fxml"));
             Parent root = loader.load();
 
             // chuyển trang qua account 
             Stage stage = (Stage) btnAddBudget.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
-            String message = "Không thể chuyển qua trang tạo ngân sách !";
+            String message = "Không thể chuyển qua trang ngân sách !";
             
             System.err.println("Chi tiết lỗi: " + ex.getMessage());
             Utils.getAlert(message, Alert.AlertType.ERROR).show();

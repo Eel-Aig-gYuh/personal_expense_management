@@ -4,6 +4,7 @@
  */
 package com.ghee.services;
 
+import com.ghee.config.AppConfigs;
 import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Users;
 import java.sql.CallableStatement;
@@ -106,7 +107,7 @@ public class UserServices {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Lỗi kết nối sql.");
+            System.out.println(AppConfigs.ERROR_DATABASE);
         }
         return null;
     }
