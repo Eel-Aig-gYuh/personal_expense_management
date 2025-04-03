@@ -30,13 +30,14 @@ import javafx.stage.Stage;
  */
 public class LoginUserController implements Initializable {
 
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private PasswordField passwordField;
+    @FXML private TextField usernameField;
+    @FXML private TextField passwordFieldVisible;
+    
+    @FXML private PasswordField passwordField;
 
-    @FXML
-    private Button loginButton;
+    @FXML private Button loginButton;
+    
+    private boolean isPasswordVisible = false;
 
     private UserServices s = null;
 
@@ -49,6 +50,27 @@ public class LoginUserController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.s = new UserServices();
+        passwordFieldVisible.textProperty().bindBidirectional(passwordField.textProperty());
+    }
+    
+    public void togglePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible; // Đảo ngược trạng thái
+
+        if (isPasswordVisible) {
+            // Hiện mật khẩu: Ẩn PasswordField, hiện TextField
+            passwordField.setVisible(false);
+            passwordField.setManaged(false);
+            passwordFieldVisible.setVisible(true);
+            passwordFieldVisible.setManaged(true);
+            
+        } else {
+            // Ẩn mật khẩu: Hiện PasswordField, ẩn TextField
+            passwordField.setVisible(true);
+            passwordField.setManaged(true);
+            passwordFieldVisible.setVisible(false);
+            passwordFieldVisible.setManaged(false);
+            
+        }
     }
 
     public void login() throws IOException {
@@ -77,6 +99,10 @@ public class LoginUserController implements Initializable {
             MessageBox.getAlert("Lỗi SQL", Alert.AlertType.ERROR).show();
         }
 
+    }
+    
+    public void showPassword() {
+        this.passwordField.setStyle("text");
     }
 
     public void goToHomePage() throws IOException {
