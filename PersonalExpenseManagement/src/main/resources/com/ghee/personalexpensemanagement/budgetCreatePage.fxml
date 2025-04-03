@@ -21,7 +21,7 @@
       </Label>
        <HBox prefHeight="52.0" prefWidth="600.0">
          <children>
-            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#goToHomePage" text="Hủy" />
+            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#goBack" text="Hủy" />
             <Label text="Thêm Ngân Sách" />
          </children>
       </HBox>

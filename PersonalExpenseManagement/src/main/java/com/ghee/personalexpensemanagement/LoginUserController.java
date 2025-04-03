@@ -7,6 +7,7 @@ package com.ghee.personalexpensemanagement;
 import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
+import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -56,7 +57,7 @@ public class LoginUserController implements Initializable {
 
         if ("".equals(username.trim()) || "".equals(password.trim())) {
             String message = username.equals("") ? "Vui lòng điền tài khoản !" : "Vui lòng điền mật khẩu !";
-            Utils.getAlert(message, Alert.AlertType.CONFIRMATION).showAndWait();
+            MessageBox.getAlert(message, Alert.AlertType.CONFIRMATION).showAndWait();
             return;
         }
 
@@ -66,14 +67,14 @@ public class LoginUserController implements Initializable {
             if (user != null) {
                 Utils.setCurrentUser(user);
 
-                Utils.getAlert("Đăng nhập thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                MessageBox.getAlert("Đăng nhập thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
 
                 goToHomePage();
             } else {
-                Utils.getAlert("Thông tin tài khoản hoặc mật khẩu không chính xác !", Alert.AlertType.CONFIRMATION).showAndWait();
+                MessageBox.getAlert("Thông tin tài khoản hoặc mật khẩu không chính xác !", Alert.AlertType.CONFIRMATION).showAndWait();
             }
         } catch (SQLException ex) {
-            Utils.getAlert("Lỗi SQL", Alert.AlertType.ERROR).show();
+            MessageBox.getAlert("Lỗi SQL", Alert.AlertType.ERROR).show();
         }
 
     }
@@ -89,7 +90,7 @@ public class LoginUserController implements Initializable {
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang chủ !";
             System.out.println(ex.getMessage());
-            Utils.getAlert(message, Alert.AlertType.ERROR).showAndWait();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).showAndWait();
         }
     }
 
@@ -103,7 +104,7 @@ public class LoginUserController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang đăng ký !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 }
