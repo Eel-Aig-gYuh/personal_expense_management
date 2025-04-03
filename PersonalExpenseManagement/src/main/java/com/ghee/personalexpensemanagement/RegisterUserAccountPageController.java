@@ -8,6 +8,7 @@ import com.ghee.config.AppConfigs;
 import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
+import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -81,24 +82,24 @@ public class RegisterUserAccountPageController implements Initializable {
         String confirmPassword = this.confirmPasswordField.getText().trim();
         
         if (username.equals("") || password.equals("") || confirmPassword.equals("")) {
-            Utils.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.ERROR).showAndWait();
+            MessageBox.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.ERROR).showAndWait();
             return;
         }
 
         // check lenght
         if (username.length() <= AppConfigs.LENGHT_OF_ACCOUNT || password.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
-            Utils.getAlert(AppConfigs.ERROR_LENGHT_OF_ACCOUNT, Alert.AlertType.ERROR).showAndWait();
+            MessageBox.getAlert(AppConfigs.ERROR_LENGHT_OF_ACCOUNT, Alert.AlertType.ERROR).showAndWait();
             return;
         }
 
         // check password && confirm
         if (!password.equals(confirmPassword)) {
-            Utils.getAlert(AppConfigs.ERROR_PASS_AND_CONFIRM, Alert.AlertType.ERROR).showAndWait();
+            MessageBox.getAlert(AppConfigs.ERROR_PASS_AND_CONFIRM, Alert.AlertType.ERROR).showAndWait();
             return;
         }
         
         if (!password.matches(AppConfigs.PASSWORD_PATTERN)) {
-            Utils.getAlert(AppConfigs.ERROR_PASS_PATTERN, Alert.AlertType.ERROR).showAndWait();
+            MessageBox.getAlert(AppConfigs.ERROR_PASS_PATTERN, Alert.AlertType.ERROR).showAndWait();
             return;
         }
 
@@ -111,9 +112,9 @@ public class RegisterUserAccountPageController implements Initializable {
             
             if (!success) {
                 System.err.println(msg);
-                Utils.getAlert("Đăng ký không thành công ! " + msg, Alert.AlertType.WARNING).showAndWait();
+                MessageBox.getAlert("Đăng ký không thành công ! " + msg, Alert.AlertType.WARNING).showAndWait();
             } else {
-                Utils.getAlert("Đăng ký thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                MessageBox.getAlert("Đăng ký thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
                 goToLoginPage();
             }
 
@@ -134,7 +135,7 @@ public class RegisterUserAccountPageController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang đăng nhập !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 
@@ -151,7 +152,7 @@ public class RegisterUserAccountPageController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang đăng ký !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 }

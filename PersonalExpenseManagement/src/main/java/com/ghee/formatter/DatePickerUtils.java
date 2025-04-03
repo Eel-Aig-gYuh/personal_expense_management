@@ -1,4 +1,4 @@
-package com.ghee.utils;
+package com.ghee.formatter;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;

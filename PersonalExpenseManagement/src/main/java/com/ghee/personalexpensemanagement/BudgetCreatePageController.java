@@ -4,14 +4,14 @@
  */
 package com.ghee.personalexpensemanagement;
 
-import com.ghee.personalexpensemanagement.CategoryCreatePageController;
-import com.ghee.personalexpensemanagement.Utils;
+import com.ghee.config.AppConfigs;
 import com.ghee.pojo.Budget;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.Users;
 import com.ghee.services.BudgetServices;
 import com.ghee.services.CategoryServices;
-import com.ghee.utils.DatePickerUtils;
+import com.ghee.formatter.DatePickerUtils;
+import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -55,6 +55,8 @@ public class BudgetCreatePageController implements Initializable {
     private static BudgetServices budgetServices = new BudgetServices();
 
     private ObservableList<Object> categoryItems;
+    
+    private String parentController;
 
     /**
      * Initializes the controller class.
@@ -77,7 +79,8 @@ public class BudgetCreatePageController implements Initializable {
             }
         });
         
-        
+        this.dpEndDate.setEditable(false);
+        this.dpStartDate.setEditable(false);
         
         DatePickerUtils.disablePastDates(this.dpStartDate);
         DatePickerUtils.disablePastDates(this.dpEndDate);
@@ -86,6 +89,10 @@ public class BudgetCreatePageController implements Initializable {
 
         DatePickerUtils.setVietnameseDateFormat(this.dpStartDate);
         DatePickerUtils.setVietnameseDateFormat(this.dpEndDate);
+    }
+    
+    public void setParentController(String parentController){
+        this.parentController = parentController;
     }
 
     /**
@@ -149,14 +156,33 @@ public class BudgetCreatePageController implements Initializable {
         try {
             Category categoryId = (Category) this.cbCategories.getSelectionModel().getSelectedItem();
             
+            if (categoryId == null) {
+                MessageBox.getAlert(AppConfigs.ERROR_CATEGORY_IS_NULL, Alert.AlertType.WARNING).showAndWait();
+                return; 
+            }
+            
             Users currentUser = Utils.getCurrentUser();
 
             Double target = Double.valueOf(this.txtTarget.getText());
+            
+            if (target.isNaN() || target <= 0) {
+                MessageBox.getAlert(AppConfigs.ERROR_TARGET_IS_NEGATIVE, Alert.AlertType.WARNING).showAndWait();
+                return; 
+            } else if (target <= 100000) {
+                MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
+                return;
+            }
+            
             Double amount = 0.00;
 
             Date startDate = java.sql.Date.valueOf(this.dpStartDate.getValue());
             Date endDate = java.sql.Date.valueOf(this.dpEndDate.getValue());
             Date createdAt = new Date();
+            
+            if (startDate == null || endDate == null || startDate.after(endDate)) {
+                MessageBox.getAlert(AppConfigs.ERROR_DATE_IS_NOT_CORRECT, Alert.AlertType.WARNING).showAndWait();
+                return;
+            }
 
             DatePickerUtils.setVietnameseDateFormat(createdAt);
 
@@ -168,14 +194,14 @@ public class BudgetCreatePageController implements Initializable {
             String msg = (String) results.get("message");
 
             if (success) {
-                Utils.getAlert("Tạo ngân sách thành công!", Alert.AlertType.CONFIRMATION).showAndWait();
-                goToHomePage();
+                MessageBox.getAlert("Tạo ngân sách thành công!", Alert.AlertType.CONFIRMATION).showAndWait();
+                goBack();
             } else {
-                Utils.getAlert("Tạo ngân sách không thành công! " + msg, Alert.AlertType.WARNING).showAndWait();
+                MessageBox.getAlert("Tạo ngân sách không thành công! " + msg, Alert.AlertType.WARNING).showAndWait();
             }
 
         } catch (NumberFormatException numberFormatException) {
-            Utils.getAlert("Vui lòng điền thông tin ngân sách là số!", Alert.AlertType.ERROR).showAndWait();
+            MessageBox.getAlert("Vui lòng điền thông tin ngân sách là số!", Alert.AlertType.ERROR).showAndWait();
         }
     }
     
@@ -194,23 +220,22 @@ public class BudgetCreatePageController implements Initializable {
             loadCategories();
         } catch (IOException ex) {
             String message = "Không thể chuyển qua giao diện thêm danh mục !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 
        
     
-    public void goToHomePage() {
+    public void goBack() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("homePage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetHomePage.fxml"));
             Parent root = loader.load();
 
-            // chuyển trang qua account 
             Stage stage = (Stage) btnSave.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang chủ !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 }

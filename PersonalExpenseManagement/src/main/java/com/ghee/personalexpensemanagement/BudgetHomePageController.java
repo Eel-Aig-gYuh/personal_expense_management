@@ -9,7 +9,8 @@ import com.ghee.pojo.Category;
 import com.ghee.pojo.Users;
 import com.ghee.services.BudgetServices;
 import com.ghee.services.CategoryServices;
-import com.ghee.utils.MoneyFormat;
+import com.ghee.formatter.MoneyFormat;
+import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -49,7 +50,14 @@ public class BudgetHomePageController implements Initializable {
     @FXML Label lblTotalBudget;
     @FXML Label lblTotalSpent;
     @FXML Label lblDayLeft;
-    @FXML Button btnCreateBudget;
+    
+    @FXML private Button btnCreateBudget;
+    
+    @FXML private Button btnHomePage;
+    @FXML private Button btnBudgetPage;
+    @FXML private Button btnTransactionPage;
+    @FXML private Button btnAddTransaction;
+    @FXML private Button btnUserPage;
     
     @FXML ProgressBar progressBar;
     
@@ -58,7 +66,6 @@ public class BudgetHomePageController implements Initializable {
     private final BudgetServices budgetServices = new BudgetServices();
     private final CategoryServices categoryServices = new CategoryServices();
     
-    
     /**
      * Initializes the controller class.
      * @param url
@@ -66,6 +73,8 @@ public class BudgetHomePageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.btnBudgetPage.setDisable(true);
+        
         this.lblDayLeft.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         
         // xử lý sự kiện thay đổi tab
@@ -81,7 +90,7 @@ public class BudgetHomePageController implements Initializable {
             Users currentUser = Utils.getCurrentUser();
             
             if (currentUser == null) {
-                Utils.getAlert("Không tìm thấy user hiện tại !", Alert.AlertType.ERROR).showAndWait();
+                MessageBox.getAlert("Không tìm thấy user hiện tại !", Alert.AlertType.ERROR).showAndWait();
                 return;
             }
             
@@ -118,14 +127,14 @@ public class BudgetHomePageController implements Initializable {
                     startDate = now.withDayOfMonth(1);
                     endDate = now.withDayOfMonth(now.lengthOfMonth());
             }
-            
+  
             double totalBudget = budgetServices.getTotalBudget(currentUser.getId(), startDate, endDate);
             double totalSpent = budgetServices.getTotalSpent(currentUser.getId(), startDate, endDate);
             double totalAvailabel = totalBudget-totalSpent;
             
             this.lblTotalAvailable.setText(MoneyFormat.moneyFormat(totalAvailabel));
-            this.lblTotalSpent.setText(MoneyFormat.moneyFormat(totalSpent));
-            this.lblTotalBudget.setText(MoneyFormat.moneyFormat(totalBudget));
+            this.lblTotalSpent.setText(MoneyFormat.formatAmount(totalSpent));
+            this.lblTotalBudget.setText(MoneyFormat.formatAmount(totalBudget));
             
             // Cập nhật thanh tiến trình
             if (totalBudget > 0) {
@@ -194,15 +203,63 @@ public class BudgetHomePageController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetCreatePage.fxml"));
             Parent root = loader.load();
-
-            // chuyển trang qua account 
+            
             Stage stage = (Stage) btnCreateBudget.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang tạo ngân sách !";
             
             System.err.println("Chi tiết lỗi: " + ex.getMessage());
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
+        }
+    }
+    
+    // ============ Điều hướng
+    public void goToHomePage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("homePage.fxml"));
+            Parent root = loader.load();
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnHomePage.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua trang tạo ngân sách !";
+            
+            System.err.println("Chi tiết lỗi: " + ex.getMessage());
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
+        }
+    }
+    
+    public void goToTransactionHomePage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("transactionHomePage.fxml"));
+            Parent root = loader.load();
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnTransactionPage.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua trang tạo ngân sách !";
+            
+            System.err.println("Chi tiết lỗi: " + ex.getMessage());
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
+        }
+    }
+    
+    public void goToCreateTransactionPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("transactionCreatePage.fxml"));
+            Parent root = loader.load();
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnAddTransaction.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua trang tạo ngân sách !";
+            
+            System.err.println("Chi tiết lỗi: " + ex.getMessage());
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 }
