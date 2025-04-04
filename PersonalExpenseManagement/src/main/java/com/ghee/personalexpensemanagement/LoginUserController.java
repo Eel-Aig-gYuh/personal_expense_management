@@ -7,6 +7,7 @@ package com.ghee.personalexpensemanagement;
 import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
+import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -29,13 +30,14 @@ import javafx.stage.Stage;
  */
 public class LoginUserController implements Initializable {
 
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private PasswordField passwordField;
+    @FXML private TextField usernameField;
+    @FXML private TextField passwordFieldVisible;
+    
+    @FXML private PasswordField passwordField;
 
-    @FXML
-    private Button loginButton;
+    @FXML private Button loginButton;
+    
+    private boolean isPasswordVisible = false;
 
     private UserServices s = null;
 
@@ -48,6 +50,27 @@ public class LoginUserController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.s = new UserServices();
+        passwordFieldVisible.textProperty().bindBidirectional(passwordField.textProperty());
+    }
+    
+    public void togglePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible; // Đảo ngược trạng thái
+
+        if (isPasswordVisible) {
+            // Hiện mật khẩu: Ẩn PasswordField, hiện TextField
+            passwordField.setVisible(false);
+            passwordField.setManaged(false);
+            passwordFieldVisible.setVisible(true);
+            passwordFieldVisible.setManaged(true);
+            
+        } else {
+            // Ẩn mật khẩu: Hiện PasswordField, ẩn TextField
+            passwordField.setVisible(true);
+            passwordField.setManaged(true);
+            passwordFieldVisible.setVisible(false);
+            passwordFieldVisible.setManaged(false);
+            
+        }
     }
 
     public void login() throws IOException {
@@ -56,7 +79,7 @@ public class LoginUserController implements Initializable {
 
         if ("".equals(username.trim()) || "".equals(password.trim())) {
             String message = username.equals("") ? "Vui lòng điền tài khoản !" : "Vui lòng điền mật khẩu !";
-            Utils.getAlert(message, Alert.AlertType.CONFIRMATION).showAndWait();
+            MessageBox.getAlert(message, Alert.AlertType.CONFIRMATION).showAndWait();
             return;
         }
 
@@ -66,16 +89,20 @@ public class LoginUserController implements Initializable {
             if (user != null) {
                 Utils.setCurrentUser(user);
 
-                Utils.getAlert("Đăng nhập thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                MessageBox.getAlert("Đăng nhập thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
 
                 goToHomePage();
             } else {
-                Utils.getAlert("Thông tin tài khoản hoặc mật khẩu không chính xác !", Alert.AlertType.CONFIRMATION).showAndWait();
+                MessageBox.getAlert("Thông tin tài khoản hoặc mật khẩu không chính xác !", Alert.AlertType.CONFIRMATION).showAndWait();
             }
         } catch (SQLException ex) {
-            Utils.getAlert("Lỗi SQL", Alert.AlertType.ERROR).show();
+            MessageBox.getAlert("Lỗi SQL", Alert.AlertType.ERROR).show();
         }
 
+    }
+    
+    public void showPassword() {
+        this.passwordField.setStyle("text");
     }
 
     public void goToHomePage() throws IOException {
@@ -89,7 +116,7 @@ public class LoginUserController implements Initializable {
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang chủ !";
             System.out.println(ex.getMessage());
-            Utils.getAlert(message, Alert.AlertType.ERROR).showAndWait();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).showAndWait();
         }
     }
 
@@ -103,7 +130,7 @@ public class LoginUserController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang đăng ký !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 }

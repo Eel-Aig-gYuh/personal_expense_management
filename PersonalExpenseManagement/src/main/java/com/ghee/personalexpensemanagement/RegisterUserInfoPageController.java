@@ -9,6 +9,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.ghee.config.AppConfigs;
 import com.ghee.config.CloudinaryConfig;
 import com.ghee.personalexpensemanagement.Utils;
+import com.ghee.utils.MessageBox;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -93,15 +94,15 @@ public class RegisterUserInfoPageController implements Initializable {
 
             } catch (IllegalStateException e) {
                 // Xử lý lỗi nếu thiếu thông tin Cloudinary trong file .env
-                Utils.getAlert("Không thể kết nối đến Cloudinary. Vui lòng kiểm tra file .env!", Alert.AlertType.ERROR).show();
+                MessageBox.getAlert("Không thể kết nối đến Cloudinary. Vui lòng kiểm tra file .env!", Alert.AlertType.ERROR).show();
 
             } catch (IOException e) {
                 // Xử lý lỗi khi upload ảnh
-                Utils.getAlert("Không thể upload ảnh lên Cloudinary: ", Alert.AlertType.ERROR).show();
+                MessageBox.getAlert("Không thể upload ảnh lên Cloudinary: ", Alert.AlertType.ERROR).show();
 
             } catch (Exception e) {
                 // Xử lý các ngoại lệ không mong muốn khác
-                Utils.getAlert("Đã xảy ra lỗi: ", Alert.AlertType.ERROR).show();
+                MessageBox.getAlert("Đã xảy ra lỗi: ", Alert.AlertType.ERROR).show();
                 
             }
         }
@@ -117,12 +118,12 @@ public class RegisterUserInfoPageController implements Initializable {
         Date createAt = new Date();
         
         if (firstname.equals("") || lastname.equals("") || email.equals("")) {
-            Utils.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
+            MessageBox.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
             return ;
         }
         
         if (!email.contains("@")) {
-            Utils.getAlert(AppConfigs.ERROR_EMAIL_PATTERN, Alert.AlertType.WARNING).showAndWait();
+            MessageBox.getAlert(AppConfigs.ERROR_EMAIL_PATTERN, Alert.AlertType.WARNING).showAndWait();
             return ;
         }
         
@@ -140,7 +141,7 @@ public class RegisterUserInfoPageController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex){
             String message = "Lỗi không thể chuyển sang trang kế tiếp !";
-            Utils.getAlert(message, Alert.AlertType.WARNING).show();
+            MessageBox.getAlert(message, Alert.AlertType.WARNING).show();
         }
     }
     
@@ -154,7 +155,7 @@ public class RegisterUserInfoPageController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang đăng ký !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 }

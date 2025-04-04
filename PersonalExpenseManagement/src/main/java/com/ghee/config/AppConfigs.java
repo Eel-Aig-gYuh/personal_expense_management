@@ -24,6 +24,14 @@ public class AppConfigs {
     public static String ERROR_PASS_PATTERN = "Lỗi mật khẩu không đủ mạnh, phải có ít nhất 1 ký tự hoa, 1 ký tự thường, 1 số và 1 ký tự đặc biệt !";
     public static String ERROR_PASS_AND_CONFIRM = "Lỗi mật khẩu không trùng khớp, vui lòng nhập lại !";
     
+    // ================ BUDGET
+    public static int MIN_TARGET = 100000;
+    
+    public static String ERROR_CATEGORY_IS_NULL = "Vui lòng chọn một danh mục cho ngân sách !";
+    public static String ERROR_TARGET_IS_NEGATIVE = "Vui lòng điền mục tiêu ngân sách không âm !";
+    public static String ERROR_TARGET_LESS_THAN_MIN = String.format("Vui lòng điền mục tiêu ngân sách không nhỏ hơn %d", MIN_TARGET);
+    public static String ERROR_DATE_IS_NOT_CORRECT = "Vui lòng điền ngày phù hợp !";
+    
     // ================ DATABASE
     public static String ERROR_DATABASE = "Lỗi kết nối database";
 }

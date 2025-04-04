@@ -5,10 +5,10 @@
 package com.ghee.personalexpensemanagement;
 
 import com.ghee.config.AppConfigs;
-import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.Users;
 import com.ghee.services.CategoryServices;
+import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -23,7 +23,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javax.security.auth.Refreshable;
 
 /**
  * FXML Controller class
@@ -51,7 +50,7 @@ public class CategoryCreatePageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        this.rdoChi.setSelected(true);
     }    
     
     public void setParentController (String parentController) {
@@ -66,7 +65,7 @@ public class CategoryCreatePageController implements Initializable {
                 String name = txtName.getText().trim();
                 
                 if (name.equals("")) {
-                    Utils.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
+                    MessageBox.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
                     return ;
                 }
                 
@@ -80,10 +79,10 @@ public class CategoryCreatePageController implements Initializable {
                 String msg = (String) results.get("message");
 
                 if (success) {
-                    Utils.getAlert("Tạo danh mục thành công!", Alert.AlertType.CONFIRMATION).showAndWait();
+                    MessageBox.getAlert("Tạo danh mục thành công!", Alert.AlertType.CONFIRMATION).showAndWait();
                     goBack();
                 } else {
-                    Utils.getAlert(msg, Alert.AlertType.WARNING).showAndWait();
+                    MessageBox.getAlert(msg, Alert.AlertType.WARNING).showAndWait();
                 }
                 
             }
@@ -110,7 +109,7 @@ public class CategoryCreatePageController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua tạo ngân sách !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
     
@@ -124,7 +123,7 @@ public class CategoryCreatePageController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua tạo giao dịch !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
     

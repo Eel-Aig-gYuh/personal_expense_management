@@ -30,8 +30,8 @@
                      </font></Label>
                </children>
             </VBox>
-            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#goToLogin" prefHeight="48.0" prefWidth="220.0" styleClass="button_first" text="Đăng nhập" />
-            <Button mnemonicParsing="false" onAction="#logout" prefHeight="48.0" prefWidth="208.0" styleClass="button_secondary" text="Đăng xuất" />
+            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#goToLogin" prefHeight="48.0" prefWidth="220.0" styleClass="button_first" text="Đăng nhập" />
+            <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#logout" prefHeight="48.0" prefWidth="208.0" styleClass="button_secondary" text="Đăng xuất" />
          </children>
       </HBox>
       <ScrollPane prefHeight="330.0" prefWidth="600.0" styleClass="ScrollPane">
@@ -45,10 +45,10 @@
       </ScrollPane>
       <HBox prefHeight="46.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Button mnemonicParsing="false" styleClass="control-button" text="Tổng quan" />
-            <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" styleClass="control-button" text="Sổ giao dịch" />
-            <Button mnemonicParsing="false" onAction="#goToCreateTransactionPage" styleClass="control-button" text="+" />
-            <Button fx:id="btnAddBudget" mnemonicParsing="false" onAction="#goToBudgetHomePage" styleClass="control-button" text="Ngân sách" />
+            <Button fx:id="btnHomePage" mnemonicParsing="false" text="Tổng quan" />
+            <Button fx:id="btnTransactionPage" mnemonicParsing="false" onAction="#goToTransactionHomePage" text="Sổ giao dịch" />
+            <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" text="+" />
+            <Button fx:id="btnBudgetPage" mnemonicParsing="false" onAction="#goToBudgetHomePage" text="Ngân sách" />
          </children>
       </HBox>
    </children>

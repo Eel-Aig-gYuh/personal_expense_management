@@ -13,7 +13,8 @@ import com.ghee.pojo.Wallet;
 import com.ghee.services.CategoryServices;
 import com.ghee.services.TransactionServices;
 import com.ghee.services.WalletServices;
-import com.ghee.utils.DatePickerUtils;
+import com.ghee.formatter.DatePickerUtils;
+import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -155,20 +156,20 @@ public class TransactionCreatePageController implements Initializable {
                 String msg = (String) results.get("message");
                 
                 if (success) {
-                    Utils.getAlert("Thêm giao dịch thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                    MessageBox.getAlert("Thêm giao dịch thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
                     goToHomePage();
                 }
                 else {
-                    Utils.getAlert("Thêm giao dịch không thành công ! " + msg, Alert.AlertType.WARNING).showAndWait();
+                    MessageBox.getAlert("Thêm giao dịch không thành công ! " + msg, Alert.AlertType.WARNING).showAndWait();
                 }
                 
             } catch (SQLException ex) {
-                Utils.getAlert("Thêm không thành công !", Alert.AlertType.ERROR).showAndWait();
+                MessageBox.getAlert("Thêm không thành công !", Alert.AlertType.ERROR).showAndWait();
                 System.err.println("ERROR: " + ex.getMessage());
             }
             
         } catch (NumberFormatException numberFormatException) {
-            Utils.getAlert("Vui lòng điền thông tin ngân sách là số!", Alert.AlertType.ERROR).showAndWait();
+            MessageBox.getAlert("Vui lòng điền thông tin ngân sách là số!", Alert.AlertType.ERROR).showAndWait();
         }
     }
     
@@ -187,7 +188,7 @@ public class TransactionCreatePageController implements Initializable {
             loadCategories();
         } catch (IOException ex) {
             String message = "Không thể chuyển qua giao diện thêm danh mục !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 
@@ -202,7 +203,7 @@ public class TransactionCreatePageController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang chủ !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
     
