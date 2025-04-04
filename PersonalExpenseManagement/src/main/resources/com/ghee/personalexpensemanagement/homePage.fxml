@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="639.0" styleClass="VBox" stylesheets="@../../../styles/homepage.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.HomePageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="639.0" styleClass="VBox" stylesheets="@../../../styles/homepage.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.HomePageController">
    <children>
       <HBox prefHeight="43.0" prefWidth="600.0" styleClass="HBox">
          <children>
@@ -45,10 +42,10 @@
       </ScrollPane>
       <HBox prefHeight="46.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Button fx:id="btnHomePage" mnemonicParsing="false" text="Tổng quan" />
-            <Button fx:id="btnTransactionPage" mnemonicParsing="false" onAction="#goToTransactionHomePage" text="Sổ giao dịch" />
-            <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" text="+" />
-            <Button fx:id="btnBudgetPage" mnemonicParsing="false" onAction="#goToBudgetHomePage" text="Ngân sách" />
+            <Button fx:id="btnHomePage" mnemonicParsing="false" styleClass="control-button" text="Tổng quan" />
+            <Button fx:id="btnTransactionPage" mnemonicParsing="false" onAction="#goToTransactionHomePage" styleClass="control-button" text="Sổ giao dịch" />
+            <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" styleClass="control-button" text="+" />
+            <Button fx:id="btnBudgetPage" mnemonicParsing="false" onAction="#goToBudgetHomePage" styleClass="control-button" text="Ngân sách" />
          </children>
       </HBox>
    </children>

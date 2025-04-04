@@ -48,7 +48,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-alignment: right;
     -fx-text-fill: #ffffff;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
 }
 
 .label-input {
@@ -111,7 +111,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 /* CSS cho nhóm button điều khiển */
 .control-button {
-    -fx-background-color: rgba(0, 78, 146, 0.7); /* Màu xanh với độ trong suốt */
+    -fx-background-color: #4682B4; /* Màu xanh với độ trong suốt */
     -fx-text-fill: white;
     -fx-font-family: 'Arial', sans-serif;
     -fx-font-size: 18px;
