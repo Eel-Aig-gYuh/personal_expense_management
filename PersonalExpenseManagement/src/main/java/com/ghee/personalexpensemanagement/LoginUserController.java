@@ -37,7 +37,7 @@ public class LoginUserController implements Initializable {
 
     @FXML private Button loginButton;
     
-    private boolean isPasswordVisible = false;
+    private boolean isPasswordVisible = true;
 
     private UserServices s = null;
 
@@ -51,6 +51,8 @@ public class LoginUserController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.s = new UserServices();
         passwordFieldVisible.textProperty().bindBidirectional(passwordField.textProperty());
+        
+        togglePasswordVisibility();
     }
     
     public void togglePasswordVisibility() {
