@@ -1,4 +1,3 @@
-
 import com.ghee.pojo.Budget;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.Users;
@@ -76,8 +75,18 @@ class BudgetServicesTestSuit {
         Map<String, Object> createResult = budgetServices.createBudget(validBudget);
         assumeTrue((boolean) createResult.get("success"));
 
-        validBudget.setTarget(1500.00);
-        Map<String, Object> updateResult = budgetServices.updateBudget(validBudget);
+        // Get the created budget ID
+        List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(
+                validBudget.getUserId().getId(),
+                LocalDate.now(),
+                LocalDate.now().plusMonths(1)
+        );
+        assumeTrue(!budgets.isEmpty());
+        
+        Budget createdBudget = budgets.get(0);
+        createdBudget.setTarget(1500.00);
+        
+        Map<String, Object> updateResult = budgetServices.updateBudget(createdBudget);
 
         assertTrue((boolean) updateResult.get("success"));
     }
@@ -121,13 +130,17 @@ class BudgetServicesTestSuit {
     @Test
     @DisplayName("Create Budget - Invalid User")
     @Tag("exception")
-    void testCreateBudget_InvalidUser() {
+    void testCreateBudget_InvalidUser() throws SQLException {
         Budget invalidBudget = new Budget();
         invalidBudget.setUserId(new Users(-1));
+        invalidBudget.setCategoryId(new Category(1));
+        invalidBudget.setTarget(1000.00);
+        invalidBudget.setStartDate(java.sql.Date.valueOf(LocalDate.now()));
+        invalidBudget.setEndDate(java.sql.Date.valueOf(LocalDate.now().plusMonths(1)));
+        invalidBudget.setCreatedAt(new Date());
 
-        assertThrows(SQLException.class, () -> {
-            budgetServices.createBudget(invalidBudget);
-        });
+        Map<String, Object> result = budgetServices.createBudget(invalidBudget);
+        assertFalse((boolean) result.get("success"));
     }
 
     @Test
@@ -146,5 +159,30 @@ class BudgetServicesTestSuit {
         Map<String, Object> result = budgetServices.updateBudget(nonExistentBudget);
 
         assertFalse((boolean) result.get("success"));
+    }
+
+    @Test
+    @DisplayName("Get Total Budget - No Budgets")
+    @Tag("query")
+    void testGetTotalBudget_NoBudgets() throws SQLException {
+        double totalBudget = budgetServices.getTotalBudget(
+                1, 
+                LocalDate.now().minusYears(1), 
+                LocalDate.now().minusYears(1).plusDays(1)
+        );
+        assertEquals(0.0, totalBudget, 0.001);
+    }
+
+    @Test
+    @DisplayName("Get Budgets By Date Range - Edge Cases")
+    @Tag("query")
+    void testGetBudgetsByDateRange_EdgeCases() throws SQLException {
+        // Test with date range that shouldn't match any budgets
+        List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(
+                1,
+                LocalDate.now().minusYears(1),
+                LocalDate.now().minusYears(1).plusDays(1)
+        );
+        assertTrue(budgets.isEmpty());
     }
 }
