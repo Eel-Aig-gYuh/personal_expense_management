@@ -133,6 +133,13 @@
             <artifactId>jakarta.persistence</artifactId>
             <version>2.2.3</version>
         </dependency>
+<!--        <dependency>
+            <groupId>com.ghee</groupId>
+            <artifactId>PersonalExpenseManagement</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>-->
     </dependencies>
     <build>
         <testResources>

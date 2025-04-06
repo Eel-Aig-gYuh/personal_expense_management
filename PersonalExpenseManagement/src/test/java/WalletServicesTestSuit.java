@@ -1,10 +1,10 @@
 
-import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Wallet;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
 import com.ghee.services.WalletServices;
+import com.ghee.utils.ManageCurrentUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ public class WalletServicesTestSuit {
         // Login the user to set current user in Utils
         Users loggedInUser = userServices.loginUser(testUser.getUsername(), "TestPass123!");
         assertNotNull(loggedInUser);
-        Utils.setCurrentUser(loggedInUser);
+        ManageCurrentUser.setCurrentUser(loggedInUser);
         
         // Get the wallet for testing
         testWallet = walletServices.getWalletById(loggedInUser.getId());
