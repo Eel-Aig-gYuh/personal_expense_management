@@ -1,0 +1,5 @@
+test_case,user_id,expected_success
+Valid existing user,39,true
+Non-existent user,999999,false
+Negative user ID,-1,false
+Zero user ID,0,false

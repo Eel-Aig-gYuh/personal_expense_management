@@ -11,7 +11,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="701.0" prefWidth="770.0" styleClass="VBox" stylesheets="@../../../styles/budgethomepage.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.BudgetHomePageController">
    <children>
-      <TabPane fx:id="tabPane" prefHeight="53.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" prefHeight="53.0" prefWidth="600.0" styleClass="TabPane" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Tháng này" />
             <Tab text="Quý này" />
@@ -20,14 +20,14 @@
       </TabPane>
       <VBox prefHeight="134.0" prefWidth="600.0">
          <children>
-            <Label text="Số tiền bạn có thể chi" />
-            <Label fx:id="lblTotalAvailable" text="0.0" />
-            <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" />
+            <Label styleClass="label-description" text="Số tiền bạn có thể chi" />
+            <Label fx:id="lblTotalAvailable" styleClass="label-description" text="0.0" />
+            <ProgressBar fx:id="progressBar" prefHeight="31.0" prefWidth="200.0" progress="0.0" />
             <HBox prefHeight="41.0" prefWidth="600.0">
                <children>
-                  <Label fx:id="lblTotalBudget" text="1M  " />
-                  <Label fx:id="lblTotalSpent" text="0   " />
-                  <Label fx:id="lblDayLeft" text="28 ngày" />
+                  <Label fx:id="lblTotalBudget" styleClass="label-description" text="1M  " />
+                  <Label fx:id="lblTotalSpent" styleClass="label-description" text="0   " />
+                  <Label fx:id="lblDayLeft" styleClass="label-description" text="28 ngày" />
                </children>
             </HBox>
             <Button fx:id="btnCreateBudget" mnemonicParsing="false" onAction="#goToCreateBudgetPage" text="Tạo ngân sách" />
@@ -36,13 +36,13 @@
       <ListView fx:id="listViewBudgets" prefHeight="226.0" prefWidth="600.0">
                             
                         </ListView>
-      <HBox prefHeight="55.0" prefWidth="600.0">
+      <HBox prefHeight="55.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Button fx:id="btnHomePage" mnemonicParsing="false" onAction="#goToHomePage" text="Tổng quan" />
-            <Button fx:id="btnTransactionPage" mnemonicParsing="false" onAction="#goToTransactionHomePage" text="Sổ giao dịch" />
-            <Button fx:id="btnCreateTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" text="+" />
-            <Button fx:id="btnBudgetPage" mnemonicParsing="false" text="Ngân sách" />
-            <Button fx:id="btnUserPage" mnemonicParsing="false" text="Button" />
+            <Button fx:id="btnHomePage" mnemonicParsing="false" onAction="#goToHomePage" styleClass="control-button" text="Tổng quan" />
+            <Button fx:id="btnTransactionPage" mnemonicParsing="false" onAction="#goToTransactionHomePage" styleClass="control-button" text="Sổ giao dịch" />
+            <Button fx:id="btnCreateTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" styleClass="control-button" text="+" />
+            <Button fx:id="btnBudgetPage" mnemonicParsing="false" styleClass="control-button" text="Ngân sách" />
+            <Button fx:id="btnUserPage" mnemonicParsing="false" styleClass="control-button" text="Button" />
          </children>
       </HBox>
    </children>

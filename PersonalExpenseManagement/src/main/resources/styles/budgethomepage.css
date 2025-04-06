@@ -36,9 +36,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-weight: bold;
     -fx-min-width: 180px;
     -fx-text-alignment: right;
-    -fx-text-fill: linear-gradient(to bottom, #000428, #004e92);
+    -fx-text-fill: white;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
 }
 
 .label-input {
@@ -65,7 +65,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
 }
 
@@ -77,7 +77,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
 }
 .button_secondary:hover {
@@ -116,7 +116,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-padding: 8px 25px;
     -fx-border-width: 0;
     -fx-font-family: 'Arial', sans-serif;
-    -fx-font-size: 16px;
+    -fx-font-size: 20px;
     -fx-text-fill: #ffffff;
     -fx-cursor: hand;
     -fx-effect: null;
@@ -192,7 +192,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 /* CSS cho nhóm button điều khiển */
 .control-button {
-    -fx-background-color: rgba(0, 78, 146, 0.7); /* Màu xanh với độ trong suốt */
+    -fx-background-color: #4682B4; /* Màu xanh với độ trong suốt */
     -fx-text-fill: white;
     -fx-font-family: 'Arial', sans-serif;
     -fx-font-size: 18px;

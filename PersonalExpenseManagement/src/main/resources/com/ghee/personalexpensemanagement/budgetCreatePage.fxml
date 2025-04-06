@@ -46,13 +46,19 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <DatePicker fx:id="dpEndDate1" prefHeight="47.0" prefWidth="323.0" promptText="Ngày kết thúc" styleClass="DatePicker" />
+            <DatePicker fx:id="dpEndDate" prefHeight="47.0" prefWidth="323.0" promptText="Ngày kết thúc" styleClass="DatePicker" />
          </children>
       </HBox>
       <HBox layoutX="40.0" layoutY="369.0" prefHeight="33.0" prefWidth="480.0" styleClass="HBox">
          <children>
-            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#goToHomePage" styleClass="cancel-button" text="Hủy" />
-            <Button fx:id="btnSave" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addBudget" styleClass="save-button" text="Lưu" />
+            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#goToHomePage" styleClass="cancel-button" text="Hủy">
+               <font>
+                  <Font size="20.0" />
+               </font></Button>
+            <Button fx:id="btnSave" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addBudget" styleClass="save-button" text="Lưu">
+               <font>
+                  <Font size="20.0" />
+               </font></Button>
          </children>
       </HBox>
    </children>
