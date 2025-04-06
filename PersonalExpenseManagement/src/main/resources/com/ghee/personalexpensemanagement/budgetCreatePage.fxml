@@ -18,6 +18,7 @@
       </Label>
       <HBox prefHeight="32.0" prefWidth="600.0" styleClass="HBox">
          <children>
+            <Label text="Thêm Ngân Sách" />
             <ComboBox fx:id="cbCategories" prefHeight="62.0" prefWidth="310.0" promptText="Chọn danh mục" styleClass="ComboBox" />
          </children>
       </HBox>
