@@ -1,147 +1,101 @@
-import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.function.Executable;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import org.mindrot.jbcrypt.BCrypt;
 
-@ExtendWith(MockitoExtension.class)
-class UserServicesTestSuit {
-    
-    @InjectMocks
+@RunWith(JUnitPlatform.class)
+public class UserServicesTestSuit {
+
     private UserServices userServices;
-
-    @Mock
-    private Connection mockConnection;
-    
-    @Mock
-    private CallableStatement mockCallableStatement;
-    
-    @Mock
-    private ResultSet mockResultSet;
-
-    private Users testUser;
+    private Users validUser;
 
     @BeforeEach
     void setUp() throws SQLException {
-        // Giả lập kết nối DB
-        Mockito.mockStatic(JdbcUtils.class);
-        when(JdbcUtils.getConn()).thenReturn(mockConnection);
+        userServices = new UserServices();
+        // Create and register a valid test user
+        validUser = createValidUser();
+        Map<String, Object> regResult = userServices.registerUser(validUser);
+        assertTrue((boolean) regResult.get("success"), "Setup failed - could not register test user");
+    }
+
+    // Registration Tests
+    @ParameterizedTest
+    @CsvFileSource(resources = "/registration_test_cases.csv", numLinesToSkip = 1)
+    @DisplayName("Registration Test: {0}")
+    void testRegistration(String testCase, String username, String password, 
+                        String firstName, String lastName, 
+                        String avatar, String email, 
+                        boolean expectedResult) throws SQLException {
         
-        // Tạo user mẫu
-        testUser = new Users();
-        testUser.setUsername("testUser");
-        testUser.setPassword("testPassword");
-        testUser.setFirstName("John");
-        testUser.setLastName("Doe");
-        testUser.setEmail("john.doe@example.com");
-        testUser.setAvatar("avatar.png");
-        testUser.setRole("USER");
-        testUser.setCreatedAt(new Date());
+        Users user = new Users();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setAvatar(avatar);
+        user.setEmail(email);
+        user.setRole("USER");
+        user.setCreatedAt(new Date());
 
-        // Giả lập CallableStatement
-        when(mockConnection.prepareCall(anyString())).thenReturn(mockCallableStatement);
+        Map<String, Object> result = userServices.registerUser(user);
+        assertEquals(expectedResult, result.get("success"), 
+            "Test case: " + testCase + " - Message: " + result.get("message"));
     }
 
-    @Test
-    @DisplayName("Test đăng ký user thành công")
-    void testRegisterUser_Success() throws SQLException {
-        when(mockCallableStatement.execute()).thenReturn(true);
-        when(mockCallableStatement.getBoolean(9)).thenReturn(true);
-        when(mockCallableStatement.getString(10)).thenReturn("Đăng ký thành công");
-
-        boolean result = userServices.registerUser(testUser);
-
+    // Login Tests
+    @ParameterizedTest
+    @CsvFileSource(resources = "/login_test_cases.csv", numLinesToSkip = 1)
+    @DisplayName("Login Test: {0}")
+    void testLogin(String testCase, String username, String password, 
+                 boolean expectedSuccess) throws SQLException {
         
-        assertTrue(result);
-        verify(mockCallableStatement, times(1)).execute();
-    }
-
-    @Test
-@DisplayName("Test đăng ký user thất bại")
-void testRegisterUser_Failure() throws SQLException {
-    when(mockCallableStatement.execute()).thenReturn(true);
-    when(mockCallableStatement.getBoolean(9)).thenReturn(false);
-    when(mockCallableStatement.getString(10)).thenReturn("Lỗi đăng ký");
-
-    boolean result = userServices.registerUser(testUser);
-    
-    assertFalse(result);
-    verify(mockCallableStatement).setString(eq(1), eq(testUser.getUsername()));
-    verify(mockCallableStatement).setString(eq(2), anyString());
-    verify(mockCallableStatement).execute();
-}
-
-    @Test
-    @DisplayName("Test lỗi khi gọi stored procedure đăng ký")
-    void testRegisterUser_SQLException() throws SQLException {
-        when(mockConnection.prepareCall(anyString())).thenThrow(new SQLException("Database error"));
-
-        Executable executable = () -> userServices.registerUser(testUser);
+        Users result = userServices.loginUser(username, password);
         
-        assertThrows(SQLException.class, executable);
+        if (expectedSuccess) {
+            assertNotNull(result, "Login should succeed for: " + testCase);
+            assertEquals(username, result.getUsername());
+        } else {
+            assertNull(result, "Login should fail for: " + testCase);
+        }
     }
 
     @Test
-    @DisplayName("Test đăng nhập user thành công")
-    void testLoginUser_Success() throws SQLException {
-        String hashedPassword = BCrypt.hashpw("testPassword", BCrypt.gensalt(10));
-
-        when(mockCallableStatement.executeQuery()).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(true);
-        when(mockResultSet.getString("password")).thenReturn(hashedPassword);
-        when(mockResultSet.getInt("id")).thenReturn(1);
-        when(mockResultSet.getString("username")).thenReturn("testUser");
-
-        Users resultUser = userServices.loginUser("testUser", "testPassword");
+    @DisplayName("Test password hashing")
+    void testPasswordHashing() throws SQLException {
+        String plainPassword = "Test@1234";
+        Users user = createValidUser();
+        user.setPassword(plainPassword);
         
-        assertNotNull(resultUser);
-        assertEquals("testUser", resultUser.getUsername());
-    }
-
-    @Test
-    @DisplayName("Test đăng nhập thất bại do sai mật khẩu")
-    void testLoginUser_WrongPassword() throws SQLException {
-        String hashedPassword = BCrypt.hashpw("correctPassword", BCrypt.gensalt(10));
-
-        when(mockCallableStatement.executeQuery()).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(true);
-        when(mockResultSet.getString("password")).thenReturn(hashedPassword);
-
-        Users resultUser = userServices.loginUser("testUser", "wrongPassword");
-
-        assertNull(resultUser);
-    }
-
-    @Test
-    @DisplayName("Test đăng nhập thất bại do user không tồn tại")
-    void testLoginUser_UserNotFound() throws SQLException {
-        when(mockCallableStatement.executeQuery()).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(false);
-
-        Users resultUser = userServices.loginUser("unknownUser", "testPassword");
+        Map<String, Object> regResult = userServices.registerUser(user);
+        assertTrue((boolean) regResult.get("success"));
         
-        assertNull(resultUser);
+        Users loggedInUser = userServices.loginUser(user.getUsername(), plainPassword);
+        assertNotNull(loggedInUser);
+        assertNotEquals(plainPassword, loggedInUser.getPassword());
+        assertTrue(loggedInUser.getPassword().startsWith("$2a$"));
     }
 
-    @Test
-    @DisplayName("Test lỗi SQL khi đăng nhập")
-    void testLoginUser_SQLException() throws SQLException {
-        when(mockConnection.prepareCall(anyString())).thenThrow(new SQLException("Database error"));
-
-        Executable executable = () -> userServices.loginUser("testUser", "testPassword");
-
-        assertThrows(SQLException.class, executable);
+    private Users createValidUser() {
+        Users user = new Users();
+        user.setUsername("validUser_" + System.currentTimeMillis());
+        user.setPassword("ValidPass123!");
+        user.setFirstName("Test");
+        user.setLastName("User");
+        user.setAvatar("avatar.png");
+        user.setEmail("test" + System.currentTimeMillis() + "@example.com");
+        user.setRole("USER");
+        user.setCreatedAt(new Date());
+        return user;
     }
 }

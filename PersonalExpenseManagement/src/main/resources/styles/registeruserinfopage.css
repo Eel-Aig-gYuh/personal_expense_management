@@ -25,9 +25,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 .hbox-title-1 {
-    -fx-background-color: #4C4C4C;
-    -fx-padding: 10;
-    -fx-alignment: center;
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-width: 0;
 }
 
 .hbox-title-2{
@@ -49,7 +53,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-alignment: right;
     -fx-text-fill: #ffffff;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
 }
 
 .label-input {
@@ -75,7 +79,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
 }
 
@@ -87,7 +91,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
 }
 .button_secondary:hover {

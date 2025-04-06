@@ -55,6 +55,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-size: 20px;
 }
 
+
+/* Định dạng TextField chồng lên */
+.text-field-overlay {
+    -fx-border-color: #004e92;
+    -fx-border-width: 2px;
+    -fx-background-radius: 10px;
+    -fx-padding: 8px 12px;
+    -fx-font-family: 'Georgia', 'Arial', sans-serif;
+    -fx-font-size: 20px;
+    -fx-opacity: 0; /* Ẩn mặc định */
+}
+
+/* Hiển thị TextField khi được bật */
+.text-field-overlay.visible {
+    -fx-opacity: 1;
+}
+
 .button {
     -fx-background-color: #004e92;
     -fx-text-fill: white;
@@ -63,7 +80,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
 }
 
@@ -75,7 +92,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
 }
 .button_secondary:hover {

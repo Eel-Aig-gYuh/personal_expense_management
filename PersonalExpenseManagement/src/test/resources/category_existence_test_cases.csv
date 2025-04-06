@@ -1,0 +1,5 @@
+testCase,categoryId,expectedExists,categoryName,categoryType
+Existing category,1,true,Test Category 1,EXPENSE
+Non-existent category,9999,false,,
+Negative ID,-1,false,,
+Zero ID,0,false,,

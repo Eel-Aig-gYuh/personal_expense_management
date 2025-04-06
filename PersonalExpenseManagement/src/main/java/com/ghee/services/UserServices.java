@@ -26,6 +26,7 @@ public class UserServices {
      * hàm thêm user vào database.
      *
      * @param user
+     * @return 
      * @throws SQLException
      */
     public Map<String, Object> registerUser(Users user) throws SQLException {
