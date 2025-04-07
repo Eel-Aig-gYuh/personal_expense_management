@@ -53,6 +53,7 @@ public class HomePageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.btnHomePage.setDisable(true);
+        this.btnLogin.setVisible(false);
         
         try {
             Users user = Utils.getCurrentUser();
