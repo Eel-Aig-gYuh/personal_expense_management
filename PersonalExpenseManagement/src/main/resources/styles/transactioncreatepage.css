@@ -14,7 +14,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-alignment: center;
     -fx-padding: 30px;
     -fx-spacing: 25px;
-    -fx-background-radius: 20px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6);
 }
 
@@ -46,7 +45,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-size: 42px;
     -fx-alignment: center;
     -fx-text-fill: #ffffff;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
+    -fx-font-family:   'Arial', sans-serif;
 }
 
 .label-description {
@@ -54,7 +53,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-min-width: 180px;
     -fx-text-alignment: right;
     -fx-text-fill: #ffffff;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
+    -fx-font-family:   'Arial', sans-serif;
     -fx-font-size: 20px;
 }
 
@@ -69,7 +68,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-padding: 10px 15px;
     -fx-min-width: 280px;
     -fx-background-radius: 10px;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
+    -fx-font-family:   'Arial', sans-serif;
     -fx-font-size: 20px;
 }
 
@@ -81,7 +80,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-spacing: 10px;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
+    -fx-font-family:   'Arial', sans-serif;
     -fx-font-size: 20px;
     -fx-cursor: hand;
 }
@@ -94,7 +93,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-spacing: 10px;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
+    -fx-font-family:   'Arial', sans-serif;
     -fx-font-size: 20px;
     -fx-cursor: hand;
 }
@@ -130,6 +129,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-padding: 10px 15px;
     -fx-min-width: 280px;
     -fx-background-radius: 10px;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
+    -fx-font-family:   'Arial', sans-serif;
     -fx-font-size: 17px;
 }

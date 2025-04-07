@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="708.0" prefWidth="540.0" styleClass="VBox" stylesheets="@../../../styles/budgetcreatepage.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.BudgetCreatePageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="708.0" prefWidth="540.0" styleClass="VBox" stylesheets="@../../../styles/budgetcreatepage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.BudgetCreatePageController">
    <children>
       <Label prefHeight="49.0" prefWidth="554.0" styleClass="subject" text="Thêm Ngân Sách" textAlignment="CENTER">
          <font>
@@ -52,7 +52,7 @@
       </HBox>
       <HBox layoutX="40.0" layoutY="369.0" prefHeight="33.0" prefWidth="480.0" styleClass="HBox">
          <children>
-            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#goToHomePage" styleClass="cancel-button" text="Hủy">
+            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#goBack" styleClass="cancel-button" text="Hủy">
                <font>
                   <Font size="20.0" />
                </font></Button>
