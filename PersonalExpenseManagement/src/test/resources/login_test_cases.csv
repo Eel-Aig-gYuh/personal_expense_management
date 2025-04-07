@@ -1,5 +1,5 @@
 testCase,username,password,expectedSuccess
-Valid login,validUser_1743670632827,ValidPass123!,true
+Valid login,user123456123,Valid@1234,true
 Wrong password,validUser_123,wrongpass,false
 Nonexistent user,nonexistent,ValidPass123!,false
 Empty username,,ValidPass123!,false
