@@ -4,9 +4,11 @@
  */
 package com.ghee.personalexpensemanagement;
 
+import com.ghee.formatter.MoneyFormat;
 import com.ghee.pojo.Users;
 import com.ghee.pojo.Wallet;
 import com.ghee.services.WalletServices;
+import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
@@ -56,7 +58,7 @@ public class HomePageController implements Initializable {
         this.btnLogin.setVisible(false);
         
         try {
-            Users user = Utils.getCurrentUser();
+            Users user = ManageUser.getCurrentUser();
             welcomeLabel.setText("Chào mừng");
             if (user != null) {
                 String fullName = user.getLastName() + " " + user.getFirstName();
@@ -66,7 +68,7 @@ public class HomePageController implements Initializable {
                     Wallet wallet = walletServices.getWalletById(user.getId());
 
                     if (wallet != null) {
-                        soDuLabel.setText(wallet.getSoDu() + " đ");
+                        soDuLabel.setText(MoneyFormat.moneyFormat(wallet.getSoDu()));
                     } else {
                         soDuLabel.setText("Lỗi không tìm thấy ví !");
                     }
@@ -105,7 +107,7 @@ public class HomePageController implements Initializable {
             // Người dùng chọn "Đồng ý" -> Thực hiện đăng xuất
             try {
                 // Xóa thông tin người dùng hiện tại
-                Utils.setCurrentUser(null);
+                ManageUser.setCurrentUser(null);
 
                 // Chuyển về màn hình đăng nhập
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("loginUser.fxml"));

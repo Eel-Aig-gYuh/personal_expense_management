@@ -13,6 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.*;
 import java.util.Date;
+import java.util.Map;
+import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -66,10 +68,10 @@ public class BudgetServicesTestSuit {
         when(mockCallableStatement.getString(8)).thenReturn("Tạo budget thành công");
         
         // Act
-        boolean result = budgetServices.createBudget(testBudget);
+        Map<String, Object> result = budgetServices.createBudget(testBudget);
         
         // Assert
-        assertTrue(result);
+        assertTrue((Boolean) result.get("success"));
         verify(mockCallableStatement).setInt(1, testBudget.getUserId().getId());
         verify(mockCallableStatement).setInt(2, testBudget.getCategoryId().getId());
         verify(mockCallableStatement).setDouble(3, testBudget.getTarget());
@@ -85,10 +87,10 @@ public class BudgetServicesTestSuit {
         when(mockCallableStatement.getString(8)).thenReturn("Lỗi tạo budget");
         
         // Act
-        boolean result = budgetServices.createBudget(testBudget);
+        Map<String, Object> result = budgetServices.createBudget(testBudget);
         
         // Assert
-        assertFalse(result);
+        assertFalse((Boolean) result.get("success"));
         verify(mockCallableStatement).execute();
     }
 
@@ -99,7 +101,7 @@ public class BudgetServicesTestSuit {
         when(mockConnection.prepareCall(anyString())).thenThrow(new SQLException("Database error"));
         
         // Act & Assert
-        assertFalse(budgetServices.createBudget(testBudget));
+        assertFalse((BooleanSupplier) budgetServices.createBudget(testBudget));
     }
 
     @Test
@@ -111,10 +113,10 @@ public class BudgetServicesTestSuit {
         when(mockCallableStatement.getString(8)).thenReturn("Cập nhật budget thành công");
         
         // Act
-        boolean result = budgetServices.updateBudget(testBudget);
+        Map<String, Object> result = budgetServices.updateBudget(testBudget);
         
         // Assert
-        assertTrue(result);
+        assertTrue((Boolean) result.get("success"));
         verify(mockCallableStatement).setInt(1, testBudget.getId());
         verify(mockCallableStatement).setInt(2, testBudget.getUserId().getId());
         verify(mockCallableStatement).setInt(3, testBudget.getCategoryId().getId());
@@ -130,10 +132,10 @@ public class BudgetServicesTestSuit {
         when(mockCallableStatement.getString(8)).thenReturn("Lỗi cập nhật budget");
         
         // Act
-        boolean result = budgetServices.updateBudget(testBudget);
+        Map<String, Object> result = budgetServices.updateBudget(testBudget);
         
         // Assert
-        assertFalse(result);
+        assertFalse((Boolean) result.get("success"));
         verify(mockCallableStatement).execute();
     }
 
@@ -145,7 +147,7 @@ public class BudgetServicesTestSuit {
             .thenThrow(new SQLException("Database error"));
 
         // Act & Assert
-        assertFalse(budgetServices.updateBudget(testBudget)); // Kiểm tra return false thay vì exception
+        assertFalse((BooleanSupplier) budgetServices.updateBudget(testBudget)); // Kiểm tra return false thay vì exception
     }
 
     @Test

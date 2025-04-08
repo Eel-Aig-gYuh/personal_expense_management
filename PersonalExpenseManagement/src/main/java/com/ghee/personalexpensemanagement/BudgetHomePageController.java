@@ -10,6 +10,7 @@ import com.ghee.pojo.Users;
 import com.ghee.services.BudgetServices;
 import com.ghee.services.CategoryServices;
 import com.ghee.formatter.MoneyFormat;
+import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
@@ -87,7 +88,7 @@ public class BudgetHomePageController implements Initializable {
     
     public void loadBudgetsData() {
         try {
-            Users currentUser = Utils.getCurrentUser();
+            Users currentUser = ManageUser.getCurrentUser();
             
             if (currentUser == null) {
                 MessageBox.getAlert("Không tìm thấy user hiện tại !", Alert.AlertType.ERROR).showAndWait();
@@ -148,6 +149,7 @@ public class BudgetHomePageController implements Initializable {
             List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(currentUser.getId(), startDate, endDate);
             listViewBudgets.getItems().setAll(budgets);
             
+            // Tùy chỉnh giao diện hiển thị cho 1 cell trong listView.
             listViewBudgets.setCellFactory(params -> new ListCell<Budget>() {
                 @Override
                 protected void updateItem(Budget budget, boolean empty) {
@@ -162,6 +164,12 @@ public class BudgetHomePageController implements Initializable {
                             
                             Label lblCategoryName = new Label(category.getName());
                             lblCategoryName.setStyle("-fx-font-weight: bold;");
+                            
+                            Label lblTarget = new Label(String.format("         : %s đ", budget.getTarget()));
+                            lblTarget.setStyle("-fx-font-weight: bold;");
+                            
+                            HBox hboxTitle = new HBox();
+                            hboxTitle.getChildren().addAll(lblCategoryName, lblTarget);
                             
                             double remainingAmount = budget.getTarget() - budget.getAmount();
                             Label lblRemainingAmount = new Label("Còn lại " + MoneyFormat.moneyFormat(remainingAmount));
@@ -181,7 +189,7 @@ public class BudgetHomePageController implements Initializable {
                             
                             HBox hBox = new HBox(10);
                             
-                            VBox vBox = new VBox(5, lblCategoryName, lblRemainingAmount, progressBarItem, lblToday);
+                            VBox vBox = new VBox(5, hboxTitle, lblRemainingAmount, progressBarItem, lblToday);
                             hBox.getChildren().add(vBox);
                             setGraphic(hBox);
                             
@@ -193,9 +201,37 @@ public class BudgetHomePageController implements Initializable {
                 
             });
             
+            // Sự kiện khi nhấn vào 1 cell trong listView.
+            listViewBudgets.setOnMouseClicked(event -> {
+                Budget selectedBudget = listViewBudgets.getSelectionModel().getSelectedItem();
+                
+                if (selectedBudget != null) {
+                    // chuyển hướng tới updateBudget.
+                    goToUpdateBudgetPage(selectedBudget);
+                }
+            
+            });
             
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
+        }
+    }
+    
+    public void goToUpdateBudgetPage(Budget selectedBudget) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetCreatePage.fxml"));
+            Parent root = loader.load();
+            
+            BudgetCreatePageController bcpc = loader.getController();
+            bcpc.setSelectedBudget(selectedBudget);
+            
+            Stage stage = (Stage) btnCreateBudget.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua trang cập nhật ngân sách !";
+            
+            System.err.println("Chi tiết lỗi: " + ex.getMessage());
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
     

@@ -11,10 +11,12 @@ import com.ghee.pojo.Users;
 import com.ghee.services.BudgetServices;
 import com.ghee.services.CategoryServices;
 import com.ghee.formatter.DatePickerUtils;
+import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -57,6 +59,12 @@ public class BudgetCreatePageController implements Initializable {
     private ObservableList<Object> categoryItems;
     
     private String parentController;
+    private Budget selectedBudget;
+    
+    public void setSelectedBudget(Budget b) {
+        this.selectedBudget = b;
+        loadSelectedBudget();
+    }
 
     /**
      * Initializes the controller class.
@@ -91,6 +99,16 @@ public class BudgetCreatePageController implements Initializable {
         DatePickerUtils.setVietnameseDateFormat(this.dpEndDate);
     }
     
+    public void loadSelectedBudget() {
+        this.cbCategories.setValue(this.selectedBudget.getCategoryId());
+        
+        this.dpStartDate.setValue(LocalDate.parse(this.selectedBudget.getStartDate().toString()));
+        this.dpEndDate.setValue(LocalDate.parse(this.selectedBudget.getEndDate().toString()));
+        
+        this.txtTarget.setText(String.valueOf(this.selectedBudget.getTarget()));
+        this.btnSave.setText("Cập nhật");
+    }
+    
     public void setParentController(String parentController){
         this.parentController = parentController;
     }
@@ -100,7 +118,7 @@ public class BudgetCreatePageController implements Initializable {
      */
     public void loadCategories() {
         try {
-            Users currentUser = Utils.getCurrentUser();
+            Users currentUser = ManageUser.getCurrentUser();
 
             if (currentUser != null) {
                 List<Category> cates = categoryServices.getCategoriesByUserId(currentUser.getId());
@@ -161,7 +179,7 @@ public class BudgetCreatePageController implements Initializable {
                 return; 
             }
             
-            Users currentUser = Utils.getCurrentUser();
+            Users currentUser = ManageUser.getCurrentUser();
 
             Double target = Double.valueOf(this.txtTarget.getText());
             
@@ -186,20 +204,33 @@ public class BudgetCreatePageController implements Initializable {
 
             DatePickerUtils.setVietnameseDateFormat(createdAt);
 
-            Budget budget = new Budget(categoryId, currentUser, amount, target, startDate, endDate, createdAt);
-
-            var results = budgetServices.createBudget(budget);
-
-            boolean success = (boolean) results.get("success");
-            String msg = (String) results.get("message");
-
-            if (success) {
-                MessageBox.getAlert("Tạo ngân sách thành công!", Alert.AlertType.CONFIRMATION).showAndWait();
-                goBack();
-            } else {
-                MessageBox.getAlert("Tạo ngân sách không thành công! " + msg, Alert.AlertType.WARNING).showAndWait();
+            if (this.btnSave.getText().equals("Cập nhật")) {
+                // Cập nhật ngân sách.
+                Budget budget = new Budget(this.selectedBudget.getId(), categoryId, target, startDate, endDate);
+            
+                var results = budgetServices.updateBudget(budget);
+            
+                boolean success = (boolean) results.get("success");
+                String msg = (String) results.get("message");
+            
+                MessageBox.getAlert(msg, Alert.AlertType.CONFIRMATION).showAndWait();
+                if (success)
+                    goBack();
             }
-
+            else {
+                // tạo ngân sách;
+                Budget budget = new Budget(categoryId, currentUser, amount, target, startDate, endDate, createdAt);
+                
+                var results = budgetServices.createBudget(budget);
+            
+                boolean success = (boolean) results.get("success");
+                String msg = (String) results.get("message");
+                
+                MessageBox.getAlert(msg, Alert.AlertType.CONFIRMATION).showAndWait();
+                if (success) {
+                    goBack();
+                }
+            }
         } catch (NumberFormatException numberFormatException) {
             MessageBox.getAlert("Vui lòng điền thông tin ngân sách là số!", Alert.AlertType.ERROR).showAndWait();
         }

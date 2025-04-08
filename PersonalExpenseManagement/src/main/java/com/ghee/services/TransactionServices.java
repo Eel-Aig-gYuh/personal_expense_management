@@ -5,7 +5,6 @@
 package com.ghee.services;
 
 import com.ghee.config.AppConfigs;
-import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Transaction;
@@ -28,6 +27,14 @@ import java.util.Map;
  */
 public class TransactionServices {
 
+    /**
+     * Lấy danh sách các giao dịch trong khoảng thời gian.
+     * @param userId
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws SQLException 
+     */
     public List<Transaction> getTransactionByUserIdAdnDateRange(int userId, LocalDate startDate, LocalDate endDate) throws SQLException{
         List<Transaction> transactions = new ArrayList<>();
         CategoryServices categoryServices = new CategoryServices();
@@ -59,7 +66,6 @@ public class TransactionServices {
                 transaction.setAmount(rs.getDouble("amount"));
                 transaction.setTransactionDate(rs.getDate("transaction_date"));
                 transaction.setDescription(rs.getString("description"));
-                transaction.setType(rs.getString("type"));
                 transaction.setCreatedAt(rs.getDate("created_at"));
                 
                 transactions.add(transaction);
@@ -118,9 +124,64 @@ public class TransactionServices {
         return 0.0;
     }
     
+    /**
+     * Xoá giao dịch.
+     * @param transactionId
+     * @return
+     * @throws SQLException 
+     */
+    public boolean deleteTransaction(int transactionId) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "DELETE FROM transaction WHERE id = ?";
+            PreparedStatement stm = conn.prepareCall(sql);
+            stm.setInt(1, transactionId);
+
+            return stm.executeUpdate() > 0;
+        }
+    }
+    
+    /**
+     * Cập nhật lại giao dịch.
+     * @param transaction
+     * @return 
+     */
+    public Map<String, Object> updateTransaction (Transaction transaction) throws SQLException {
+        Map<String, Object> results = new HashMap<>();
+        
+        try (Connection conn = JdbcUtils.getConn()) {
+            String produceCall = "{Call UpdateTransaction (?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            CallableStatement callableStatement = conn.prepareCall(produceCall);
+            
+            callableStatement.setInt(1, transaction.getId()); // transaction_id
+            callableStatement.setInt(2, transaction.getUserId().getId()); // user_id
+            callableStatement.setInt(3, transaction.getCategoryId().getId()); // category_id
+            callableStatement.setDouble(4, transaction.getWalletId().getId()); // wallet_id
+            callableStatement.setDouble(5, transaction.getAmount()); // amount
+            callableStatement.setDate(6, new java.sql.Date(transaction.getTransactionDate().getTime())); // transaction_date
+            callableStatement.setString(7, transaction.getDescription()); // description
+            
+            callableStatement.registerOutParameter(8, Types.BOOLEAN);
+            callableStatement.registerOutParameter(9, Types.VARCHAR);
+            
+            callableStatement.execute();
+            
+            boolean success = callableStatement.getBoolean(8);
+            String message = callableStatement.getString(9);
+            
+            results.put("success", success);
+            results.put("message", message);
+        }
+        return results;
+    }
         
     /**
-     * 
+     * Thêm giao dịch.
+     * @param transaction
+     * @return
+     * @throws SQLException 
+     */        
+    /**
+     * Thêm giao dịch.
      * @param transaction
      * @return
      * @throws SQLException 
@@ -129,7 +190,7 @@ public class TransactionServices {
         Map<String, Object> results = new HashMap<>();
         
         try (Connection conn = JdbcUtils.getConn()) {
-            String produceCall = "{Call CreateTransaction (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            String produceCall = "{Call CreateTransaction (?, ?, ?, ?, ?, ?, ?, ?, ?)}";
             CallableStatement callableStatement = conn.prepareCall(produceCall);
             
             callableStatement.setInt(1, transaction.getUserId().getId()); // user_id
@@ -138,16 +199,15 @@ public class TransactionServices {
             callableStatement.setDouble(4, transaction.getAmount()); // amount
             callableStatement.setDate(5, new java.sql.Date(transaction.getTransactionDate().getTime())); // transaction_date
             callableStatement.setString(6, transaction.getDescription()); // description
-            callableStatement.setString(7, transaction.getType()); // type
-            callableStatement.setDate(8, new java.sql.Date(transaction.getCreatedAt().getTime())); // created_at
+            callableStatement.setDate(7, new java.sql.Date(transaction.getCreatedAt().getTime())); // created_at
             
-            callableStatement.registerOutParameter(9, Types.BOOLEAN);
-            callableStatement.registerOutParameter(10, Types.VARCHAR);
+            callableStatement.registerOutParameter(8, Types.BOOLEAN);
+            callableStatement.registerOutParameter(9, Types.VARCHAR);
             
             callableStatement.execute();
             
-            boolean success = callableStatement.getBoolean(9);
-            String message = callableStatement.getString(10);
+            boolean success = callableStatement.getBoolean(8);
+            String message = callableStatement.getString(9);
             
             results.put("success", success);
             results.put("message", message);

@@ -8,14 +8,13 @@ import com.ghee.formatter.MoneyFormat;
 import com.ghee.pojo.Transaction;
 import com.ghee.pojo.Users;
 import com.ghee.services.TransactionServices;
+import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +22,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -95,7 +93,7 @@ public class TransactionHomePageController implements Initializable {
      */
     public void loadTransactionDatas() {
         try {
-            Users currentUser = Utils.getCurrentUser();
+            Users currentUser = ManageUser.getCurrentUser();
 
             LocalDate now = LocalDate.now();
             LocalDate startDate;
@@ -165,18 +163,30 @@ public class TransactionHomePageController implements Initializable {
                             // Hiển thị ngày;
                             LocalDate date = LocalDate.parse(item.toString());
                             String dayOfWeek = date.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("vi"));
-                            String formatDate = String.format("%d %s, tháng %d %d", date.getDayOfMonth(), dayOfWeek, date.getMonthValue(), date.getYear());
+                            String formatDate = String.format("tháng %d %d", date.getMonthValue(), date.getYear());
                             double dailyTotal = calculateDailyTotal(date);
-
-                            Label lblDate = new Label(formatDate);
-                            lblDate.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+                            
+                            Label lblDay = new Label(String.format("%s  ", date.getDayOfMonth()));
+                            lblDay.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-alignment: center");
+                            
+                            Label lblDayOfWeek = new Label(dayOfWeek);
+                            lblDayOfWeek.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
+                            
+                            Label lblformatDate = new Label(formatDate);
+                            lblformatDate.setStyle("-fx-font-size: 8px;");
+                            
+                            VBox vboxDate = new VBox(3, lblDayOfWeek, lblformatDate);
+                            
+                            HBox hboxDate = new HBox();
+                            hboxDate.getChildren().addAll(lblDay, vboxDate);
 
                             Label lblDailyTotal = new Label(MoneyFormat.moneyFormat(dailyTotal));
                             String styleThu = "-fx-font-size: 14px; -fx-text-fill: green;";
                             String styleChi = "-fx-font-size: 14px; -fx-text-fill: red;";
-                            lblDailyTotal.setStyle(dailyTotal > 0 ? styleThu: styleChi);
+                            lblDailyTotal.setStyle(dailyTotal > 0 ? styleThu: styleChi + "-fx-text-alignment: right;");
 
-                            hbox.getChildren().addAll(lblDate, lblDailyTotal);
+                            hbox.getChildren().addAll(hboxDate, lblDailyTotal);
+                            
                             setGraphic(hbox);
                         }
                         if (item instanceof Transaction) {
@@ -190,18 +200,51 @@ public class TransactionHomePageController implements Initializable {
                             String styleThu = "-fx-font-size: 14px; -fx-text-fill: green;";
                             String styleChi = "-fx-font-size: 14px; -fx-text-fill: red;";
                             
-                            lblAmount.setStyle(((Transaction) item).getType().equals("Thu") ? styleThu: styleChi);
+                            lblAmount.setStyle(((Transaction) item).getCategoryId().getType().equals("Thu") ? styleThu: styleChi);
 
                             hbox.getChildren().addAll(lblCategoryName, lblAmount);
                             setGraphic(hbox);
                         }
                     }
                 }
-
             });
 
+            // Sự kiện khi nhấn vào 1 cell trong list view
+            listViewTransactions.setOnMouseClicked(event -> {
+                var selected = listViewTransactions.getSelectionModel().getSelectedItem();
+                
+                if (selected instanceof Transaction) { 
+                    Transaction selectedTransaction = (Transaction) selected;
+                    
+                    if (selectedTransaction != null) {
+                        // chuyển hướng tới updateBudget.
+                        goToUpdateTransactionPage(selectedTransaction);
+                    }
+                }
+
+            });
+            
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
+        }
+    }
+    
+    public void goToUpdateTransactionPage(Transaction transaction) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("transactionCreatePage.fxml"));
+            Parent root = loader.load();
+            
+            TransactionCreatePageController tcpc = loader.getController();
+            tcpc.setSelectedTransaction(transaction);
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) btnHomePage.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua cập nhật giao dịch !";
+
+            System.err.println("Chi tiết lỗi: " + ex.getMessage());
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 
@@ -211,7 +254,7 @@ public class TransactionHomePageController implements Initializable {
         
         return tmp.stream().filter(t -> t.getTransactionDate().equals(java.sql.Date.valueOf(date)))
                 .mapToDouble(t -> {
-                    return t.getType().equals("Chi")? t.getAmount() * -1.0 : t.getAmount();
+                    return t.getCategoryId().getType().equals("Chi")? t.getAmount() * -1.0 : t.getAmount();
                 })
                 .sum();
     }

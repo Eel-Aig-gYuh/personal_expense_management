@@ -13,8 +13,8 @@
    <children>
       <HBox prefHeight="52.0" prefWidth="600.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#goToHomePage" text="Hủy" />
-            <Label text="Thêm Giao Dịch" />
+            <Button mnemonicParsing="false" onAction="#goBack" text="Hủy" />
+            <Label fx:id="lblTitle" text="Thêm Giao Dịch" />
          </children>
       </HBox>
       <HBox prefHeight="32.0" prefWidth="600.0">

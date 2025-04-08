@@ -4,9 +4,9 @@
  */
 package com.ghee.services;
 
-import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Wallet;
+import com.ghee.utils.ManageUser;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -34,7 +34,7 @@ public class WalletServices {
             if (rs.next()) {
                 Wallet wallet = new Wallet(rs.getInt("id"), rs.getDouble("so_du"), rs.getDate("created_at"));
                 
-                wallet.setUsers(Utils.getCurrentUser());
+                wallet.setUsers(ManageUser.getCurrentUser());
                 
                 return wallet;
             }

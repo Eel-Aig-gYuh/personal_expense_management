@@ -8,6 +8,7 @@ import com.ghee.config.AppConfigs;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.Users;
 import com.ghee.services.CategoryServices;
+import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
@@ -59,7 +60,7 @@ public class CategoryCreatePageController implements Initializable {
     
     public void addCategory() {
         try {
-            Users currentUser = Utils.getCurrentUser();
+            Users currentUser = ManageUser.getCurrentUser();
             
             if (currentUser != null) {
                 String name = txtName.getText().trim();
