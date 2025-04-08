@@ -1,162 +1,188 @@
-
 import com.ghee.pojo.Budget;
 import com.ghee.pojo.Category;
-import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Users;
 import com.ghee.services.BudgetServices;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 
-import java.sql.*;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
-import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-@ExtendWith(MockitoExtension.class) 
-public class BudgetServicesTestSuit {
+@RunWith(JUnitPlatform.class)
+@DisplayName("Budget Services Unit Tests")
+class BudgetServicesTestSuit {
 
-    @InjectMocks
     private BudgetServices budgetServices;
+    private static Budget validBudget;
 
-    @Mock
-    private Connection mockConnection;
-    
-    @Mock
-    private CallableStatement mockCallableStatement;
-    
-    private Budget testBudget;
+    @BeforeAll
+    static void setUpClass() {
+        validBudget = new Budget();
+        validBudget.setUserId(new Users(1));
+        validBudget.setCategoryId(new Category(1));
+        validBudget.setTarget(1000.00);
+        validBudget.setStartDate(java.sql.Date.valueOf(LocalDate.now()));
+        validBudget.setEndDate(java.sql.Date.valueOf(LocalDate.now().plusMonths(1)));
+        validBudget.setCreatedAt(new Date());
+    }
 
     @BeforeEach
-    void setUp() throws SQLException {
-        // Mock static JdbcUtils
-        Mockito.mockStatic(JdbcUtils.class);
-        when(JdbcUtils.getConn()).thenReturn(mockConnection);
-        
-        // Prepare test data
-        Users testUser = new Users();
-        testUser.setId(1);
-        
-        Category testCategory = new Category();
-        testCategory.setId(1);
-        
-        testBudget = new Budget();
-        testBudget.setId(1);
-        testBudget.setUserId(testUser);
-        testBudget.setCategoryId(testCategory);
-        testBudget.setTarget(1000.0);
-        testBudget.setStartDate(new Date());
-        testBudget.setEndDate(new Date());
-        testBudget.setCreatedAt(new Date());
-        
-        // Mock CallableStatement
-        when(mockConnection.prepareCall(anyString())).thenReturn(mockCallableStatement);
+    void setUp() {
+        budgetServices = new BudgetServices();
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @CsvFileSource(resources = "/budget_creation_test_cases.csv", numLinesToSkip = 1)
+    @DisplayName("Create Budget - Parameterized Tests")
+    @Tag("creation")
+    void testCreateBudget(
+            String testCase,
+            int userId,
+            int categoryId,
+            double target,
+            String startDate,
+            String endDate,
+            boolean expectedSuccess,
+            @SuppressWarnings("unused") String ignoredMessage) throws SQLException {
+
+        Budget budget = new Budget();
+        budget.setUserId(new Users(userId));
+        budget.setCategoryId(new Category(categoryId));
+        budget.setTarget(target);
+        budget.setStartDate(java.sql.Date.valueOf(LocalDate.parse(startDate)));
+        budget.setEndDate(java.sql.Date.valueOf(LocalDate.parse(endDate)));
+        budget.setCreatedAt(new Date());
+
+        Map<String, Object> result = budgetServices.createBudget(budget);
+
+        assertEquals(expectedSuccess, result.get("success"),
+                () -> "Test case '" + testCase + "' failed. Success expected: " + expectedSuccess);
     }
 
     @Test
-    @DisplayName("Test tạo budget thành công")
-    void testCreateBudget_Success() throws SQLException {
-        // Arrange
-        when(mockCallableStatement.execute()).thenReturn(true);
-        when(mockCallableStatement.getBoolean(7)).thenReturn(true);
-        when(mockCallableStatement.getString(8)).thenReturn("Tạo budget thành công");
-        
-        // Act
-        Map<String, Object> result = budgetServices.createBudget(testBudget);
-        
-        // Assert
-        assertTrue((Boolean) result.get("success"));
-        verify(mockCallableStatement).setInt(1, testBudget.getUserId().getId());
-        verify(mockCallableStatement).setInt(2, testBudget.getCategoryId().getId());
-        verify(mockCallableStatement).setDouble(3, testBudget.getTarget());
-        verify(mockCallableStatement).execute();
-    }
-
-    @Test
-    @DisplayName("Test tạo budget thất bại")
-    void testCreateBudget_Failure() throws SQLException {
-        // Arrange
-        when(mockCallableStatement.execute()).thenReturn(true);
-        when(mockCallableStatement.getBoolean(7)).thenReturn(false);
-        when(mockCallableStatement.getString(8)).thenReturn("Lỗi tạo budget");
-        
-        // Act
-        Map<String, Object> result = budgetServices.createBudget(testBudget);
-        
-        // Assert
-        assertFalse((Boolean) result.get("success"));
-        verify(mockCallableStatement).execute();
-    }
-
-    @Test
-    @DisplayName("Test lỗi SQL khi tạo budget")
-    void testCreateBudget_SQLException() throws SQLException {
-        // Arrange
-        when(mockConnection.prepareCall(anyString())).thenThrow(new SQLException("Database error"));
-        
-        // Act & Assert
-        assertFalse((BooleanSupplier) budgetServices.createBudget(testBudget));
-    }
-
-    @Test
-    @DisplayName("Test cập nhật budget thành công")
+    @DisplayName("Update Budget - Success Case")
+    @Tag("update")
     void testUpdateBudget_Success() throws SQLException {
-        // Arrange
-        when(mockCallableStatement.execute()).thenReturn(true);
-        when(mockCallableStatement.getBoolean(7)).thenReturn(true); // Note: Corrected index from 7 to 8
-        when(mockCallableStatement.getString(8)).thenReturn("Cập nhật budget thành công");
+        Map<String, Object> createResult = budgetServices.createBudget(validBudget);
+        assumeTrue((boolean) createResult.get("success"));
+
+        // Get the created budget ID
+        List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(
+                validBudget.getUserId().getId(),
+                LocalDate.now(),
+                LocalDate.now().plusMonths(1)
+        );
+        assumeTrue(!budgets.isEmpty());
         
-        // Act
-        Map<String, Object> result = budgetServices.updateBudget(testBudget);
+        Budget createdBudget = budgets.get(0);
+        createdBudget.setTarget(1500.00);
         
-        // Assert
-        assertTrue((Boolean) result.get("success"));
-        verify(mockCallableStatement).setInt(1, testBudget.getId());
-        verify(mockCallableStatement).setInt(2, testBudget.getUserId().getId());
-        verify(mockCallableStatement).setInt(3, testBudget.getCategoryId().getId());
-        verify(mockCallableStatement).execute();
+        Map<String, Object> updateResult = budgetServices.updateBudget(createdBudget);
+
+        assertTrue((boolean) updateResult.get("success"));
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @CsvFileSource(resources = "/budget_query_test_cases.csv", numLinesToSkip = 1)
+    @DisplayName("Query Budgets - Parameterized Tests")
+    @Tag("query")
+    void testGetBudgetsByDateRange(
+            String testCase,
+            int userId,
+            String startDate,
+            String endDate,
+            int expectedCount,
+            double expectedTotalBudget) throws SQLException {
+
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+
+        List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(userId, start, end);
+        double totalBudget = budgetServices.getTotalBudget(userId, start, end);
+
+        assertAll(testCase,
+                () -> assertEquals(expectedCount, budgets.size()),
+                () -> assertEquals(expectedTotalBudget, totalBudget, 0.001)
+        );
     }
 
     @Test
-    @DisplayName("Test cập nhật budget thất bại")
-    void testUpdateBudget_Failure() throws SQLException {
-        // Arrange
-        when(mockCallableStatement.execute()).thenReturn(true);
-        when(mockCallableStatement.getBoolean(7)).thenReturn(false);
-        when(mockCallableStatement.getString(8)).thenReturn("Lỗi cập nhật budget");
-        
-        // Act
-        Map<String, Object> result = budgetServices.updateBudget(testBudget);
-        
-        // Assert
-        assertFalse((Boolean) result.get("success"));
-        verify(mockCallableStatement).execute();
+    @DisplayName("Get Total Spent - Basic Validation")
+    @Tag("query")
+    void testGetTotalSpent_Basic() throws SQLException {
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+
+        double totalSpent = budgetServices.getTotalSpent(1, start, end);
+
+        assertTrue(totalSpent >= 0, "Total spent should not be negative");
     }
 
     @Test
-    @DisplayName("Test lỗi SQL khi cập nhật budget")
-    void testUpdateBudget_SQLException() throws SQLException {
-        // Arrange
-        when(mockConnection.prepareCall(anyString()))
-            .thenThrow(new SQLException("Database error"));
-
-        // Act & Assert
-        assertFalse((BooleanSupplier) budgetServices.updateBudget(testBudget)); // Kiểm tra return false thay vì exception
-    }
-
-    @Test
-    @DisplayName("Test cập nhật budget với dữ liệu không hợp lệ")
-    void testUpdateBudget_InvalidData() throws SQLException {
-        // Arrange - Create an invalid budget (missing required fields)
+    @DisplayName("Create Budget - Invalid User")
+    @Tag("exception")
+    void testCreateBudget_InvalidUser() throws SQLException {
         Budget invalidBudget = new Budget();
-        
-        // Act & Assert
-        assertThrows(NullPointerException.class, () -> budgetServices.updateBudget(invalidBudget));
+        invalidBudget.setUserId(new Users(-1));
+        invalidBudget.setCategoryId(new Category(1));
+        invalidBudget.setTarget(1000.00);
+        invalidBudget.setStartDate(java.sql.Date.valueOf(LocalDate.now()));
+        invalidBudget.setEndDate(java.sql.Date.valueOf(LocalDate.now().plusMonths(1)));
+        invalidBudget.setCreatedAt(new Date());
+
+        Map<String, Object> result = budgetServices.createBudget(invalidBudget);
+        assertFalse((boolean) result.get("success"));
+    }
+
+    @Test
+    @DisplayName("Update Non-Existent Budget")
+    @Tag("update")
+    void testUpdateNonExistentBudget() throws SQLException {
+        Budget nonExistentBudget = new Budget();
+        nonExistentBudget.setId(-1);
+        nonExistentBudget.setUserId(new Users(1));
+        nonExistentBudget.setCategoryId(new Category(1));
+        nonExistentBudget.setTarget(1000.00);
+        nonExistentBudget.setStartDate(java.sql.Date.valueOf(LocalDate.now()));
+        nonExistentBudget.setEndDate(java.sql.Date.valueOf(LocalDate.now().plusMonths(1)));
+        nonExistentBudget.setCreatedAt(new Date());
+
+        Map<String, Object> result = budgetServices.updateBudget(nonExistentBudget);
+
+        assertFalse((boolean) result.get("success"));
+    }
+
+    @Test
+    @DisplayName("Get Total Budget - No Budgets")
+    @Tag("query")
+    void testGetTotalBudget_NoBudgets() throws SQLException {
+        double totalBudget = budgetServices.getTotalBudget(
+                1, 
+                LocalDate.now().minusYears(1), 
+                LocalDate.now().minusYears(1).plusDays(1)
+        );
+        assertEquals(0.0, totalBudget, 0.001);
+    }
+
+    @Test
+    @DisplayName("Get Budgets By Date Range - Edge Cases")
+    @Tag("query")
+    void testGetBudgetsByDateRange_EdgeCases() throws SQLException {
+        // Test with date range that shouldn't match any budgets
+        List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(
+                1,
+                LocalDate.now().minusYears(1),
+                LocalDate.now().minusYears(1).plusDays(1)
+        );
+        assertTrue(budgets.isEmpty());
     }
 }

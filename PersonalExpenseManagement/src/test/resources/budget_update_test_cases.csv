@@ -1,0 +1,4 @@
+test_case,budget_id,user_id,category_id,target,start_date,end_date,expected_success
+Valid Update,1,1,1,1500.00,2023-01-01,2023-01-31,true
+Invalid Budget ID,-1,1,1,1000.00,2023-01-01,2023-01-31,false
+Zero Target,2,1,2,0.00,2023-02-01,2023-02-28,false

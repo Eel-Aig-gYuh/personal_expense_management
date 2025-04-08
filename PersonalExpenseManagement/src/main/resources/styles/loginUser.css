@@ -14,7 +14,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-alignment: center;
     -fx-padding: 30px;
     -fx-spacing: 25px;
-    -fx-background-radius: 20px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6);
 }
 
@@ -29,7 +28,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-size: 42px;
     -fx-alignment: center;
     -fx-text-fill: #ffffff;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
+    -fx-font-family:   'Arial', sans-serif;
 }
 
 .label-description {
@@ -37,7 +36,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-min-width: 100px;
     -fx-text-alignment: right;
     -fx-text-fill: #ffffff;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
+    -fx-font-family:   'Arial', sans-serif;
     -fx-font-size: 22px;
 }
 
@@ -51,8 +50,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-radius: 10px;
     -fx-padding: 10px 15px;
     -fx-background-radius: 10px;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
+    -fx-font-family:   'Arial', sans-serif;
     -fx-font-size: 20px;
+}
+
+
+/* Định dạng TextField chồng lên */
+.text-field-overlay {
+    -fx-border-color: #004e92;
+    -fx-border-width: 2px;
+    -fx-background-radius: 10px;
+    -fx-padding: 8px 12px;
+    -fx-font-family:   'Arial', sans-serif;
+    -fx-font-size: 20px;
+    -fx-opacity: 0; /* Ẩn mặc định */
+}
+
+/* Hiển thị TextField khi được bật */
+.text-field-overlay.visible {
+    -fx-opacity: 1;
 }
 
 .button {
@@ -62,8 +78,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-padding: 12px 25px;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-family:   'Arial', sans-serif;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
 }
 
@@ -74,8 +90,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-padding: 12px 25px;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
-    -fx-font-family: 'Georgia', 'Arial', sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-family:   'Arial', sans-serif;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
 }
 .button_secondary:hover {
