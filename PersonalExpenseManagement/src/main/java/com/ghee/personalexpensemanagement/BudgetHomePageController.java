@@ -29,6 +29,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -187,10 +188,35 @@ public class BudgetHomePageController implements Initializable {
                             Label lblToday = new Label("Hôm nay");
                             lblToday.setStyle("-fx-font-size: 10px;");
                             
+                            Button btnDelete = new Button("Xóa");
+                            
+                            btnDelete.setOnAction(event -> {
+                                MessageBox.getYesNoAlert("Bạn có chắc chắn muốn xóa ngân sách này không?", Alert.AlertType.CONFIRMATION)
+                                        .showAndWait().ifPresent(res -> {
+                                            if (res == ButtonType.OK) {
+                                                Button b = (Button) event.getSource();
+                                                ListCell cell = (ListCell) b.getParent().getParent();
+                                                Budget budgetInCell = (Budget) cell.getItem();
+                                                
+                                                try {
+                                                    if (budgetServices.deleteBudget(budgetInCell.getId()) == true) {
+                                                        MessageBox.getAlert("Xóa thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                                                        loadBudgetsData();
+                                                    }
+                                                    else {
+                                                        MessageBox.getAlert("Xóa không thành công !", Alert.AlertType.ERROR).showAndWait();
+                                                    }
+                                                } catch (SQLException ex) {
+                                                    System.err.println(ex.getMessage());
+                                                }
+                                            }
+                                        });
+                            });
+                            
                             HBox hBox = new HBox(10);
                             
                             VBox vBox = new VBox(5, hboxTitle, lblRemainingAmount, progressBarItem, lblToday);
-                            hBox.getChildren().add(vBox);
+                            hBox.getChildren().addAll(vBox, btnDelete);
                             setGraphic(hBox);
                             
                         } catch (SQLException ex) {
