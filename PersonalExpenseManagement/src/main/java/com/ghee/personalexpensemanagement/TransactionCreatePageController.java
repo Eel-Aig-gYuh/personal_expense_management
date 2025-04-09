@@ -94,22 +94,22 @@ public class TransactionCreatePageController implements Initializable {
         
         DatePickerUtils.disableFutureDates(this.dpTransactionDate);
         DatePickerUtils.setVietnameseDateFormat(this.dpTransactionDate);
-        
-        if (btnSave.getText().equals("Cập nhật"))
-            lblTitle.setText("CẬP NHẬT GIAO DỊCH");
-        else 
-            lblTitle.setText("THÊM GIAO DỊCH");
     }
     
     public void loadSelectedTransaction () {
         if (this.selectedTransaction != null) {
+            btnSave.setText(String.valueOf("Cập nhật"));
+            
+            if (btnSave.getText().equals("Cập nhật"))
+                lblTitle.setText("CẬP NHẬT GIAO DỊCH");
+            else 
+                lblTitle.setText("THÊM GIAO DỊCH");
+            
             txtTarget.setText(String.valueOf(this.selectedTransaction.getAmount()));
             txtDescription.setText(this.selectedTransaction.getDescription());
             
             dpTransactionDate.setValue(LocalDate.parse(this.selectedTransaction.getTransactionDate().toString()));
             cbCategories.setValue(this.selectedTransaction.getCategoryId());
-            
-            btnSave.setText(String.valueOf("Cập nhật"));
         }
     }
     

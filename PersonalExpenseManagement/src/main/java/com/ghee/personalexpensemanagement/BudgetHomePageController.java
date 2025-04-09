@@ -197,13 +197,12 @@ public class BudgetHomePageController implements Initializable {
                                                 Button b = (Button) event.getSource();
                                                 ListCell cell = (ListCell) b.getParent().getParent();
                                                 Budget budgetInCell = (Budget) cell.getItem();
-                                                
+
                                                 try {
                                                     if (budgetServices.deleteBudget(budgetInCell.getId()) == true) {
                                                         MessageBox.getAlert("Xóa thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
                                                         loadBudgetsData();
-                                                    }
-                                                    else {
+                                                    } else {
                                                         MessageBox.getAlert("Xóa không thành công !", Alert.AlertType.ERROR).showAndWait();
                                                     }
                                                 } catch (SQLException ex) {
@@ -233,7 +232,7 @@ public class BudgetHomePageController implements Initializable {
                 
                 if (selectedBudget != null) {
                     // chuyển hướng tới updateBudget.
-                    goToUpdateBudgetPage(selectedBudget);
+                    goToDetailBudgetPage(selectedBudget);
                 }
             
             });
@@ -243,18 +242,19 @@ public class BudgetHomePageController implements Initializable {
         }
     }
     
-    public void goToUpdateBudgetPage(Budget selectedBudget) {
+    public void goToDetailBudgetPage(Budget selectedBudget) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetCreatePage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetDetailPage.fxml"));
             Parent root = loader.load();
             
-            BudgetCreatePageController bcpc = loader.getController();
+            BudgetDetailPageController bcpc = loader.getController();
             bcpc.setSelectedBudget(selectedBudget);
+            // System.out.println(selectedBudget);
             
             Stage stage = (Stage) btnCreateBudget.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
-            String message = "Không thể chuyển qua trang cập nhật ngân sách !";
+            String message = "Không thể chuyển qua trang chi tiết ngân sách !";
             
             System.err.println("Chi tiết lỗi: " + ex.getMessage());
             MessageBox.getAlert(message, Alert.AlertType.ERROR).show();

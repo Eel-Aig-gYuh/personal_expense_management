@@ -179,12 +179,6 @@ public class TransactionServices {
      * @param transaction
      * @return
      * @throws SQLException 
-     */        
-    /**
-     * Thêm giao dịch.
-     * @param transaction
-     * @return
-     * @throws SQLException 
      */
     public Map<String, Object> addTransaction(Transaction transaction) throws SQLException {
         Map<String, Object> results = new HashMap<>();
