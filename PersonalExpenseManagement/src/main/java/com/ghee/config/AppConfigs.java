@@ -35,6 +35,9 @@ public class AppConfigs {
     // ================ TRANSACTION
     public static String ERROR_LENGHT_DESCRIPTION = "Vui lòng nhập miêu tả có độ dài nhỏ hơn 255 ký tự !";
     
+    // ================ NO INFORMATION
+    public static String NO_DATA_TRANSACTION = "Danh sách giao dịch hiện đang trống, vui lòng thêm giao dịch !";
+    
     // ================ DATABASE
     public static String ERROR_DATABASE = "Lỗi kết nối database";
 }

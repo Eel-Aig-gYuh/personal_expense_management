@@ -120,7 +120,7 @@ public class BudgetHomePageController implements Initializable {
                     lblDayLeft.setText(daysLeft + " ngày");
                     break;
                     
-                case "Năm này": 
+                case "Năm này":
                     startDate = LocalDate.of(now.getYear(), 1, 1);
                     endDate = LocalDate.of(now.getYear(), 12, 31);
                     daysLeft = ChronoUnit.DAYS.between(now, endDate);

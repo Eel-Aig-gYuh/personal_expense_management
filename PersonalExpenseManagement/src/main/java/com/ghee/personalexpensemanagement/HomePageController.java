@@ -4,12 +4,14 @@
  */
 package com.ghee.personalexpensemanagement;
 
+import com.ghee.config.AppConfigs;
 import com.ghee.formatter.MoneyFormat;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.Transaction;
 import com.ghee.pojo.Users;
 import com.ghee.pojo.Wallet;
 import com.ghee.services.CategoryServices;
+import com.ghee.services.StaticticsServices;
 import com.ghee.services.TransactionServices;
 import com.ghee.services.WalletServices;
 import com.ghee.utils.ManageUser;
@@ -48,6 +50,7 @@ public class HomePageController implements Initializable {
 
     @FXML private Label welcomeLabel;
     @FXML private Label soDuLabel;
+    @FXML private Label lblNoData;
 
     @FXML private Button btnLogin;
     @FXML private Button btnLogout;
@@ -67,6 +70,7 @@ public class HomePageController implements Initializable {
     private final WalletServices walletServices = new WalletServices();
     private final TransactionServices transactionServices = new TransactionServices();
     private final CategoryServices categoryServices = new CategoryServices();
+    private final StaticticsServices staticticsServices = new StaticticsServices();
 
     /**
      * Initializes the controller class.
@@ -161,31 +165,25 @@ public class HomePageController implements Initializable {
                 endDate = now;
             }
             
-            // Lấy danh sách giao dịch
-            List<Transaction> transactions = transactionServices
-                    .getTransactionByUserIdAdnDateRange(currentUser.getId(), startDate, endDate);
+            // Lấy danh sách các giao dịch theo danh mục
+            Map<String, Double> spendingByCategory = staticticsServices.statSpendingByCategory(currentUser, startDate, endDate);
             
-            // Lọc chỉ lấy giao dịch chi
-            transactions = transactions.stream()
-                    .filter(t -> {
-                        System.out.println(t.getCategoryId().getType().equals("Chi"));
-                        return t.getCategoryId().getType().equals("Chi");
-                    })
-                    .collect(Collectors.toList());
-            
-            if (transactions.isEmpty()) {
+            if (spendingByCategory.isEmpty()) {
                 this.barChart.getData().clear();
+                this.barChart.setVisible(false);
+                this.lblNoData.setVisible(true);
+                this.lblNoData.setText(AppConfigs.NO_DATA_TRANSACTION);
+ 
                 return;
             }
             
-            // Nhóm các giao dịch theo danh mục
-            Map<String, Double> spendingByCategory = new HashMap<>();
-            transactions.forEach(t -> spendingByCategory.merge(t.getCategoryId().getName(), t.getAmount(), Double::sum));
+            this.barChart.setVisible(true);
+            this.lblNoData.setVisible(false);
             
             // Vẽ biểu đồ.
             drawBarChart(spendingByCategory);
             
-        } catch(Exception ex) {
+        } catch(SQLException ex) {
             System.err.println(ex.getMessage());
         }
     }

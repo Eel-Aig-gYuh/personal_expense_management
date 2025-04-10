@@ -50,6 +50,6 @@
          </font>
       </TextArea>
       <DatePicker fx:id="dpTransactionDate" styleClass="label-input" />
-      <Button fx:id="btnSave" mnemonicParsing="false" styleClass="button_secondary" text="Lưu" />
+      <Button fx:id="btnSave" mnemonicParsing="false" onAction="#addTransaction" styleClass="button_secondary" text="Lưu" />
    </children>
 </VBox>

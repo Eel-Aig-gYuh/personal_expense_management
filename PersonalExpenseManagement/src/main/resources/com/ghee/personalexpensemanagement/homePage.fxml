@@ -53,12 +53,13 @@
                                        <children>
                                           <BarChart fx:id="barChart" prefHeight="187.0" prefWidth="406.0">
                                             <xAxis>
-                                              <CategoryAxis side="BOTTOM" />
+                                              <CategoryAxis label="Danh mục" side="BOTTOM" />
                                             </xAxis>
                                             <yAxis>
-                                              <NumberAxis side="LEFT" />
+                                              <NumberAxis label="Số tiền (VND)" side="LEFT" />
                                             </yAxis>
                                           </BarChart>
+                                          <Label fx:id="lblNoData" text="Label" />
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -94,6 +95,7 @@
             <Button fx:id="btnTransactionPage" mnemonicParsing="false" onAction="#goToTransactionHomePage" styleClass="control-button" text="Sổ giao dịch" />
             <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" styleClass="control-button" text="+" />
             <Button fx:id="btnBudgetPage" mnemonicParsing="false" onAction="#goToBudgetHomePage" styleClass="control-button" text="Ngân sách" />
+            <Button mnemonicParsing="false" styleClass="control-button" text="Tài khoản" />
          </children>
       </HBox>
    </children>

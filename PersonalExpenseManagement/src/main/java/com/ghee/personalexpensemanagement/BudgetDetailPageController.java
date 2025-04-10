@@ -7,6 +7,7 @@ package com.ghee.personalexpensemanagement;
 import com.ghee.formatter.MoneyFormat;
 import com.ghee.pojo.Budget;
 import com.ghee.services.BudgetServices;
+import com.ghee.services.StaticticsServices;
 import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
@@ -14,7 +15,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -56,6 +59,7 @@ public class BudgetDetailPageController implements Initializable {
     @FXML private ProgressBar progressBar;
 
     private final BudgetServices budgetServices = new BudgetServices();
+    private final StaticticsServices staticticsServices = new StaticticsServices();
     
     private Budget selectedBudget;
 
@@ -111,29 +115,34 @@ public class BudgetDetailPageController implements Initializable {
     }
     
     public void drawChart() {
-        // Dữ liệu giả lập cho biểu đồ
-        XYChart.Series projectedSeries = new XYChart.Series<>();
-        projectedSeries.setName("Dự kiến");
-
-        XYChart.Series actualSeries = new XYChart.Series<>();
-        actualSeries.setName("Thực tế");
-
-        LocalDate startDate = LocalDate.parse(selectedBudget.getStartDate().toString());
-        LocalDate endDate = LocalDate.parse(selectedBudget.getEndDate().toString());
-        
-        long totalDays = ChronoUnit.DAYS.between(startDate, endDate) + 1;
-        double dailySpending = selectedBudget.getTarget() / totalDays;
-
-        // Dữ liệu dự kiến
-        // projectedSeries.getData().add(new XYChart.Data<>(0, 0));
-        projectedSeries.getData().add(new XYChart.Data<>(startDate.toString(), selectedBudget.getTarget()));
-
-        // Dữ liệu thực tế (giả lập)
-        long daysPassed = ChronoUnit.DAYS.between(startDate, LocalDate.now()) + 1;
-        // actualSeries.getData().add(new XYChart.Data<>(0, 0));
-        actualSeries.getData().add(new XYChart.Data<>(endDate.toString(), selectedBudget.getAmount()));
-
-        lineChart.getData().addAll(projectedSeries, actualSeries);
+        try {
+            Map<LocalDate, Double> datas = staticticsServices.statSpendingByBudget(this.selectedBudget);
+            
+            // Kiểm tra có dữ liệu không để vẽ biểu đồ.
+            if (datas.isEmpty()) {
+                lineChart.getData().clear();
+                
+                return;
+            }
+            
+            // Sử dụng TreeMap để tự động sắp xếp theo ngày.
+            Map<LocalDate, Double> sortedDatas = new TreeMap<>(datas);
+            
+            // Vẽ biểu đồ.
+            lineChart.getData().clear();
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            series.setName("Thống kê chi tiểu của ngân sách " + this.selectedBudget.getCategoryId().getName());
+            
+            for (Map.Entry<LocalDate, Double> item : sortedDatas.entrySet()) {
+                String dateLabel = item.getKey().format(DateTimeFormatter.ofPattern("dd/MM"));
+                series.getData().add(new XYChart.Data<>(dateLabel, item.getValue()));
+            }
+            
+            lineChart.getData().add(series);
+            
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
     }
 
     public void deleteBudget(ActionEvent event) {

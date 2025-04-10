@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,6 +32,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
@@ -219,16 +222,45 @@ public class BudgetCreatePageController implements Initializable {
             }
             else {
                 // tạo ngân sách;
+                System.out.println("tao ngan sach");
+                
                 Budget budget = new Budget(categoryId, currentUser, amount, target, startDate, endDate, createdAt);
                 
                 var results = budgetServices.createBudget(budget);
             
                 boolean success = (boolean) results.get("success");
                 String msg = (String) results.get("message");
+                // System.out.println(msg);
                 
-                MessageBox.getAlert(msg, Alert.AlertType.CONFIRMATION).showAndWait();
-                if (success) {
-                    goBack();
+                if (msg.startsWith("208")) {
+                    MessageBox.getYesNoAlert("Đã tồn tại một ngân sách trong khoảng thời gian này, bạn có muốn cập nhật lại không?", Alert.AlertType.CONFIRMATION)
+                            .showAndWait().ifPresent(res -> {
+                                if (res == ButtonType.OK) {
+                                    try {
+                                        int idSameBudget = Integer.parseInt(msg.substring(msg.indexOf(":")+1));
+                                        // System.out.println(idSameBudget);
+                                        
+                                        budget.setId(idSameBudget);
+                                        
+                                        var resultsUpdate = budgetServices.updateBudget(budget);
+                                        
+                                        Boolean successUpdate = (boolean) resultsUpdate.get("success");
+                                        String msgUpdate = (String) resultsUpdate.get("message");
+                                        
+                                        MessageBox.getAlert(msgUpdate, Alert.AlertType.CONFIRMATION).showAndWait();
+                                        if (successUpdate) {
+                                            goBack();
+                                        }
+                                    } catch (SQLException ex) {
+                                        Logger.getLogger(BudgetCreatePageController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                            });
+                } else {
+                    MessageBox.getAlert(msg, Alert.AlertType.CONFIRMATION).showAndWait();
+                    if (success) {
+                        goBack();
+                    }
                 }
             }
         } catch (NumberFormatException numberFormatException) {
