@@ -218,4 +218,23 @@ public class BudgetViewTransactionPageController implements Initializable {
             MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
+    
+    public void goBack(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetDetailPage.fxml"));
+            Parent root = loader.load();
+            
+            BudgetDetailPageController bdpc = loader.getController();
+            bdpc.setSelectedBudget(this.selectedBudget);
+
+            // chuyển trang qua account 
+            Stage stage = (Stage) listViewTransactions.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua cập nhật giao dịch !";
+
+            System.err.println("Chi tiết lỗi: " + ex.getMessage());
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
+        }
+    }
 }

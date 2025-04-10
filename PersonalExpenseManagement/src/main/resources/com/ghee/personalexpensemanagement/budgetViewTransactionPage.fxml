@@ -10,10 +10,10 @@
    <children>
       <HBox prefHeight="33.0" prefWidth="600.0">
          <children>
-            <Button fx:id="btnGoBack" mnemonicParsing="false" text="&lt; Chi tiết" />
+            <Button fx:id="btnGoBack" mnemonicParsing="false" text="&lt; Quay lại" />
          </children>
       </HBox>
       <Label fx:id="lblCategoryName" text="categoryName" />
-      <ListView fx:id="listViewTransactions" prefHeight="334.0" prefWidth="600.0" />
+      <ListView fx:id="listViewTransactions" onEditStart="#goBack" prefHeight="334.0" prefWidth="600.0" />
    </children>
 </VBox>
