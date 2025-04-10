@@ -4,9 +4,9 @@
  */
 package com.ghee.personalexpensemanagement;
 
-import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
+import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
@@ -89,7 +89,7 @@ public class LoginUserController implements Initializable {
             Users user = s.loginUser(username, password);
 
             if (user != null) {
-                Utils.setCurrentUser(user);
+                ManageUser.setCurrentUser(user);
 
                 MessageBox.getAlert("Đăng nhập thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
 

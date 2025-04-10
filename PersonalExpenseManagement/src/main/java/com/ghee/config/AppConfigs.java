@@ -32,6 +32,12 @@ public class AppConfigs {
     public static String ERROR_TARGET_LESS_THAN_MIN = String.format("Vui lòng điền mục tiêu ngân sách không nhỏ hơn %d", MIN_TARGET);
     public static String ERROR_DATE_IS_NOT_CORRECT = "Vui lòng điền ngày phù hợp !";
     
+    // ================ TRANSACTION
+    public static String ERROR_LENGHT_DESCRIPTION = "Vui lòng nhập miêu tả có độ dài nhỏ hơn 255 ký tự !";
+    
+    // ================ NO INFORMATION
+    public static String NO_DATA_TRANSACTION = "Danh sách giao dịch hiện đang trống, vui lòng thêm giao dịch !";
+    
     // ================ DATABASE
     public static String ERROR_DATABASE = "Lỗi kết nối database";
 }

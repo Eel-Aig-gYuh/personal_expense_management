@@ -21,6 +21,11 @@ import javafx.util.StringConverter;
  */
 public class DatePickerUtils {
 
+    /**
+     * Định dạng ngày theo mẫu của Việt Nam dd/MM/yyyy.
+     * @param date
+     * @return 
+     */
     public static String setVietnameseDateFormat(Date date) {
         if (date == null) {
             return "";
@@ -32,6 +37,10 @@ public class DatePickerUtils {
         return dateFormatter.format(localDate);
     }
 
+    /**
+     * Định dạng ngày theo mẫu của Việt Nam dd/MM/yyyy.
+     * @param datePicker 
+     */
     public static void setVietnameseDateFormat(DatePicker datePicker) {
         String pattern = "dd/MM/yyyy";
         datePicker.setConverter(new StringConverter<LocalDate>() {
@@ -73,6 +82,35 @@ public class DatePickerUtils {
                     public void updateItem(LocalDate date, boolean empty) {
                         super.updateItem(date, empty);
                         if (date.isBefore(today)) {
+                            setDisable(true);
+                            setStyle("-fx-background-color: #d3d3d3;"); // Màu xám nhạt
+                        }
+                    }
+                };
+            }
+        });
+
+        // Đặt giá trị mặc định là ngày hiện tại
+        datePicker.setValue(today);
+    }
+    
+    /**
+     * Cấu hình DatePicker để không cho phép chọn các ngày sau ngày hiện tại.
+     * @param datePicker 
+     */
+    public static void disableFutureDates(DatePicker datePicker) {
+        // Lấy ngày hiện tại
+        final LocalDate today = LocalDate.now();
+
+        // Thiết lập dayCellFactory để vô hiệu hóa các ngày trước ngày hiện tại
+        datePicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+                        if (date.isAfter(today)) {
                             setDisable(true);
                             setStyle("-fx-background-color: #d3d3d3;"); // Màu xám nhạt
                         }

@@ -4,8 +4,7 @@
  */
 package com.ghee.personalexpensemanagement;
 
-import com.ghee.personalexpensemanagement.CategoryCreatePageController;
-import com.ghee.personalexpensemanagement.Utils;
+import com.ghee.config.AppConfigs;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.Transaction;
 import com.ghee.pojo.Users;
@@ -14,6 +13,7 @@ import com.ghee.services.CategoryServices;
 import com.ghee.services.TransactionServices;
 import com.ghee.services.WalletServices;
 import com.ghee.formatter.DatePickerUtils;
+import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
@@ -34,6 +34,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -47,17 +48,30 @@ import javafx.stage.Stage;
 public class TransactionCreatePageController implements Initializable {
 
     @FXML private ComboBox<Wallet> cbWallets;
-    @FXML private TextField txtTarget;
     @FXML private ComboBox<Object> cbCategories;
+    
+    @FXML private TextField txtTarget;
     @FXML private TextArea txtDescription;
+    
     @FXML private DatePicker dpTransactionDate;
+    
     @FXML private Button btnSave;
+    
+    @FXML private Label lblTitle;
     
     private static CategoryServices categoryServices = new CategoryServices();
     private static WalletServices walletServices = new WalletServices();
     private static TransactionServices transactionServices = new TransactionServices();
     
-     private ObservableList<Object> categoryItems;
+    private ObservableList<Object> categoryItems;
+    
+    private Transaction selectedTransaction;
+    
+    public void setSelectedTransaction(Transaction t) {
+        this.selectedTransaction = t;
+        
+        loadSelectedTransaction();
+    }
     
     /**
      * Initializes the controller class.
@@ -78,8 +92,25 @@ public class TransactionCreatePageController implements Initializable {
             }
         });
         
-        this.dpTransactionDate.setValue(LocalDate.now());
+        DatePickerUtils.disableFutureDates(this.dpTransactionDate);
         DatePickerUtils.setVietnameseDateFormat(this.dpTransactionDate);
+    }
+    
+    public void loadSelectedTransaction () {
+        if (this.selectedTransaction != null) {
+            btnSave.setText(String.valueOf("Cập nhật"));
+            
+            if (btnSave.getText().equals("Cập nhật"))
+                lblTitle.setText("CẬP NHẬT GIAO DỊCH");
+            else 
+                lblTitle.setText("THÊM GIAO DỊCH");
+            
+            txtTarget.setText(String.valueOf(this.selectedTransaction.getAmount()));
+            txtDescription.setText(this.selectedTransaction.getDescription());
+            
+            dpTransactionDate.setValue(LocalDate.parse(this.selectedTransaction.getTransactionDate().toString()));
+            cbCategories.setValue(this.selectedTransaction.getCategoryId());
+        }
     }
     
     /**
@@ -87,7 +118,7 @@ public class TransactionCreatePageController implements Initializable {
      */
     public void loadCategories() {
         try {
-            Users currentUser = Utils.getCurrentUser();
+            Users currentUser = ManageUser.getCurrentUser();
 
             if (currentUser != null) {
                 List<Category> cates = categoryServices.getCategoriesByUserId(currentUser.getId());
@@ -133,9 +164,18 @@ public class TransactionCreatePageController implements Initializable {
         }
     } 
     
+    /**
+     * Xử lý sự kiện thêm giao dịch.
+     * @param e
+     * @throws SQLException 
+     */
     public void addTransaction(ActionEvent e) throws SQLException {
+        if (btnSave.getText().equals("Cập nhật")) {
+            updateTransaction();
+            return ;
+        }
         try {
-            Users currentUser = Utils.getCurrentUser();
+            Users currentUser = ManageUser.getCurrentUser();
             Category categoryId = (Category) this.cbCategories.getSelectionModel().getSelectedItem();
             Wallet walletId = walletServices.getWalletById(currentUser.getId());
             
@@ -146,8 +186,12 @@ public class TransactionCreatePageController implements Initializable {
             DatePickerUtils.setVietnameseDateFormat(createdAt);
             
             String description = this.txtDescription.getText();
+            if (description.length() >= 255 ) {
+                MessageBox.getAlert(AppConfigs.ERROR_LENGHT_DESCRIPTION, Alert.AlertType.ERROR).showAndWait();
+                return ;
+            }
             
-            Transaction transaction = new Transaction(currentUser, categoryId, walletId, amount, transactionDate, description, categoryId.getType(), createdAt);
+            Transaction transaction = new Transaction(currentUser, categoryId, walletId, amount, transactionDate, description, createdAt);
             
             try {
                 var results = transactionServices.addTransaction(transaction);
@@ -157,7 +201,7 @@ public class TransactionCreatePageController implements Initializable {
                 
                 if (success) {
                     MessageBox.getAlert("Thêm giao dịch thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
-                    goToHomePage();
+                    goBack();
                 }
                 else {
                     MessageBox.getAlert("Thêm giao dịch không thành công ! " + msg, Alert.AlertType.WARNING).showAndWait();
@@ -170,6 +214,50 @@ public class TransactionCreatePageController implements Initializable {
             
         } catch (NumberFormatException numberFormatException) {
             MessageBox.getAlert("Vui lòng điền thông tin ngân sách là số!", Alert.AlertType.ERROR).showAndWait();
+        }
+    }
+    
+    /** 
+     * Xử lý sự kiện cập nhật giao dịch.
+     */
+    public void updateTransaction() throws SQLException {
+        try {
+            Users currentUser = ManageUser.getCurrentUser();
+            Category categoryId = (Category) this.cbCategories.getSelectionModel().getSelectedItem();
+            Double amount = Double.valueOf(this.txtTarget.getText());
+            Date transactionDate = java.sql.Date.valueOf(this.dpTransactionDate.getValue());
+            
+            String description = this.txtDescription.getText();
+            if (description.length() >= 255 ) {
+                MessageBox.getAlert(AppConfigs.ERROR_LENGHT_DESCRIPTION, Alert.AlertType.ERROR).showAndWait();
+                return ;
+            }
+            
+            // chuẩn bị dữ liệu.
+            Transaction transaction = new Transaction();
+            transaction.setId(this.selectedTransaction.getId());
+            transaction.setUserId(currentUser);
+            transaction.setCategoryId(categoryId);
+            transaction.setWalletId(walletServices.getWalletById(currentUser.getId()));
+            transaction.setAmount(amount);
+            transaction.setTransactionDate(transactionDate);
+            transaction.setDescription(description);
+            
+            try {
+                var results = transactionServices.updateTransaction(transaction);
+                
+                boolean success = (boolean) results.get("success");
+                String msg = (String) results.get("message");
+                
+                MessageBox.getAlert(msg, Alert.AlertType.CONFIRMATION).showAndWait();
+                if (success) {
+                    goBack();
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            }
+        } catch(NumberFormatException ex) {
+             MessageBox.getAlert("Vui lòng điền thông tin ngân sách là số!", Alert.AlertType.ERROR).showAndWait();
         }
     }
     
@@ -193,9 +281,9 @@ public class TransactionCreatePageController implements Initializable {
     }
 
     
-    public void goToHomePage() {
+    public void goBack() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("homePage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("transactionHomePage.fxml"));
             Parent root = loader.load();
 
             // chuyển trang qua account 

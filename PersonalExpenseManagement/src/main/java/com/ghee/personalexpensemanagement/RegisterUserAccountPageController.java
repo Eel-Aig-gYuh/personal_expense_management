@@ -5,7 +5,6 @@
 package com.ghee.personalexpensemanagement;
 
 import com.ghee.config.AppConfigs;
-import com.ghee.personalexpensemanagement.Utils;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
 import com.ghee.utils.MessageBox;

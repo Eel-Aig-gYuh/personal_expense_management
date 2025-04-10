@@ -10,15 +10,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="788.0" prefWidth="602.0" styleClass="VBox" stylesheets="@../../../styles/transactioncreatepage.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.TransactionCreatePageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="788.0" prefWidth="602.0" styleClass="VBox" stylesheets="@../../../styles/transactioncreatepage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.TransactionCreatePageController">
    <children>
       <HBox prefHeight="49.0" prefWidth="601.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#goToHomePage" prefHeight="61.0" prefWidth="92.0" styleClass="button-huy" text="Hủy">
+            <Button mnemonicParsing="false" onAction="#goBack" prefHeight="61.0" prefWidth="92.0" styleClass="button-huy" text="Hủy">
                <font>
                   <Font size="25.0" />
                </font></Button>
-            <Label prefHeight="56.0" prefWidth="239.0" styleClass="hbox-title-1" text=" Thêm Giao Dịch" textFill="WHITE">
+            <Label fx:id="lblTitle" prefHeight="56.0" prefWidth="239.0" styleClass="hbox-title-1" text=" Thêm Giao Dịch" textFill="WHITE">
                <font>
                   <Font size="25.0" />
                </font></Label>
@@ -50,6 +50,6 @@
          </font>
       </TextArea>
       <DatePicker fx:id="dpTransactionDate" styleClass="label-input" />
-      <Button fx:id="btnSave" mnemonicParsing="false" styleClass="button_secondary" text="Lưu" />
+      <Button fx:id="btnSave" mnemonicParsing="false" onAction="#addTransaction" styleClass="button_secondary" text="Lưu" />
    </children>
 </VBox>

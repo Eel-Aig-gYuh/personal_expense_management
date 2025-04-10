@@ -10,6 +10,7 @@ import com.ghee.pojo.Users;
 import com.ghee.services.BudgetServices;
 import com.ghee.services.CategoryServices;
 import com.ghee.formatter.MoneyFormat;
+import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
 import java.io.IOException;
 import java.net.URL;
@@ -26,8 +27,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -52,7 +56,7 @@ public class BudgetHomePageController implements Initializable {
     @FXML Label lblDayLeft;
     
     @FXML private Button btnCreateBudget;
-    
+
     @FXML private Button btnHomePage;
     @FXML private Button btnBudgetPage;
     @FXML private Button btnTransactionPage;
@@ -87,7 +91,7 @@ public class BudgetHomePageController implements Initializable {
     
     public void loadBudgetsData() {
         try {
-            Users currentUser = Utils.getCurrentUser();
+            Users currentUser = ManageUser.getCurrentUser();
             
             if (currentUser == null) {
                 MessageBox.getAlert("Không tìm thấy user hiện tại !", Alert.AlertType.ERROR).showAndWait();
@@ -116,7 +120,7 @@ public class BudgetHomePageController implements Initializable {
                     lblDayLeft.setText(daysLeft + " ngày");
                     break;
                     
-                case "Năm này": 
+                case "Năm này":
                     startDate = LocalDate.of(now.getYear(), 1, 1);
                     endDate = LocalDate.of(now.getYear(), 12, 31);
                     daysLeft = ChronoUnit.DAYS.between(now, endDate);
@@ -148,6 +152,7 @@ public class BudgetHomePageController implements Initializable {
             List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(currentUser.getId(), startDate, endDate);
             listViewBudgets.getItems().setAll(budgets);
             
+            // Tùy chỉnh giao diện hiển thị cho 1 cell trong listView.
             listViewBudgets.setCellFactory(params -> new ListCell<Budget>() {
                 @Override
                 protected void updateItem(Budget budget, boolean empty) {
@@ -162,6 +167,12 @@ public class BudgetHomePageController implements Initializable {
                             
                             Label lblCategoryName = new Label(category.getName());
                             lblCategoryName.setStyle("-fx-font-weight: bold;");
+                            
+                            Label lblTarget = new Label(String.format("         : %s đ", budget.getTarget()));
+                            lblTarget.setStyle("-fx-font-weight: bold;");
+                            
+                            HBox hboxTitle = new HBox();
+                            hboxTitle.getChildren().addAll(lblCategoryName, lblTarget);
                             
                             double remainingAmount = budget.getTarget() - budget.getAmount();
                             Label lblRemainingAmount = new Label("Còn lại " + MoneyFormat.moneyFormat(remainingAmount));
@@ -179,10 +190,34 @@ public class BudgetHomePageController implements Initializable {
                             Label lblToday = new Label("Hôm nay");
                             lblToday.setStyle("-fx-font-size: 10px;");
                             
+                            Button btnDelete = new Button("Xóa");
+                            
+                            btnDelete.setOnAction(event -> {
+                                MessageBox.getYesNoAlert("Bạn có chắc chắn muốn xóa ngân sách này không?", Alert.AlertType.CONFIRMATION)
+                                        .showAndWait().ifPresent(res -> {
+                                            if (res == ButtonType.OK) {
+                                                Button b = (Button) event.getSource();
+                                                ListCell cell = (ListCell) b.getParent().getParent();
+                                                Budget budgetInCell = (Budget) cell.getItem();
+
+                                                try {
+                                                    if (budgetServices.deleteBudget(budgetInCell.getId()) == true) {
+                                                        MessageBox.getAlert("Xóa thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                                                        loadBudgetsData();
+                                                    } else {
+                                                        MessageBox.getAlert("Xóa không thành công !", Alert.AlertType.ERROR).showAndWait();
+                                                    }
+                                                } catch (SQLException ex) {
+                                                    System.err.println(ex.getMessage());
+                                                }
+                                            }
+                                        });
+                            });
+                            
                             HBox hBox = new HBox(10);
                             
-                            VBox vBox = new VBox(5, lblCategoryName, lblRemainingAmount, progressBarItem, lblToday);
-                            hBox.getChildren().add(vBox);
+                            VBox vBox = new VBox(5, hboxTitle, lblRemainingAmount, progressBarItem, lblToday);
+                            hBox.getChildren().addAll(vBox, btnDelete);
                             setGraphic(hBox);
                             
                         } catch (SQLException ex) {
@@ -193,9 +228,38 @@ public class BudgetHomePageController implements Initializable {
                 
             });
             
+            // Sự kiện khi nhấn vào 1 cell trong listView.
+            listViewBudgets.setOnMouseClicked(event -> {
+                Budget selectedBudget = listViewBudgets.getSelectionModel().getSelectedItem();
+                
+                if (selectedBudget != null) {
+                    // chuyển hướng tới updateBudget.
+                    goToDetailBudgetPage(selectedBudget);
+                }
+            
+            });
             
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
+        }
+    }
+    
+    public void goToDetailBudgetPage(Budget selectedBudget) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetDetailPage.fxml"));
+            Parent root = loader.load();
+            
+            BudgetDetailPageController bcpc = loader.getController();
+            bcpc.setSelectedBudget(selectedBudget);
+            // System.out.println(selectedBudget);
+            
+            Stage stage = (Stage) btnCreateBudget.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException ex) {
+            String message = "Không thể chuyển qua trang chi tiết ngân sách !";
+            
+            System.err.println("Chi tiết lỗi: " + ex.getMessage());
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
     
