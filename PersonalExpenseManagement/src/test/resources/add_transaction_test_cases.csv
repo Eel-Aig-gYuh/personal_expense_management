@@ -1,0 +1,9 @@
+testCase,userId,categoryId,walletId,amount,transactionDate,description,expectedResult
+Valid transaction,2,1,2,100.0,2023-01-01,Test transaction,true
+Negative amount,1,1,1,-100.0,2023-01-01,Invalid amount,false
+Zero amount,1,1,1,0.0,2023-01-01,Zero amount,false
+Future date,1,1,1,100.0,2030-01-01,Future date,false
+Invalid user,999,1,1,100.0,2023-01-01,Invalid user,false
+Invalid category,1,999,1,100.0,2023-01-01,Invalid category,false
+Invalid wallet,1,1,999,100.0,2023-01-01,Invalid wallet,false
+Empty description,2,1,2,100.0,2023-01-01,,true
