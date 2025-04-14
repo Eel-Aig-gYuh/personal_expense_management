@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="708.0" prefWidth="540.0" styleClass="VBox" stylesheets="@../../../styles/budgetcreatepage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.BudgetCreatePageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="708.0" prefWidth="540.0" styleClass="VBox" stylesheets="@../../../styles/budgetcreatepage.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.BudgetCreatePageController">
    <children>
       <Label prefHeight="49.0" prefWidth="554.0" styleClass="subject" text="Thêm Ngân Sách" textAlignment="CENTER">
          <font>
@@ -18,7 +18,10 @@
       </Label>
       <HBox prefHeight="32.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Label text="Thêm Ngân Sách" />
+            <Label prefHeight="30.0" prefWidth="163.0" text="Thêm Ngân Sách" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font></Label>
             <ComboBox fx:id="cbCategories" prefHeight="62.0" prefWidth="310.0" promptText="Chọn danh mục" styleClass="ComboBox" />
          </children>
       </HBox>

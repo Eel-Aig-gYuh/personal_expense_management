@@ -9,34 +9,34 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.BudgetDetailPageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="819.0" prefWidth="575.0" styleClass="VBox" stylesheets="@../../../styles/budgetdetailpage.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.BudgetDetailPageController">
    <children>
-      <HBox prefHeight="30.0" prefWidth="600.0">
+      <HBox prefHeight="30.0" prefWidth="600.0" styleClass="nav-button-container">
          <children>
-            <Button fx:id="btnGoBack" mnemonicParsing="false" onAction="#goBack" text="&lt; Quay lại" />
-            <Button fx:id="btnUpdateBudget" mnemonicParsing="false" onAction="#goToUpdateBudget" text="Sửa" />
+            <Button fx:id="btnGoBack" mnemonicParsing="false" onAction="#goBack" styleClass="action-button" text="&lt; Quay lại" />
+            <Button fx:id="btnUpdateBudget" mnemonicParsing="false" onAction="#goToUpdateBudget" styleClass="action-button" text="Sửa" />
          </children>
       </HBox>
-      <Label fx:id="lblCategoryName" text="Ăn uống" />
-      <Label fx:id="lblTarget" text="1.000.000 đ" />
-      <HBox prefHeight="22.0" prefWidth="600.0">
+      <Label fx:id="lblCategoryName" styleClass="label-description" text="Ăn uống" />
+      <Label fx:id="lblTarget" styleClass="label-input" text="1.000.000 đ" />
+      <HBox prefHeight="22.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Label text="Đã chi " />
-            <Label text="Còn lại" />
+            <Label styleClass="amount-display" text="Đã chi " />
+            <Label styleClass="amount-display" text="Còn lại" />
          </children>
       </HBox>
-      <HBox prefHeight="4.0" prefWidth="600.0">
+      <HBox prefHeight="4.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <Label fx:id="lblSpent" text="500.000  " />
-            <Label fx:id="lblRemaining" text="500.000" />
+            <Label fx:id="lblSpent" styleClass="spent-amount" text="500.000  " />
+            <Label fx:id="lblRemaining" styleClass="remaining-amount" text="500.000" />
          </children>
       </HBox>
-      <ProgressBar fx:id="progressBar" prefHeight="20.0" prefWidth="200.0" progress="0.0" />
-      <Label fx:id="lblDateRange" text="01/04 - 30/04" />
-      <Label fx:id="lblDayRemaining" text="Label" />
+      <ProgressBar fx:id="progressBar" prefHeight="62.0" prefWidth="200.0" progress="0.0" />
+      <Label fx:id="lblDateRange" styleClass="date-range" text="01/04 - 30/04" />
+      <Label fx:id="lblDayRemaining" styleClass="label-description" text="Label" />
       <HBox prefHeight="183.0" prefWidth="600.0">
          <children>
-            <LineChart fx:id="lineChart" prefHeight="183.0" prefWidth="579.0">
+            <LineChart fx:id="lineChart" prefHeight="162.0" prefWidth="515.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -46,7 +46,7 @@
             </LineChart>
          </children>
       </HBox>
-      <Button fx:id="btnViewTransactions" mnemonicParsing="false" onAction="#goToViewTransaction" text="Danh sách giao dịch" />
-      <Button fx:id="btnDeleteBudget" mnemonicParsing="false" onAction="#deleteBudget" text="Xóa" textFill="#f70202" />
+      <Button fx:id="btnViewTransactions" mnemonicParsing="false" onAction="#goToViewTransaction" styleClass="transaction-list-button" text="Danh sách giao dịch" />
+      <Button fx:id="btnDeleteBudget" mnemonicParsing="false" onAction="#deleteBudget" styleClass="delete-button" text="Xóa" textFill="#f70202" />
    </children>
 </VBox>
