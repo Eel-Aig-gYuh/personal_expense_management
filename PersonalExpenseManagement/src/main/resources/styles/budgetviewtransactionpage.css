@@ -1,7 +1,122 @@
 /*
- * Empty Stylesheet file.
- */
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
 
-.mainFxmlClass {
+ 
+    Created on : Mar 24, 2025, 7:18:13 PM
+    Author     : HP
 
+
+}*/
+
+.VBox {
+    -fx-background-color: linear-gradient(to bottom, #000428, #004e92); /* Sleek blue-black gradient background */
+    -fx-alignment: center;
+    -fx-padding: 30px;
+    -fx-spacing: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6);
+}
+
+.HBox {
+    -fx-alignment: center;
+    -fx-spacing: 20px;
+    -fx-padding: 20px;
+}
+
+.action-button {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 20px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.label-description {
+    -fx-font-weight: bold;
+    -fx-min-width: 180px;
+    -fx-text-alignment: right;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 20px;
+}
+
+.label-input {
+    -fx-border-color: #888888;
+    -fx-border-width: 1px;
+    -fx-padding: 8px 12px;
+    -fx-min-width: 220px;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #004e92;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px 15px;
+    -fx-min-width: 280px;
+    -fx-background-radius: 10px;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 20px;
+}
+
+
+.save-button {
+    -fx-background-color: #004e92;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 25px;
+    -fx-background-radius: 5px;
+}
+
+.cancel-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: whitesmoke;
+    -fx-border-color: #004e92;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px 25px;
+}
+
+/* ListView Styling */
+.ListView {
+    -fx-background-color: rgba(211, 211, 211, 0.3); /* Màu xám trong suốt (30% opacity) */
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-margin: 10px 0 0 0; /* Cách button 10px phía trên */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+/* Cell styling */
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 8px;
+    -fx-border-color: transparent;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 5px;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: rgba(0, 78, 146, 0.3);
+    -fx-background-radius: 5px;
+}
+
+/* Scrollbar styling */
+.list-view .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.list-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.list-view .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-background-radius: 5px;
 }
