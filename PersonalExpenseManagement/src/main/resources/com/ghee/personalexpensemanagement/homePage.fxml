@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="639.0" styleClass="VBox" stylesheets="@../../../styles/homepage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.HomePageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="807.0" styleClass="VBox" stylesheets="@../../../styles/homepage.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.HomePageController">
    <children>
       <HBox prefHeight="43.0" prefWidth="600.0" styleClass="HBox">
          <children>
@@ -39,19 +39,19 @@
             <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#logout" prefHeight="48.0" prefWidth="208.0" styleClass="button_secondary" text="Đăng xuất" />
          </children>
       </HBox>
-      <ScrollPane prefHeight="330.0" prefWidth="600.0" styleClass="ScrollPane">
+      <ScrollPane prefHeight="310.0" prefWidth="746.0" styleClass="scroll-container">
          <content>
-            <VBox prefHeight="265.0" prefWidth="576.0">
+            <VBox prefHeight="266.0" prefWidth="702.0">
                <children>
-                  <HBox prefHeight="218.0" prefWidth="576.0">
+                  <HBox prefHeight="218.0" prefWidth="682.0">
                      <children>
-                        <TabPane prefHeight="125.0" prefWidth="407.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane prefHeight="218.0" prefWidth="526.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Báo cáo chi tiêu">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="407.0">
                                        <children>
-                                          <BarChart fx:id="barChart" prefHeight="187.0" prefWidth="406.0">
+                                          <BarChart fx:id="barChart" layoutX="43.0" prefHeight="187.0" prefWidth="458.0" styleClass="chart">
                                             <xAxis>
                                               <CategoryAxis label="Danh mục" side="BOTTOM" />
                                             </xAxis>
@@ -59,7 +59,7 @@
                                               <NumberAxis label="Số tiền (VND)" side="LEFT" />
                                             </yAxis>
                                           </BarChart>
-                                          <Label fx:id="lblNoData" text="Label" />
+                                          <Label fx:id="lblNoData" styleClass="chart-title" text="Label" />
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -70,7 +70,7 @@
                                        <children>
                                           <AreaChart layoutX="4.0" layoutY="3.0" prefHeight="182.0" prefWidth="400.0">
                                             <xAxis>
-                                              <CategoryAxis side="BOTTOM" />
+                                              <CategoryAxis prefHeight="26.0" prefWidth="344.0" side="BOTTOM" />
                                             </xAxis>
                                             <yAxis>
                                               <NumberAxis side="LEFT" />
@@ -82,8 +82,8 @@
                             </Tab>
                           </tabs>
                         </TabPane>
-                        <Label text="Theo: " />
-                        <ComboBox fx:id="cbTimeRange" prefHeight="26.0" prefWidth="114.0" />
+                        <Label styleClass="chart-title" text="Theo: " />
+                        <ComboBox fx:id="cbTimeRange" prefHeight="27.0" prefWidth="122.0" styleClass="combo-box" />
                      </children></HBox>
                </children>
             </VBox>

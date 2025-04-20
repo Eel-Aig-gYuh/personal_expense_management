@@ -119,8 +119,8 @@ class BudgetServicesTestSuit {
     @DisplayName("Get Total Spent - Basic Validation")
     @Tag("query")
     void testGetTotalSpent_Basic() throws SQLException {
-        LocalDate start = LocalDate.now();
-        LocalDate end = LocalDate.now().plusMonths(1);
+        LocalDate end = LocalDate.now();
+        LocalDate start = LocalDate.now().minusMonths(1);
 
         double totalSpent = budgetServices.getTotalSpent(1, start, end);
 
@@ -168,7 +168,7 @@ class BudgetServicesTestSuit {
         double totalBudget = budgetServices.getTotalBudget(
                 1, 
                 LocalDate.now().minusYears(1), 
-                LocalDate.now().minusYears(1).plusDays(1)
+                LocalDate.now().minusYears(1).plusDays(30)
         );
         assertEquals(0.0, totalBudget, 0.001);
     }

@@ -1,5 +1,4 @@
 
-import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Wallet;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
