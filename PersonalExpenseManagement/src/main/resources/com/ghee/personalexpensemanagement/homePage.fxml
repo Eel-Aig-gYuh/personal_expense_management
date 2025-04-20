@@ -15,11 +15,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="807.0" styleClass="VBox" stylesheets="@../../../styles/homepage.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.HomePageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="807.0" styleClass="VBox" stylesheets="@../../../styles/homepage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.HomePageController">
    <children>
       <HBox prefHeight="43.0" prefWidth="600.0" styleClass="HBox">
          <children>
-            <VBox prefHeight="108.0" prefWidth="258.0">
+            <VBox prefHeight="108.0" prefWidth="433.0">
                <children>
                   <Label fx:id="welcomeLabel" text="Chào mừng" textFill="WHITE">
                      <font>

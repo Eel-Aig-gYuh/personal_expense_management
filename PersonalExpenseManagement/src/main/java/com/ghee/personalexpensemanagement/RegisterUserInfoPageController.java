@@ -9,6 +9,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.ghee.config.AppConfigs;
 import com.ghee.config.CloudinaryConfig;
 import com.ghee.utils.MessageBox;
+import com.ghee.utils.MessageErrorField;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -116,31 +117,49 @@ public class RegisterUserInfoPageController implements Initializable {
         String role = "User";
         Date createAt = new Date();
         
-        if (firstname.equals("") || lastname.equals("") || email.equals("")) {
-            MessageBox.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
-            return ;
+        boolean hasError = false;
+        
+        // check firstname
+        if (firstname.equals("")) {
+            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.NULL_FIRSTNAME);
+            hasError = true;
+        } else {
+            MessageErrorField.ErrorFieldHboxOff(firstnameField);
         }
         
-        if (!email.contains("@")) {
-            MessageBox.getAlert(AppConfigs.ERROR_EMAIL_PATTERN, Alert.AlertType.WARNING).showAndWait();
-            return ;
+        // check lastname
+        if (lastname.equals("")) {
+            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.NULL_LASTNAME);
+            hasError = true;
+        } else {
+            MessageErrorField.ErrorFieldHboxOff(lastnameField);
         }
         
-        try {
-            // chuyển dữ liệu qua trang account 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("registerUserAccountPage.fxml"));
-            Parent root = loader.load();
+        // check email
+        if (email.equals("") || !email.contains("@")) {
+            MessageErrorField.ErrorFieldHbox(emailField, AppConfigs.ERROR_EMAIL_PATTERN);
+            hasError = true;
+        } else {
+            MessageErrorField.ErrorFieldHboxOff(emailField);
+        }
+        
+        if (!hasError) {
+            try {
+                // chuyển dữ liệu qua trang account 
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("registerUserAccountPage.fxml"));
+                Parent root = loader.load();
 
-            // chuyển props qua page khác.
-            RegisterUserAccountPageController accountPageController = loader.getController();
-            accountPageController.setUserData(firstname, lastname, email, avatarPath, role, createAt);
+                // chuyển props qua page khác.
+                RegisterUserAccountPageController accountPageController = loader.getController();
+                accountPageController.setUserData(firstname, lastname, email, avatarPath, role, createAt);
 
-            // chuyển trang qua account 
-            Stage stage = (Stage) nextPageButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-        } catch (IOException ex){
-            String message = "Lỗi không thể chuyển sang trang kế tiếp !";
-            MessageBox.getAlert(message, Alert.AlertType.WARNING).show();
+                // chuyển trang qua account 
+                Stage stage = (Stage) nextPageButton.getScene().getWindow();
+                stage.setScene(new Scene(root));
+            } catch (IOException ex) {
+                String message = "Lỗi không thể chuyển sang trang kế tiếp !";
+                MessageBox.getAlert(message, Alert.AlertType.WARNING).show();
+            }
         }
     }
     

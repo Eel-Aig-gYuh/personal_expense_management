@@ -10,6 +10,7 @@ import com.ghee.pojo.Users;
 import com.ghee.services.CategoryServices;
 import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
+import com.ghee.utils.MessageErrorField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -66,8 +67,11 @@ public class CategoryCreatePageController implements Initializable {
                 String name = txtName.getText().trim();
                 
                 if (name.equals("")) {
-                    MessageBox.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
+                    // MessageBox.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
+                    MessageErrorField.ErrorFieldHbox(txtName, AppConfigs.ERROR_NOT_ENOUGH_INFORMATION);
                     return ;
+                } else {
+                    MessageErrorField.ErrorFieldHboxOff(txtName);
                 }
                 
                 String type = rdoChi.isSelected() ? "Chi" : "Thu";

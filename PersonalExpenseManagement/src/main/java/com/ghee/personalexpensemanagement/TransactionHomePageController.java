@@ -149,6 +149,7 @@ public class TransactionHomePageController implements Initializable {
                         setGraphic(null);
                     } else {
                         HBox hbox = new HBox(10);
+                        hbox.setStyle("-fx-background-color: white; -fx-padding: 5; -fx-border-radius: 10px;");
                         if (item instanceof Date) {
                             // Hiển thị ngày;
                             LocalDate date = LocalDate.parse(item.toString());
@@ -180,7 +181,7 @@ public class TransactionHomePageController implements Initializable {
                             setGraphic(hbox);
                         }
                         if (item instanceof Transaction) {
-
+                            hbox.setStyle("-fx-padding: 5; -fx-margin-top: -10; -fx-background-color: white;");
                             Transaction transaction = (Transaction) item;
 
                             Label lblCategoryName = new Label(transaction.getCategoryId().getName());
@@ -196,6 +197,7 @@ public class TransactionHomePageController implements Initializable {
                             setGraphic(hbox);
                         }
                     }
+                    
                 }
             });
 

@@ -4,10 +4,12 @@
  */
 package com.ghee.personalexpensemanagement;
 
+import com.ghee.config.AppConfigs;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
 import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
+import com.ghee.utils.MessageErrorField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -19,8 +21,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -78,29 +83,40 @@ public class LoginUserController implements Initializable {
     public void login() throws IOException {
         String username = this.usernameField.getText().trim();
         String password = this.passwordField.getText().trim();
+        
+        boolean hasError = false;
 
-        if ("".equals(username.trim()) || "".equals(password.trim())) {
-            String message = username.equals("") ? "Vui lòng điền tài khoản !" : "Vui lòng điền mật khẩu !";
-            MessageBox.getAlert(message, Alert.AlertType.CONFIRMATION).showAndWait();
-            return;
+        if (this.usernameField.getText().trim().equals("")) {
+            MessageErrorField.ErrorFieldHbox(usernameField, AppConfigs.NULL_USERNAME);
+            hasError = true;
+        } else {
+            MessageErrorField.ErrorFieldHboxOff(usernameField);
+        }
+        
+        if (this.passwordField.getText().trim().equals("")) {
+            MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.NULL_PASSWORD);
+            hasError = true;
+        } else {
+            MessageErrorField.ErrorFieldHboxOff(passwordField);
         }
 
-        try {
-            Users user = s.loginUser(username, password);
+        if (!hasError) {
+            try {
+                Users user = s.loginUser(username, password);
 
-            if (user != null) {
-                ManageUser.setCurrentUser(user);
+                if (user != null) {
+                    ManageUser.setCurrentUser(user);
 
-                MessageBox.getAlert("Đăng nhập thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                    MessageBox.getAlert("Đăng nhập thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
 
-                goToHomePage();
-            } else {
-                MessageBox.getAlert("Thông tin tài khoản hoặc mật khẩu không chính xác !", Alert.AlertType.CONFIRMATION).showAndWait();
+                    goToHomePage();
+                } else {
+                    MessageBox.getAlert("Thông tin tài khoản hoặc mật khẩu không chính xác !", Alert.AlertType.CONFIRMATION).showAndWait();
+                }
+            } catch (SQLException ex) {
+                MessageBox.getAlert("Lỗi SQL", Alert.AlertType.ERROR).show();
             }
-        } catch (SQLException ex) {
-            MessageBox.getAlert("Lỗi SQL", Alert.AlertType.ERROR).show();
         }
-
     }
     
     public void showPassword() {

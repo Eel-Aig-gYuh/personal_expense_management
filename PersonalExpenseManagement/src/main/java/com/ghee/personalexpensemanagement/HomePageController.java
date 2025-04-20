@@ -94,7 +94,7 @@ public class HomePageController implements Initializable {
                     Wallet wallet = walletServices.getWalletById(user.getId());
 
                     if (wallet != null) {
-                        soDuLabel.setText(MoneyFormat.moneyFormat(wallet.getSoDu()));
+                        soDuLabel.setText(MoneyFormat.moneyFormat(wallet.getSoDu()) + "đ");
                     } else {
                         soDuLabel.setText("Lỗi không tìm thấy ví !");
                     }

@@ -13,6 +13,7 @@ import com.ghee.services.CategoryServices;
 import com.ghee.formatter.DatePickerUtils;
 import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
+import com.ghee.utils.MessageErrorField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -63,6 +64,7 @@ public class BudgetCreatePageController implements Initializable {
     
     private String parentController;
     private Budget selectedBudget;
+    private boolean isFormatting; // bo dem
     
     public void setSelectedBudget(Budget b) {
         this.selectedBudget = b;
@@ -89,6 +91,8 @@ public class BudgetCreatePageController implements Initializable {
                 goToCreateCategoryPage();
             }
         });
+        
+        
         
         this.dpEndDate.setEditable(false);
         this.dpStartDate.setEditable(false);
@@ -172,6 +176,7 @@ public class BudgetCreatePageController implements Initializable {
      * thêm ngân sách mới.
      *
      * @param e
+     * @throws java.sql.SQLException
      */
     public void addBudget(ActionEvent e) throws SQLException {
         try {
@@ -187,11 +192,15 @@ public class BudgetCreatePageController implements Initializable {
             Double target = Double.valueOf(this.txtTarget.getText());
             
             if (target.isNaN() || target <= 0) {
-                MessageBox.getAlert(AppConfigs.ERROR_TARGET_IS_NEGATIVE, Alert.AlertType.WARNING).showAndWait();
+                // MessageBox.getAlert(AppConfigs.ERROR_TARGET_IS_NEGATIVE, Alert.AlertType.WARNING).showAndWait();
+                MessageErrorField.ErrorFieldHbox(txtTarget, AppConfigs.ERROR_TARGET_IS_NEGATIVE);
                 return; 
             } else if (target <= 100000) {
-                MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
+                // MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
+                MessageErrorField.ErrorFieldHbox(txtTarget, AppConfigs.ERROR_TARGET_LESS_THAN_MIN);
                 return;
+            } else {
+                MessageErrorField.ErrorFieldHboxOff(txtTarget);
             }
             
             Double amount = 0.00;

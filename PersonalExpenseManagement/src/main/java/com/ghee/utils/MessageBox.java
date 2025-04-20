@@ -6,6 +6,10 @@ package com.ghee.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 /**
  *
@@ -19,7 +23,11 @@ public class MessageBox {
      * @return 
      */
     public static Alert getAlert(String content, Alert.AlertType types){
-        return new Alert(types, content, ButtonType.OK);
+        Alert alert = new Alert(types, "", ButtonType.OK);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        
+        return alert;
     }
     
     public static Alert getYesNoAlert(String content, Alert.AlertType types){

@@ -15,6 +15,7 @@ import com.ghee.services.WalletServices;
 import com.ghee.formatter.DatePickerUtils;
 import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
+import com.ghee.utils.MessageErrorField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -219,18 +220,30 @@ public class TransactionCreatePageController implements Initializable {
     
     /** 
      * Xử lý sự kiện cập nhật giao dịch.
+     * @throws java.sql.SQLException
      */
     public void updateTransaction() throws SQLException {
         try {
             Users currentUser = ManageUser.getCurrentUser();
             Category categoryId = (Category) this.cbCategories.getSelectionModel().getSelectedItem();
             Double amount = Double.valueOf(this.txtTarget.getText());
+            
+            if (this.txtTarget.getText().trim().equals("")) {
+                MessageErrorField.ErrorFieldHbox(txtTarget, AppConfigs.ERROR_AMOUNT);
+                return;
+            } else {
+                MessageErrorField.ErrorFieldHboxOff(txtTarget);
+            }
+            
             Date transactionDate = java.sql.Date.valueOf(this.dpTransactionDate.getValue());
             
             String description = this.txtDescription.getText();
             if (description.length() >= 255 ) {
-                MessageBox.getAlert(AppConfigs.ERROR_LENGHT_DESCRIPTION, Alert.AlertType.ERROR).showAndWait();
+                // MessageBox.getAlert(AppConfigs.ERROR_LENGHT_DESCRIPTION, Alert.AlertType.ERROR).showAndWait();
+                MessageErrorField.ErrorFieldHbox(txtDescription, AppConfigs.ERROR_LENGHT_DESCRIPTION);
                 return ;
+            } else {
+                MessageErrorField.ErrorFieldHboxOff(txtDescription);
             }
             
             // chuẩn bị dữ liệu.
