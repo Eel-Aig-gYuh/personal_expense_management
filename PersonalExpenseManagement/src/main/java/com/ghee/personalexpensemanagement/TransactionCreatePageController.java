@@ -201,11 +201,11 @@ public class TransactionCreatePageController implements Initializable {
                 String msg = (String) results.get("message");
                 
                 if (success) {
-                    MessageBox.getAlert("Thêm giao dịch thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                    MessageBox.getAlert(msg, Alert.AlertType.CONFIRMATION).showAndWait();
                     goBack();
                 }
                 else {
-                    MessageBox.getAlert("Thêm giao dịch không thành công ! " + msg, Alert.AlertType.WARNING).showAndWait();
+                    MessageBox.getAlert(msg, Alert.AlertType.WARNING).showAndWait();
                 }
                 
             } catch (SQLException ex) {

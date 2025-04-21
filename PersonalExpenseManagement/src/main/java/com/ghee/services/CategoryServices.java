@@ -92,4 +92,44 @@ public class CategoryServices {
         
         return results;
     }
+    
+    /**
+     * cập nhật danh mục.
+     * @param category
+     * @return
+     * @throws SQLException 
+     */
+    public boolean updateCategory(Category category) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "UPDATE Category SET name = ?, type = ? WHERE id = ? AND user_id = ?";
+            PreparedStatement stm = conn.prepareCall(query);
+            
+            stm.setString(1, category.getName());
+            stm.setString(2, category.getType());
+            stm.setInt(3, category.getId());
+            stm.setInt(4, category.getUserId().getId());
+            
+            return stm.executeUpdate() > 0;
+        }
+    }
+    
+    // ==================== DELETE
+    /**
+     * Xoá danh mục.
+     * @param categoryId
+     * @param userId
+     * @return
+     * @throws SQLException 
+     */
+    public boolean deleteCategory(int categoryId, int userId) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "DELETE FROM Category WHERE id = ? AND user_id = ?";
+            PreparedStatement stm = conn.prepareStatement(query);
+            
+            stm.setInt(1, categoryId);
+            stm.setInt(2, userId);
+          
+            return stm.executeUpdate() > 0;
+        }
+    }
 }

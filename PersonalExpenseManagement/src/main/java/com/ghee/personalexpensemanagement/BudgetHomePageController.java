@@ -38,6 +38,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -48,12 +50,13 @@ import javafx.stage.Stage;
  */
 public class BudgetHomePageController implements Initializable {
 
-    @FXML TabPane tabPane;
+    @FXML private TabPane tabPane;
     
-    @FXML Label lblTotalAvailable;
-    @FXML Label lblTotalBudget;
-    @FXML Label lblTotalSpent;
-    @FXML Label lblDayLeft;
+    @FXML private Label lblTotalAvailable;
+    @FXML private Label lblTotalBudget;
+    @FXML private Label lblTotalSpent;
+    @FXML private Label lblDayLeft;
+    @FXML private Label lblNoData;
     
     @FXML private Button btnCreateBudget;
 
@@ -78,6 +81,7 @@ public class BudgetHomePageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.btnBudgetPage.setDisable(true);
+        this.lblNoData.setVisible(false);
         
         this.lblDayLeft.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         
@@ -85,6 +89,8 @@ public class BudgetHomePageController implements Initializable {
         this.tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             loadBudgetsData();
         });
+        
+        this.tabPane.getSelectionModel().select(1);
         
         loadBudgetsData();
     } 
@@ -105,6 +111,13 @@ public class BudgetHomePageController implements Initializable {
             
             String selectedTab = tabPane.getSelectionModel().getSelectedItem().getText();
             switch (selectedTab) {
+                case "Năm trước":
+                    int previousYear = now.getYear() - 1;
+                    startDate = LocalDate.of(previousYear, 1, 1);
+                    endDate = LocalDate.of(previousYear, 12, 31);
+                    lblDayLeft.setText("");
+                    break;
+
                 case "Tháng này": 
                     startDate = now.withDayOfMonth(1);
                     endDate = now.withDayOfMonth(now.lengthOfMonth());
@@ -152,6 +165,16 @@ public class BudgetHomePageController implements Initializable {
             List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(currentUser.getId(), startDate, endDate);
             listViewBudgets.getItems().setAll(budgets);
             
+            if (budgets.isEmpty()) {
+                lblNoData.setVisible(true);
+                lblNoData.setText("Hiện tại chưa có ngân sách nào được tạo, thêm ngay ...");
+                lblNoData.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-alignment: center;");
+                this.listViewBudgets.setVisible(false);
+            } else {
+                lblNoData.setVisible(false);
+                this.listViewBudgets.setVisible(true);
+            }
+            
             // Tùy chỉnh giao diện hiển thị cho 1 cell trong listView.
             listViewBudgets.setCellFactory(params -> new ListCell<Budget>() {
                 @Override
@@ -178,16 +201,66 @@ public class BudgetHomePageController implements Initializable {
                             Label lblRemainingAmount = new Label("Còn lại " + MoneyFormat.moneyFormat(remainingAmount));
                             lblRemainingAmount.setStyle("-fx-font-size: 12px;");
                             
+//                            ProgressBar progressBarItem = new ProgressBar();
+//                            progressBarItem.setPrefWidth(150);
+//                            double progress = 0.0;
+//                            
+//                            if (budget.getTarget() > 0) {
+//                                progress = budget.getAmount() / budget.getTarget();
+//                                progressBarItem.setProgress(progress);
+//                            }
+//                            else {
+//                                progressBarItem.setProgress(0);
+//                            }
+//                            
+//                            if (progress > 0.8) {
+//                                progressBarItem.setStyle("-fx-accent: red;");
+//                                
+//                            } else {
+//                                progressBarItem.getStyleClass().remove("-fx-accent: green;");
+//                            }
+                            
+                            // Tạo StackPane để chứa hai ProgressBar chồng lên nhau
+                            HBox progressBarContainer = new HBox();
+
+                            // Tạo ProgressBar chính (hiển thị tiến trình bình thường, tối đa 100%)
                             ProgressBar progressBarItem = new ProgressBar();
                             progressBarItem.setPrefWidth(150);
+                            progressBarItem.setStyle("-fx-accent: green;"); // Màu mặc định (xanh lá cây)
+
+                            // Tạo ProgressBar phụ (hiển thị phần vượt quá 80%)
+                            ProgressBar progressBarExcess = new ProgressBar();
+                            progressBarExcess.setPrefWidth(150);
+                            progressBarExcess.setStyle("-fx-accent: red;"); // Màu đỏ cho phần vượt quá
+
+                            // Tính toán giá trị tiến trình
+                            double progress = 0.0;
                             if (budget.getTarget() > 0) {
-                                progressBarItem.setProgress(budget.getAmount() / budget.getTarget());
+                                progress = budget.getAmount() / budget.getTarget();
+                            } else {
+                                progress = 0.0;
                             }
-                            else {
-                                progressBarItem.setProgress(0);
+
+                            // Hiển thị tiến trình trên ProgressBar chính
+                            if (progress <= 1.0) {
+                                progressBarItem.setProgress(progress); // Tiến trình bình thường (0% - 100%)
+                                progressBarExcess.setProgress(0); // Không có phần vượt quá
+                            } else {
+                                progressBarItem.setProgress(1.0); // ProgressBar chính đạt tối đa (100%)
+                                progressBarExcess.setProgress((progress - 1.0) / progress); // Phần vượt quá
                             }
-                            
-                            Label lblToday = new Label("Hôm nay");
+
+                            // Nếu không vượt quá 80%, không cần hiển thị ProgressBar phụ
+                            if (progress <= 0.8) {
+                                progressBarExcess.setVisible(false);
+                            } else {
+                                progressBarExcess.setVisible(true);
+                            }
+
+                            // Đặt hai ProgressBar vào StackPane
+                            progressBarContainer.getChildren().addAll(progressBarItem, progressBarExcess);
+
+                            Label lblToday = new Label("Đã chi " + budget.getAmount() + " đ");
                             lblToday.setStyle("-fx-font-size: 10px;");
                             
                             Button btnDelete = new Button("Xóa");
@@ -216,8 +289,12 @@ public class BudgetHomePageController implements Initializable {
                             
                             HBox hBox = new HBox(10);
                             
-                            VBox vBox = new VBox(5, hboxTitle, lblRemainingAmount, progressBarItem, lblToday);
+                            VBox vBox = new VBox(5, hboxTitle, lblRemainingAmount, progressBarContainer, lblToday);
                             hBox.getChildren().addAll(vBox, btnDelete);
+                            
+                            HBox.setHgrow(vBox, Priority.ALWAYS);
+                            vBox.setMaxWidth(Double.MAX_VALUE);
+                            
                             setGraphic(hBox);
                             
                         } catch (SQLException ex) {

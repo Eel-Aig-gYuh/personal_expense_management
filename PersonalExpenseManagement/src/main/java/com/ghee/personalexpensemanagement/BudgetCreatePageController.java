@@ -36,8 +36,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 /**
@@ -79,10 +82,7 @@ public class BudgetCreatePageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
         this.categoryItems = FXCollections.observableArrayList();
-        
-        loadCategories();
         
         cbCategories.setOnAction(event -> {
             Object selectedItem = cbCategories.getSelectionModel().getSelectedItem();
@@ -91,9 +91,7 @@ public class BudgetCreatePageController implements Initializable {
                 goToCreateCategoryPage();
             }
         });
-        
-        
-        
+  
         this.dpEndDate.setEditable(false);
         this.dpStartDate.setEditable(false);
         
@@ -104,6 +102,8 @@ public class BudgetCreatePageController implements Initializable {
 
         DatePickerUtils.setVietnameseDateFormat(this.dpStartDate);
         DatePickerUtils.setVietnameseDateFormat(this.dpEndDate);
+        
+        loadCategories();
     }
     
     public void loadSelectedBudget() {
@@ -136,7 +136,7 @@ public class BudgetCreatePageController implements Initializable {
                     cates.forEach(c -> this.categoryItems.add(c));
                 }
                 this.cbCategories.setItems(categoryItems);
-                
+
                 this.cbCategories.setCellFactory(params -> new ListCell<>() {
                     @Override
                     protected void updateItem(Object item, boolean empty) {
@@ -150,7 +150,7 @@ public class BudgetCreatePageController implements Initializable {
                         }
                     }
                 });
-                
+
                 this.cbCategories.setButtonCell(new ListCell<>() {
                     @Override
                     protected void updateItem(Object item, boolean empty) {
@@ -171,6 +171,13 @@ public class BudgetCreatePageController implements Initializable {
         }
     } 
     
+    public void deleteCategory(Category category) {
+        System.err.println("lasdk");
+    }
+    
+    public void updateCategory(Category category) {
+        
+    }
 
     /**
      * thêm ngân sách mới.

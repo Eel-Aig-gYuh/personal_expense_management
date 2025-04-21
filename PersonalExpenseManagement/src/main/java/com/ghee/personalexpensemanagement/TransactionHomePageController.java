@@ -35,6 +35,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -48,6 +49,7 @@ public class TransactionHomePageController implements Initializable {
     @FXML private Label lblSoDuDau;
     @FXML private Label lblSoDuCuoi;
     @FXML private Label lblTong;
+    @FXML private Label lblNoData;
 
     @FXML private Button btnHomePage;
     @FXML private Button btnBudgetPage;
@@ -70,6 +72,7 @@ public class TransactionHomePageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.btnTransactionPage.setDisable(true);
+        this.lblNoData.setVisible(false);
 
         this.tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             loadTransactionDatas();
@@ -91,6 +94,17 @@ public class TransactionHomePageController implements Initializable {
 
             String selectedTab = tabPane.getSelectionModel().getSelectedItem().getText();
             switch (selectedTab) {
+                case "Năm trước":
+                    int previousYear = now.getYear() - 1;
+                    startDate = LocalDate.of(previousYear, 1, 1);
+                    endDate = LocalDate.of(previousYear, 12, 31);
+                    break;
+                case "Tháng trước":
+                    LocalDate previousMonth = now.minusMonths(1);
+                    startDate = previousMonth.withDayOfMonth(1);
+                    endDate = previousMonth.withDayOfMonth(previousMonth.lengthOfMonth());
+                    break;
+                    
                 case "Tháng này":
                     startDate = now.withDayOfMonth(1);
                     endDate = now.withDayOfMonth(now.lengthOfMonth());
@@ -133,6 +147,16 @@ public class TransactionHomePageController implements Initializable {
                 displayItems.add(date); // Thêm tiêu đề ngày
                 dailyTransaction.forEach(dt -> displayItems.add(dt));
             });
+            
+            if (displayItems.isEmpty()) {
+                lblNoData.setVisible(true);
+                lblNoData.setText("Hiện tại chưa có giao dịch nào, vui lòng nhấn thêm giao dịch ...");
+                lblNoData.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
+                this.listViewTransactions.setVisible(false);
+            } else {
+                lblNoData.setVisible(false);
+                this.listViewTransactions.setVisible(true);
+            }
 
             // Cập nhật listView
             this.listViewTransactions.getItems().setAll(displayItems);
@@ -171,12 +195,15 @@ public class TransactionHomePageController implements Initializable {
                             HBox hboxDate = new HBox();
                             hboxDate.getChildren().addAll(lblDay, vboxDate);
 
-                            Label lblDailyTotal = new Label(MoneyFormat.moneyFormat(dailyTotal));
+                            Label lblDailyTotal = new Label("Tổng thu chi: " + MoneyFormat.moneyFormat(dailyTotal) + " đ");
                             String styleThu = "-fx-font-size: 14px; -fx-text-fill: green;";
                             String styleChi = "-fx-font-size: 14px; -fx-text-fill: red;";
                             lblDailyTotal.setStyle(dailyTotal > 0 ? styleThu: styleChi + "-fx-text-alignment: right;");
 
                             hbox.getChildren().addAll(hboxDate, lblDailyTotal);
+                            
+                            HBox.setHgrow(hboxDate, Priority.ALWAYS);
+                            hboxDate.setMaxWidth(Double.MAX_VALUE);
                             
                             setGraphic(hbox);
                         }
@@ -194,6 +221,10 @@ public class TransactionHomePageController implements Initializable {
                             lblAmount.setStyle(((Transaction) item).getCategoryId().getType().equals("Thu") ? styleThu: styleChi);
 
                             hbox.getChildren().addAll(lblCategoryName, lblAmount);
+                            
+                            HBox.setHgrow(lblCategoryName, Priority.ALWAYS);
+                            lblCategoryName.setMaxWidth(Double.MAX_VALUE);
+                            
                             setGraphic(hbox);
                         }
                     }

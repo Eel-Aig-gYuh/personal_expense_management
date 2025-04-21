@@ -54,62 +54,70 @@ public class MessageErrorField {
     }
     
     public static void ErrorFieldHboxOff(TextField txt) {
-        // Đặt lại viền mặc định cho TextField
-        txt.setStyle("-fx-border-color: black; -fx-border-width: 1px");
+        try {
+            // Đặt lại viền mặc định cho TextField
+            txt.setStyle("-fx-border-color: black; -fx-border-width: 1px");
 
-        // Lấy VBox chứa TextField (sau khi ErrorFieldHbox được gọi)
-        VBox vbox = (VBox) txt.getParent();
-        if (vbox == null) {
+            // Lấy VBox chứa TextField (sau khi ErrorFieldHbox được gọi)
+            VBox vbox = (VBox) txt.getParent();
+            if (vbox == null) {
+                return;
+            }
+
+            // Tìm Label lỗi trong VBox
+            Label errLb = (Label) vbox.lookup("#" + txt.getId() + "error");
+            if (errLb != null) {
+                // Xóa Label lỗi khỏi VBox
+                vbox.getChildren().remove(errLb);
+            }
+
+            // Lấy HBox chứa VBox
+            HBox hbox = (HBox) vbox.getParent();
+            if (hbox == null) {
+                return;
+            }
+
+            // Lấy vị trí của VBox trong HBox
+            int index = hbox.getChildren().indexOf(vbox);
+
+            // Thay thế VBox bằng TextField (khôi phục cấu trúc ban đầu)
+            hbox.getChildren().set(index, txt);
+        } catch (Exception ex) {
             return;
         }
-
-        // Tìm Label lỗi trong VBox
-        Label errLb = (Label) vbox.lookup("#" + txt.getId() + "error");
-        if (errLb != null) {
-            // Xóa Label lỗi khỏi VBox
-            vbox.getChildren().remove(errLb);
-        }
-
-        // Lấy HBox chứa VBox
-        HBox hbox = (HBox) vbox.getParent();
-        if (hbox == null) {
-            return;
-        }
-
-        // Lấy vị trí của VBox trong HBox
-        int index = hbox.getChildren().indexOf(vbox);
-
-        // Thay thế VBox bằng TextField (khôi phục cấu trúc ban đầu)
-        hbox.getChildren().set(index, txt);
     }
     
     public static void ErrorFieldHboxOff(TextArea txt) {
-        // Đặt lại viền mặc định cho TextField
-        txt.setStyle("-fx-border-color: black; -fx-border-width: 1px");
+        try {
+            // Đặt lại viền mặc định cho TextField
+            txt.setStyle("-fx-border-color: black; -fx-border-width: 1px");
 
-        // Lấy VBox chứa TextField (sau khi ErrorFieldHbox được gọi)
-        VBox vbox = (VBox) txt.getParent();
-        if (vbox == null) {
+            // Lấy VBox chứa TextField (sau khi ErrorFieldHbox được gọi)
+            VBox vbox = (VBox) txt.getParent();
+            if (vbox == null) {
+                return;
+            }
+
+            // Tìm Label lỗi trong VBox
+            Label errLb = (Label) vbox.lookup("#" + txt.getId() + "error");
+            if (errLb != null) {
+                // Xóa Label lỗi khỏi VBox
+                vbox.getChildren().remove(errLb);
+            }
+
+            // Lấy HBox chứa VBox
+            HBox hbox = (HBox) vbox.getParent();
+            if (hbox == null) {
+                return;
+            }
+
+            // Lấy vị trí của VBox trong HBox
+            int index = hbox.getChildren().indexOf(vbox);
+
+            // Thay thế VBox bằng TextField (khôi phục cấu trúc ban đầu)
+            hbox.getChildren().set(index, txt);
+        } catch (Exception ex) {
             return;
         }
-
-        // Tìm Label lỗi trong VBox
-        Label errLb = (Label) vbox.lookup("#" + txt.getId() + "error");
-        if (errLb != null) {
-            // Xóa Label lỗi khỏi VBox
-            vbox.getChildren().remove(errLb);
-        }
-
-        // Lấy HBox chứa VBox
-        HBox hbox = (HBox) vbox.getParent();
-        if (hbox == null) {
-            return;
-        }
-
-        // Lấy vị trí của VBox trong HBox
-        int index = hbox.getChildren().indexOf(vbox);
-
-        // Thay thế VBox bằng TextField (khôi phục cấu trúc ban đầu)
-        hbox.getChildren().set(index, txt);
     }
 }

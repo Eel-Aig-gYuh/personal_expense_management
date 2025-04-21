@@ -93,7 +93,7 @@ public class CategoryCreatePageController implements Initializable {
             }
             
         } catch (SQLException ex) {
-            System.err.println("ERROR: " + ex.getMessage());
+            return;
         }
     }
     
