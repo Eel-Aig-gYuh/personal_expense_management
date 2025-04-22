@@ -17,11 +17,18 @@ public class AppConfigs {
     public static String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*(),.?\":{}|<>]).+$";
     public static int LENGHT_OF_ACCOUNT = 7;
     
+    public static String NULL_USERNAME = "Vui lòng điền tên tài khoản !";
+    public static String NULL_PASSWORD = "Vui lòng điền mật khẩu !";
+    public static String NULL_FIRSTNAME = "Vui lòng điền tên của bạn !";
+    public static String NULL_LASTNAME = "Vui lòng điền họ và chữ lót của bạn của bạn !";
+
     public static String ERROR_NOT_ENOUGH_INFORMATION = "Vui lòng điền đầy đủ thông tin !";
-    public static String ERROR_EMAIL_PATTERN = "Vui lòng điền email hợp lệ thiếu @ !";
+    public static String ERROR_EMAIL_PATTERN = "Vui lòng điền email hợp lệ! Ví dụ: example@";
     
-    public static String ERROR_LENGHT_OF_ACCOUNT = "Độ dài không hợp lệ, vui lòng nhập lại username và password phải trên 7 ký tự !";
-    public static String ERROR_PASS_PATTERN = "Lỗi mật khẩu không đủ mạnh, phải có ít nhất 1 ký tự hoa, 1 ký tự thường, 1 số và 1 ký tự đặc biệt !";
+    public static String ERROR_LENGHT_OF_USERNAME = "Độ dài không hợp lệ! \n Vui lòng nhập lại tên tài khoản phải trên 7 ký tự !";
+    public static String ERROR_LENGHT_OF_PASSWORD = "Độ dài không hợp lệ! \n Vui lòng nhập lại mật khẩu phải trên 7 ký tự !";
+    
+    public static String ERROR_PASS_PATTERN = "Lỗi mật khẩu không đủ mạnh!\n Phải có ít nhất 1 ký tự hoa, 1 ký tự thường, 1 số và 1 ký tự đặc biệt !";
     public static String ERROR_PASS_AND_CONFIRM = "Lỗi mật khẩu không trùng khớp, vui lòng nhập lại !";
     
     // ================ BUDGET
@@ -33,6 +40,7 @@ public class AppConfigs {
     public static String ERROR_DATE_IS_NOT_CORRECT = "Vui lòng điền ngày phù hợp !";
     
     // ================ TRANSACTION
+    public static String ERROR_AMOUNT = "Vui lòng điền số tiền hợp lệ !";
     public static String ERROR_LENGHT_DESCRIPTION = "Vui lòng nhập miêu tả có độ dài nhỏ hơn 255 ký tự !";
     
     // ================ NO INFORMATION

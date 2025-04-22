@@ -13,6 +13,7 @@ import com.ghee.services.CategoryServices;
 import com.ghee.formatter.DatePickerUtils;
 import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
+import com.ghee.utils.MessageErrorField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -35,8 +36,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 /**
@@ -63,6 +67,7 @@ public class BudgetCreatePageController implements Initializable {
     
     private String parentController;
     private Budget selectedBudget;
+    private boolean isFormatting; // bo dem
     
     public void setSelectedBudget(Budget b) {
         this.selectedBudget = b;
@@ -77,10 +82,7 @@ public class BudgetCreatePageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
         this.categoryItems = FXCollections.observableArrayList();
-        
-        loadCategories();
         
         cbCategories.setOnAction(event -> {
             Object selectedItem = cbCategories.getSelectionModel().getSelectedItem();
@@ -89,7 +91,7 @@ public class BudgetCreatePageController implements Initializable {
                 goToCreateCategoryPage();
             }
         });
-        
+  
         this.dpEndDate.setEditable(false);
         this.dpStartDate.setEditable(false);
         
@@ -100,6 +102,8 @@ public class BudgetCreatePageController implements Initializable {
 
         DatePickerUtils.setVietnameseDateFormat(this.dpStartDate);
         DatePickerUtils.setVietnameseDateFormat(this.dpEndDate);
+        
+        loadCategories();
     }
     
     public void loadSelectedBudget() {
@@ -132,7 +136,7 @@ public class BudgetCreatePageController implements Initializable {
                     cates.forEach(c -> this.categoryItems.add(c));
                 }
                 this.cbCategories.setItems(categoryItems);
-                
+
                 this.cbCategories.setCellFactory(params -> new ListCell<>() {
                     @Override
                     protected void updateItem(Object item, boolean empty) {
@@ -146,7 +150,7 @@ public class BudgetCreatePageController implements Initializable {
                         }
                     }
                 });
-                
+
                 this.cbCategories.setButtonCell(new ListCell<>() {
                     @Override
                     protected void updateItem(Object item, boolean empty) {
@@ -167,11 +171,19 @@ public class BudgetCreatePageController implements Initializable {
         }
     } 
     
+    public void deleteCategory(Category category) {
+        System.err.println("lasdk");
+    }
+    
+    public void updateCategory(Category category) {
+        
+    }
 
     /**
      * thêm ngân sách mới.
      *
      * @param e
+     * @throws java.sql.SQLException
      */
     public void addBudget(ActionEvent e) throws SQLException {
         try {
@@ -187,11 +199,15 @@ public class BudgetCreatePageController implements Initializable {
             Double target = Double.valueOf(this.txtTarget.getText());
             
             if (target.isNaN() || target <= 0) {
-                MessageBox.getAlert(AppConfigs.ERROR_TARGET_IS_NEGATIVE, Alert.AlertType.WARNING).showAndWait();
+                // MessageBox.getAlert(AppConfigs.ERROR_TARGET_IS_NEGATIVE, Alert.AlertType.WARNING).showAndWait();
+                MessageErrorField.ErrorFieldHbox(txtTarget, AppConfigs.ERROR_TARGET_IS_NEGATIVE);
                 return; 
             } else if (target <= 100000) {
-                MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
+                // MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
+                MessageErrorField.ErrorFieldHbox(txtTarget, AppConfigs.ERROR_TARGET_LESS_THAN_MIN);
                 return;
+            } else {
+                MessageErrorField.ErrorFieldHboxOff(txtTarget);
             }
             
             Double amount = 0.00;

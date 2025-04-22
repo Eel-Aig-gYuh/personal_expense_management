@@ -8,15 +8,21 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="750.0" styleClass="VBox" stylesheets="@../../../styles/transactionhomepage.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.TransactionHomePageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="701.0" prefWidth="750.0" styleClass="VBox" stylesheets="@../../../styles/transactionhomepage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.TransactionHomePageController">
    <children>
-      <TabPane fx:id="tabPane" prefHeight="584.0" prefWidth="539.0" styleClass="TabPane" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab text="Tháng này" />
-            <Tab text="Quý này" />
-            <Tab text="Năm này" />
-        </tabs>
-      </TabPane>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <TabPane fx:id="tabPane" prefHeight="584.0" prefWidth="690.0" styleClass="TabPane" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Tháng này" />
+                  <Tab text="Quý này" />
+                  <Tab text="Năm này" />
+                  <Tab text="Tháng trước" />
+                  <Tab text="Năm trước" />
+              </tabs>
+            </TabPane>
+         </children>
+      </HBox>
       <VBox prefHeight="116.0" prefWidth="600.0">
          <children>
             <HBox prefHeight="51.0" prefWidth="600.0">
@@ -38,14 +44,15 @@
             </HBox>
          </children>
       </VBox>
-      <ListView fx:id="listViewTransactions" prefHeight="54.0" prefWidth="690.0" styleClass="ListView"> </ListView>
+      <Label fx:id="lblNoData" text="lblNoData" />
+      <ListView fx:id="listViewTransactions" prefHeight="304.0" prefWidth="690.0" styleClass="ListView"> </ListView>
       <HBox prefHeight="38.0" prefWidth="600.0" styleClass="HBox">
          <children>
             <Button fx:id="btnHomePage" mnemonicParsing="false" onAction="#goToHomePage" styleClass="control-button" text="Tổng quan" />
             <Button fx:id="btnTransactionPage" mnemonicParsing="false" styleClass="control-button" text="Sổ giao dịch" />
             <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" styleClass="control-button" text="+" />
             <Button fx:id="btnBudgetPage" mnemonicParsing="false" onAction="#goToBudgetHomePage" styleClass="control-button" text="Ngân sách" />
-            <Button fx:id="btnUserPage" mnemonicParsing="false" styleClass="control-button" text="Button" />
+            <Button fx:id="btnUserPage" mnemonicParsing="false" styleClass="control-button" text="Tài khoản" />
          </children>
       </HBox>
    </children>
