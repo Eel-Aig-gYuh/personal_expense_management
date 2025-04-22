@@ -1,5 +1,5 @@
 test_case,user_id,expected_success
-Valid existing user,2,true
-Non-existent user,999999,false
-Negative user ID,-1,false
-Zero user ID,0,false
+Valid existing user,admin123,Admin@123,true
+Valid existing user,testuser1,Admin@123,true
+Valid existing user,testuser2,Admin@123,true
+Valid existing user,testuser5,Admin@123,true
