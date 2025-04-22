@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,12 +34,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
@@ -51,6 +58,8 @@ public class HomePageController implements Initializable {
     @FXML private Label welcomeLabel;
     @FXML private Label soDuLabel;
     @FXML private Label lblNoData;
+    @FXML private Label lblNoData1;
+    @FXML private Label lblNoData2;
 
     @FXML private Button btnLogin;
     @FXML private Button btnLogout;
@@ -60,13 +69,24 @@ public class HomePageController implements Initializable {
     @FXML private Button btnTransactionPage;
     @FXML private Button btnAddTransaction;
     @FXML private Button btnUserPage;
-    
-    
+   
     // báo cáo chi tiêu:
     @FXML private ComboBox<String> cbTimeRange;
     
     @FXML private BarChart<String, Double> barChart;
-
+    @FXML private BarChart<String, Double> barChartComparison;
+    
+    @FXML private LineChart<String, Double> lineChartSpent;
+    @FXML private CategoryAxis spentXAxis;
+    
+    @FXML private TabPane tabPaneReport;
+    @FXML private Tab tabSpendingByBudget;
+    @FXML private Tab tabSpendingByDay;
+    @FXML private Tab tabSpendingByComparison;
+    
+    @FXML private AnchorPane apSpendingByBudget;
+    
+    
     private final WalletServices walletServices = new WalletServices();
     private final TransactionServices transactionServices = new TransactionServices();
     private final CategoryServices categoryServices = new CategoryServices();
@@ -108,8 +128,26 @@ public class HomePageController implements Initializable {
                 this.cbTimeRange.setValue("Tháng này");
 
                 // khi thay đổi trong combobox thì load lại barchart
-                this.cbTimeRange.setOnAction(event -> loadSpendingReport());
+                this.cbTimeRange.setOnAction(event -> {
+                    if (tabPaneReport.getSelectionModel().getSelectedIndex() == 0) {
+                        loadSpendingReport();
+                    } else if (tabPaneReport.getSelectionModel().getSelectedIndex() == 1) {
+                        loadDaySpentReport();
+                    }
+                });
                 
+                tabPaneReport.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+                    if (newTab == tabSpendingByBudget) {
+                        cbTimeRange.setVisible(true);
+                        loadSpendingReport();
+                    } else if (newTab == tabSpendingByDay) {
+                        cbTimeRange.setVisible(true);
+                        loadDaySpentReport();
+                    } else if (newTab == tabSpendingByComparison) {
+                        cbTimeRange.setVisible(false);
+                        loadComparisonReport();
+                    }
+                });
                 loadSpendingReport();
             }
         } catch (Exception ex) {
@@ -193,11 +231,165 @@ public class HomePageController implements Initializable {
         XYChart.Series<String, Double> series = new XYChart.Series<>();
         series.setName("Chi tiêu");
         
+        // Kích hoạt hiệu ứng động
+        this.barChart.setAnimated(false);
+
         for (Map.Entry<String, Double> entry: datas.entrySet()) {
-            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+            XYChart.Data<String, Double> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
+            series.getData().add(data);
+            
+            
+            // Thêm Tooltip
+            Tooltip tooltip = new Tooltip("Danh mục: " + entry.getKey() + "\nSố tiền: " + MoneyFormat.moneyFormat(entry.getValue()) + "đ");
+            Tooltip.install(data.getNode(), tooltip);
         }
         
         this.barChart.getData().add(series);
+    }
+    
+    /**
+     * Vẽ line chart chi tiêu theo ngày.
+     */
+    public void loadDaySpentReport() {
+        Users user = ManageUser.getCurrentUser();
+        if (user == null) {
+            this.lineChartSpent.getData().clear();
+            return;
+        }
+        
+        try {
+            LocalDate now = LocalDate.now();
+            LocalDate startDate;
+            LocalDate endDate;
+            
+            String timeRange = this.cbTimeRange.getValue();
+            switch (timeRange) {
+                case "Tuần này":
+                    startDate = now.with(DayOfWeek.MONDAY);
+                    endDate = now.with(DayOfWeek.SUNDAY);
+                    break;
+                case "Tháng này":
+                    startDate = now.withDayOfMonth(1);
+                    endDate = now.withDayOfMonth(now.lengthOfMonth());
+                    break;
+                case "Quý này":
+                    int quarter = (now.getMonthValue() - 1) / 3 + 1;
+                    startDate = LocalDate.of(now.getYear(), (quarter - 1) * 3 + 1, 1);
+                    endDate = startDate.plusMonths(2).withDayOfMonth(startDate.plusMonths(2).lengthOfMonth());
+                    break;    
+                case "Năm này":
+                    startDate = LocalDate.of(now.getYear(), 1, 1);
+                    endDate = LocalDate.of(now.getYear(), 12, 31);
+                    break;
+                default:
+                    startDate = now.withDayOfMonth(1);
+                    endDate = now.withDayOfMonth(now.lengthOfMonth());
+            }
+            
+            if (endDate.isAfter(now)) {
+                endDate = now;
+            }
+            
+            Map<LocalDate, Double> transactionByDay = staticticsServices.statTransactionByDay(user, startDate, endDate);
+            
+            if (transactionByDay.isEmpty() || transactionByDay.values().stream().allMatch(amount -> amount == 0.0)) {
+                this.lineChartSpent.getData().clear();
+                this.lineChartSpent.setVisible(true);
+                this.lblNoData1.setVisible(true);
+                this.lblNoData1.setText(AppConfigs.NO_DATA_TRANSACTION);
+            }
+            
+            this.tabSpendingByDay.setClosable(false);
+            this.lblNoData1.setVisible(false);
+            
+            drawLineChartSpentByDay(transactionByDay, startDate, endDate);
+            
+        } catch (SQLException ex) {
+            return;
+        }
+    }
+    
+    public void drawLineChartSpentByDay(Map<LocalDate, Double> datas, LocalDate startDate, LocalDate endDate) {
+        this.lineChartSpent.getData().clear();
+        
+        XYChart.Series<String, Double> series = new XYChart.Series<>();
+        series.setName("Thống kê chi tiêu trong tháng ...");
+        
+        LocalDate currentDate = startDate;
+        
+        this.lineChartSpent.setAnimated(false);
+        
+        while (!currentDate.isAfter(endDate)) {
+            String dateStr = currentDate.format(DateTimeFormatter.ofPattern("dd/MM"));
+            Double amount = datas.getOrDefault(currentDate, 0.0);
+            // System.out.printf("%s - %f ", dateStr, amount);
+            series.getData().add(new XYChart.Data<>(dateStr, amount));
+            currentDate = currentDate.plusDays(1);
+        }
+        
+        this.lineChartSpent.getData().add(series);
+    }
+    
+    public void loadComparisonReport() {
+        Users user = ManageUser.getCurrentUser();
+        if (user == null) {
+            this.lineChartSpent.getData().clear();
+            return;
+        }
+        
+        try {
+            LocalDate now = LocalDate.now();
+
+            // Tháng này
+            LocalDate currStartDate = now.withDayOfMonth(1);
+            LocalDate currEndDate = now.withDayOfMonth(now.lengthOfMonth());
+            if (currEndDate.isAfter(now)) {
+                currEndDate = now;
+            }
+
+            // Tháng trước
+            LocalDate previousMonth = now.minusMonths(1);
+            LocalDate preStartDate = previousMonth.withDayOfMonth(1);
+            LocalDate preEndDate = previousMonth.withDayOfMonth(previousMonth.lengthOfMonth());
+            
+            
+            Map<String, Double> comparisonDatas = staticticsServices.statComparison(user, currStartDate, currEndDate, preStartDate, preEndDate);
+            
+            if (comparisonDatas.isEmpty() || comparisonDatas.values().stream().allMatch(amount -> amount == 0.0)) {
+                this.barChartComparison.getData().clear();
+                this.barChartComparison.setVisible(false);
+                this.lblNoData2.setVisible(true);
+                this.lblNoData2.setText(AppConfigs.NO_DATA_TRANSACTION);
+            }
+            
+            this.barChartComparison.setVisible(true);
+            this.lblNoData2.setVisible(false);
+            
+            drawBarChartComparison(comparisonDatas);
+            
+        } catch (SQLException ex) {
+            return;
+        }
+    }
+    
+    public void drawBarChartComparison(Map<String, Double> datas) {
+        this.barChartComparison.getData().clear();
+        XYChart.Series<String, Double> series = new XYChart.Series<>();
+        series.setName("Bảng thống kê chi trong 2 tháng !");
+        
+         this.barChartComparison.setAnimated(false);
+        
+        for (Map.Entry<String, Double> entry: datas.entrySet()) {
+            XYChart.Data<String, Double> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
+            series.getData().add(data);
+            
+            
+            // Thêm Tooltip
+            Tooltip tooltip = new Tooltip("Danh mục: " + entry.getKey() + "\nSố tiền: " + MoneyFormat.moneyFormat(entry.getValue()) + "đ");
+            Tooltip.install(data.getNode(), tooltip);
+        }
+        
+        this.barChartComparison.getData().add(series);
     }
 
     public void goToLogin() {

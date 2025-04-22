@@ -121,9 +121,10 @@ public class BudgetDetailPageController implements Initializable {
             // Kiểm tra có dữ liệu không để vẽ biểu đồ.
             if (datas.isEmpty()) {
                 lineChart.getData().clear();
-                
                 return;
             }
+            
+            this.lineChart.setAnimated(false);
             
             // Sử dụng TreeMap để tự động sắp xếp theo ngày.
             Map<LocalDate, Double> sortedDatas = new TreeMap<>(datas);
@@ -135,6 +136,7 @@ public class BudgetDetailPageController implements Initializable {
             
             for (Map.Entry<LocalDate, Double> item : sortedDatas.entrySet()) {
                 String dateLabel = item.getKey().format(DateTimeFormatter.ofPattern("dd/MM"));
+                
                 series.getData().add(new XYChart.Data<>(dateLabel, item.getValue()));
             }
             

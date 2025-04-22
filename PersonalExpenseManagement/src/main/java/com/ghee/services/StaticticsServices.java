@@ -93,4 +93,83 @@ public class StaticticsServices {
         return spendingByBudgetData;
     }
     
+    /**
+     * Thống kê chi theo ngày trong tháng.
+     * @param userId
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws SQLException 
+     */
+    public Map<LocalDate, Double> statTransactionByDay(Users userId, LocalDate startDate, LocalDate endDate) throws SQLException {
+        Map<LocalDate, Double> transactionByDay = new HashMap<>();
+        
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "SELECT t.transaction_date, SUM(t.amount) AS total_amount " + 
+                           "FROM transaction t " +
+                           "JOIN category c ON t.category_id = c.id " +
+                           "WHERE t.user_id = ? " + 
+                           "AND t.transaction_date BETWEEN ? AND ? " + 
+                           "AND c.type = 'Chi' " + 
+                           "GROUP BY t.transaction_date";
+            PreparedStatement stm = conn.prepareCall(query);
+            
+            stm.setInt(1, userId.getId());
+            stm.setDate(2, Date.valueOf(startDate));
+            stm.setDate(3, Date.valueOf(endDate));
+            
+            ResultSet rs = stm.executeQuery();
+            
+            while (rs.next()) {
+                LocalDate date = rs.getDate("transaction_date").toLocalDate();
+                double totalAmount = rs.getDouble("total_amount");
+                transactionByDay.put(date, totalAmount);
+            }
+            
+            // Điền giá trị 0 cho các ngày không có giao dịch trong khoảng thời gian
+            LocalDate currentDate = startDate;
+            while (!currentDate.isAfter(endDate)) {
+                transactionByDay.putIfAbsent(currentDate, 0.0);
+                currentDate = currentDate.plusDays(1);
+            }
+        }
+        
+        return transactionByDay;
+    }
+    
+    public Map<String, Double> statComparison(Users userId, LocalDate currentDateStart, LocalDate currentDateEnd, 
+                                                            LocalDate preDateStart, LocalDate preDateEnd) throws SQLException {
+        Map<String, Double> comparisonDatas = new HashMap<>();
+        
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "SELECT SUM(t.amount) AS total_amount " + 
+                           "FROM transaction t " + 
+                           "JOIN category c ON c.id = t.category_id " +
+                           "WHERE t.user_id = ? " + 
+                           "AND t.transaction_date BETWEEN ? AND ? " + 
+                           "AND c.type = 'Chi'";
+            PreparedStatement stm = conn.prepareCall(query);
+            
+            // thang truoc
+            stm.setInt(1, userId.getId());
+            stm.setDate(2, Date.valueOf(currentDateStart));
+            stm.setDate(3, Date.valueOf(currentDateEnd));
+            
+            ResultSet rs = stm.executeQuery();
+            
+            Double preTotal = rs.next() ? rs.getDouble("total_amount") : 0.0;
+            comparisonDatas.put("Tháng trước", preTotal);
+            
+            // thang nay
+            stm.setDate(2, Date.valueOf(currentDateStart));
+            stm.setDate(3, Date.valueOf(currentDateEnd));
+            
+            rs = stm.executeQuery();
+            
+            Double currTotal = rs.next() ? rs.getDouble("total_amount") : 0.0;
+            comparisonDatas.put("Tháng này", currTotal);
+        }
+        
+        return comparisonDatas;
+    }
 }
