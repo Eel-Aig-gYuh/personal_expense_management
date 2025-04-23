@@ -64,8 +64,11 @@ public class RegisterUserInfoPageController implements Initializable {
         this.lastnameField.setText(lastname);
         this.emailField.setText(email);
         this.avatarPath = avatarUrl;
-        Image img = new Image(avatarPath);
-        this.avatar.setImage(img);
+        if (avatarPath != null) {
+            Image img = new Image(avatarPath);
+            this.avatar.setImage(img);
+        }
+            
     }
     
     /**

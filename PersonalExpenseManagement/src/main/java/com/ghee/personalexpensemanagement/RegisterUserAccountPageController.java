@@ -175,6 +175,8 @@ public class RegisterUserAccountPageController implements Initializable {
             RegisterUserInfoPageController infoPageController = loader.getController();
             infoPageController.setUserData(firstname, lastname, email, avatarUrl, role, createdAt);
 
+            // System.out.printf("%s - %s \n%s - %s\n%s - %s", firstname, lastname, email, avatarUrl, role, createdAt);
+            
             // chuyển trang qua account 
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.setScene(new Scene(root));
