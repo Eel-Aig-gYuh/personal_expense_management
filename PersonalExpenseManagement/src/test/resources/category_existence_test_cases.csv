@@ -1,5 +1,5 @@
 testCase,categoryId,expectedExists,categoryName,categoryType
-Existing category,1,true,Ăn uống,EXPENSE
+Existing category,1,true,Ăn uống,Chi
 Non-existent category,9999,false,,
 Negative ID,-1,false,,
 Zero ID,0,false,,

@@ -87,7 +87,7 @@ public class WalletServicesTestSuit {
     @CsvFileSource(resources = "/wallet_test_cases.csv", numLinesToSkip = 1)
     @DisplayName("Test wallet-user association: {0}")
     void testWalletUserAssociation(String testCase, String username, String password, boolean expectedSuccess) throws SQLException {
-        if (!expectedSuccess) return; // Skip if not expected to succeed
+        if (!expectedSuccess) return; 
         
         Users user = userServices.loginUser(username, password);
         ManageUser.setCurrentUser(user);
