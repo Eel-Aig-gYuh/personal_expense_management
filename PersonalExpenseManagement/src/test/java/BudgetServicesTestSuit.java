@@ -148,7 +148,7 @@ class BudgetServicesTestSuit {
     @Tag("update")
     void testUpdateNonExistentBudget() throws SQLException {
         Budget nonExistentBudget = new Budget();
-        nonExistentBudget.setId(-1);
+        nonExistentBudget.setId(-10);
         nonExistentBudget.setUserId(new Users(1));
         nonExistentBudget.setCategoryId(new Category(1));
         nonExistentBudget.setTarget(1000.00);
@@ -159,6 +159,7 @@ class BudgetServicesTestSuit {
         Map<String, Object> result = budgetServices.updateBudget(nonExistentBudget);
 
         assertFalse((boolean) result.get("success"));
+
     }
 
     @Test

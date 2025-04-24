@@ -1,7 +1,7 @@
 testCase,userId,type,name,expectedSuccess
-Valid category,1,EXPENSE,Grocery,true
-Same name different type,1,INCOME,Grocery,true
-Same name same type,1,EXPENSE,Grocery,true
-Empty name,1,EXPENSE,,false
+Valid category,1,Chi,Grocery,true
+Same name different type,1,Thu,Grocery,true
+Same name same type,1,Chi,Grocery,true
+Empty name,1,Chi,,false
 Empty type,1,,Rent,false
-Invalid type,1,INVALID_TYPE,Test,false
+Invalid type,1,rent,Test,false

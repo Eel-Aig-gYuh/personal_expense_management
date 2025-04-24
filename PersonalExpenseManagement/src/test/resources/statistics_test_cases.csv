@@ -1,0 +1,5 @@
+testCase,username,password,startDate,endDate,expectedSize
+User1 hợp lệ,user1,pass1,2023-01-01,2023-01-31,3
+User2 hợp lệ,user2,pass2,2023-06-01,2023-06-30,2
+Khoảng thời gian không giao dịch,user1,pass1,2024-01-01,2024-01-31,0
+Ngày không hợp lệ,user1,pass1,2023-12-31,2023-01-01,0
