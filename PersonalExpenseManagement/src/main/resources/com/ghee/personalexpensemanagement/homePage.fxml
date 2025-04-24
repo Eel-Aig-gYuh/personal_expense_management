@@ -41,15 +41,15 @@
       </HBox>
       <ScrollPane prefHeight="310.0" prefWidth="746.0" styleClass="scroll-container">
          <content>
-            <VBox prefHeight="266.0" prefWidth="702.0">
+            <VBox prefHeight="287.0" prefWidth="702.0">
                <children>
-                  <HBox prefHeight="218.0" prefWidth="682.0">
+                  <HBox prefHeight="294.0" prefWidth="702.0">
                      <children>
                         <TabPane fx:id="tabPaneReport" prefHeight="218.0" prefWidth="526.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab fx:id="tabSpendingByBudget" text="Báo cáo ngân sách">
                               <content>
-                                <AnchorPane fx:id="apSpendingByBudget" minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="407.0">
+                                <AnchorPane fx:id="apSpendingByBudget" minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="497.0">
                                        <children>
                                           <Label fx:id="lblNoData" styleClass="chart-title" text="Label" />
                                           <BarChart fx:id="barChart" layoutX="-1.0" layoutY="-2.0" prefHeight="138.0" prefWidth="500.0" styleClass="chart">

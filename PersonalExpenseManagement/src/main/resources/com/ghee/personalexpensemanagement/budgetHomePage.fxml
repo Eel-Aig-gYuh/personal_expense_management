@@ -44,7 +44,7 @@
             <Button fx:id="btnTransactionPage" mnemonicParsing="false" onAction="#goToTransactionHomePage" styleClass="control-button" text="Sổ giao dịch" />
             <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" styleClass="control-button" text="+" />
             <Button fx:id="btnBudgetPage" mnemonicParsing="false" styleClass="control-button" text="Ngân sách" />
-            <Button fx:id="btnUserPage" mnemonicParsing="false" styleClass="control-button" text="Button" />
+            <Button fx:id="btnUserPage" mnemonicParsing="false" styleClass="control-button" text="Tài khoản" />
          </children>
       </HBox>
    </children>
