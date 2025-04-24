@@ -4,6 +4,7 @@
  */
 package com.ghee.services;
 
+import com.ghee.formatter.DatePickerUtils;
 import com.ghee.pojo.Budget;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.JdbcUtils;
@@ -15,10 +16,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import java.sql.Date;
+import java.text.ParseException;
 
 /**
  *
@@ -107,7 +112,9 @@ public class BudgetServices {
      */
     public Map<String, Object> createBudget(Budget budget) throws SQLException {
         Map<String, Object> results = new HashMap<>();
-
+   
+        System.out.printf("start date %s\n - end date %s\n - created at %s\n", budget.getStartDate(), budget.getEndDate(), budget.getCreatedAt());
+        
         try (Connection conn = JdbcUtils.getConn()) {
             String produceCall = "{Call CreateBudget (?, ?, ?, ?, ?, ?, ?, ?)}";
             CallableStatement callableStatement = conn.prepareCall(produceCall);
@@ -115,6 +122,7 @@ public class BudgetServices {
             callableStatement.setInt(1, budget.getUserId().getId()); // user_id
             callableStatement.setInt(2, budget.getCategoryId().getId()); // category_id
             callableStatement.setDouble(3, budget.getTarget()); // target
+    
             callableStatement.setDate(4, new java.sql.Date(budget.getStartDate().getTime())); // start_date
             callableStatement.setDate(5, new java.sql.Date(budget.getEndDate().getTime())); // end_date
             callableStatement.setDate(6, new java.sql.Date(budget.getCreatedAt().getTime())); // created_at
@@ -130,6 +138,8 @@ public class BudgetServices {
             results.put("success", success);
             results.put("message", message);
 
+        } catch (DateTimeParseException ex) {
+            return null;
         }
         return results;
     }
@@ -143,7 +153,7 @@ public class BudgetServices {
      */
     public Map<String, Object> updateBudget(Budget budget) throws SQLException {
         Map<String, Object> results = new HashMap<>();
-
+        
         try (Connection conn = JdbcUtils.getConn()) {
 
             String produceCall = "{Call UpdateBudget (?, ?, ?, ?, ?, ?, ?)}";

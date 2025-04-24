@@ -1,3 +1,4 @@
+import com.ghee.config.AppConfigs;
 import com.ghee.pojo.Budget;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.Users;
@@ -9,6 +10,7 @@ import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -52,14 +54,14 @@ class BudgetServicesTestSuit {
             String startDate,
             String endDate,
             boolean expectedSuccess,
-            @SuppressWarnings("unused") String ignoredMessage) throws SQLException {
+            @SuppressWarnings("unused") String ignoredMessage) throws SQLException, ParseException {
 
         Budget budget = new Budget();
         budget.setUserId(new Users(userId));
         budget.setCategoryId(new Category(categoryId));
         budget.setTarget(target);
-        budget.setStartDate(java.sql.Date.valueOf(LocalDate.parse(startDate)));
-        budget.setEndDate(java.sql.Date.valueOf(LocalDate.parse(endDate)));
+        budget.setStartDate(java.sql.Date.valueOf(startDate));
+        budget.setEndDate(java.sql.Date.valueOf(startDate));
         budget.setCreatedAt(new Date());
 
         Map<String, Object> result = budgetServices.createBudget(budget);
@@ -71,7 +73,7 @@ class BudgetServicesTestSuit {
     @Test
     @DisplayName("Update Budget - Success Case")
     @Tag("update")
-    void testUpdateBudget_Success() throws SQLException {
+    void testUpdateBudget_Success() throws SQLException, ParseException {
         Map<String, Object> createResult = budgetServices.createBudget(validBudget);
         assumeTrue((boolean) createResult.get("success"));
 
@@ -130,7 +132,7 @@ class BudgetServicesTestSuit {
     @Test
     @DisplayName("Create Budget - Invalid User")
     @Tag("exception")
-    void testCreateBudget_InvalidUser() throws SQLException {
+    void testCreateBudget_InvalidUser() throws SQLException, ParseException {
         Budget invalidBudget = new Budget();
         invalidBudget.setUserId(new Users(-1));
         invalidBudget.setCategoryId(new Category(1));
@@ -146,7 +148,7 @@ class BudgetServicesTestSuit {
     @Test
     @DisplayName("Update Non-Existent Budget")
     @Tag("update")
-    void testUpdateNonExistentBudget() throws SQLException {
+    void testUpdateNonExistentBudget() throws SQLException, ParseException {
         Budget nonExistentBudget = new Budget();
         nonExistentBudget.setId(-10);
         nonExistentBudget.setUserId(new Users(1));
