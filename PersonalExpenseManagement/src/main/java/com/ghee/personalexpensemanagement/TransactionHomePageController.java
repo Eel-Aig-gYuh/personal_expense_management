@@ -5,6 +5,7 @@
 package com.ghee.personalexpensemanagement;
 
 import com.ghee.formatter.MoneyFormat;
+import com.ghee.pojo.Budget;
 import com.ghee.pojo.Transaction;
 import com.ghee.pojo.Users;
 import com.ghee.services.TransactionServices;
@@ -30,6 +31,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -172,8 +174,9 @@ public class TransactionHomePageController implements Initializable {
                     if (empty || item == null) {
                         setGraphic(null);
                     } else {
-                        HBox hbox = new HBox(10);
-                        hbox.setStyle("-fx-background-color: white; -fx-padding: 5; -fx-border-radius: 10px;");
+                        HBox hbox = new HBox();
+                        hbox.setStyle("-fx-stroke-width: 2px; -fx-background-color: white; -fx-border-radius: 12px 12px 0px 0px;-fx-background-radius: 12px 12px 0px 0px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6); -fx-border-color: black; -fx-border-width: 1px; -fx-padding: 10px;");
+                            
                         if (item instanceof Date) {
                             // Hiển thị ngày;
                             LocalDate date = LocalDate.parse(item.toString());
@@ -205,7 +208,7 @@ public class TransactionHomePageController implements Initializable {
                             HBox.setHgrow(hboxDate, Priority.ALWAYS);
                             hboxDate.setMaxWidth(Double.MAX_VALUE);
                             
-                            setGraphic(hbox);
+//                            setGraphic(hbox);
                         }
                         if (item instanceof Transaction) {
                             hbox.setStyle("-fx-padding: 5; -fx-margin-top: -10; -fx-background-color: white;");
@@ -219,14 +222,42 @@ public class TransactionHomePageController implements Initializable {
                             String styleChi = "-fx-font-size: 14px; -fx-text-fill: red;";
                             
                             lblAmount.setStyle(((Transaction) item).getCategoryId().getType().equals("Thu") ? styleThu: styleChi);
+                            
+                            Button delTransaction = new Button("Xóa");
+                            delTransaction.setStyle("-fx-background-color: #FF6B6B; -fx-padding: 10px; -fx-font-size: 14px;");
+                            
+                            delTransaction.setOnAction(event -> {
+                                MessageBox.getYesNoAlert("Bạn có chắc chắn muốn xóa giao dịch này không?", Alert.AlertType.CONFIRMATION)
+                                        .showAndWait().ifPresent(res -> {
+                                            if (res == ButtonType.OK) {
+                                                Button b = (Button) event.getSource();
+                                                ListCell cell = (ListCell) b.getParent().getParent();
+                                                Transaction transactionInCell = (Transaction) cell.getItem();
 
-                            hbox.getChildren().addAll(lblCategoryName, lblAmount);
+                                                try {
+                                                    if (transactionServices.deleteTransaction(transactionInCell) == true) {
+                                                        MessageBox.getAlert("Xóa thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                                                        loadTransactionDatas();
+                                                        
+                                                    } else {
+                                                        MessageBox.getAlert("Xóa không thành công !", Alert.AlertType.ERROR).showAndWait();
+                                                    }
+                                                } catch (SQLException ex) {
+                                                    System.err.println(ex.getMessage());
+                                                }
+                                            }
+                                        });
+                            });
+                            
+                            hbox.getChildren().addAll(lblCategoryName, lblAmount, delTransaction);
+                            hbox.setStyle("-fx-spacing: 10px; -fx-cursor: hand; -fx-stroke-width: 2px; -fx-background-color: white; -fx-border-radius: 12px 12px 0px 0px;-fx-background-radius: 12px 12px 0px 0px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6); -fx-border-color: black; -fx-border-width: 1px; -fx-padding: 10px;");
                             
                             HBox.setHgrow(lblCategoryName, Priority.ALWAYS);
                             lblCategoryName.setMaxWidth(Double.MAX_VALUE);
                             
-                            setGraphic(hbox);
+//                            setGraphic(hbox);
                         }
+                        setGraphic(hbox);
                     }
                     
                 }
@@ -243,8 +274,7 @@ public class TransactionHomePageController implements Initializable {
                         // chuyển hướng tới updateBudget.
                         goToUpdateTransactionPage(selectedTransaction);
                     }
-                }
-
+                } 
             });
             
         } catch (SQLException ex) {

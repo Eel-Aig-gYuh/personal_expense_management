@@ -82,38 +82,38 @@ public class BudgetCreatePageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.categoryItems = FXCollections.observableArrayList();
+        this.setCategoryItems(FXCollections.observableArrayList());
         
-        cbCategories.setOnAction(event -> {
-            Object selectedItem = cbCategories.getSelectionModel().getSelectedItem();
+        getCbCategories().setOnAction(event -> {
+            Object selectedItem = getCbCategories().getSelectionModel().getSelectedItem();
             if ("Thêm danh mục".equals(selectedItem)) {
                 // Mở cửa sổ createCategory.fxml
                 goToCreateCategoryPage();
             }
         });
   
-        this.dpEndDate.setEditable(false);
-        this.dpStartDate.setEditable(false);
+        this.getDpEndDate().setEditable(false);
+        this.getDpStartDate().setEditable(false);
         
-        DatePickerUtils.disablePastDates(this.dpStartDate);
-        DatePickerUtils.disablePastDates(this.dpEndDate);
+        DatePickerUtils.disablePastDates(this.getDpStartDate());
+        DatePickerUtils.disablePastDates(this.getDpEndDate());
 
-        DatePickerUtils.restrictEndDate(this.dpStartDate, this.dpEndDate);
+        DatePickerUtils.restrictEndDate(this.getDpStartDate(), this.getDpEndDate());
 
-        DatePickerUtils.setVietnameseDateFormat(this.dpStartDate);
-        DatePickerUtils.setVietnameseDateFormat(this.dpEndDate);
+        DatePickerUtils.setVietnameseDateFormat(this.getDpStartDate());
+        DatePickerUtils.setVietnameseDateFormat(this.getDpEndDate());
         
         loadCategories();
     }
     
     public void loadSelectedBudget() {
-        this.cbCategories.setValue(this.selectedBudget.getCategoryId());
+        this.getCbCategories().setValue(this.selectedBudget.getCategoryId());
         
-        this.dpStartDate.setValue(LocalDate.parse(this.selectedBudget.getStartDate().toString()));
-        this.dpEndDate.setValue(LocalDate.parse(this.selectedBudget.getEndDate().toString()));
+        this.getDpStartDate().setValue(LocalDate.parse(this.selectedBudget.getStartDate().toString()));
+        this.getDpEndDate().setValue(LocalDate.parse(this.selectedBudget.getEndDate().toString()));
         
-        this.txtTarget.setText(String.valueOf(this.selectedBudget.getTarget()));
-        this.btnSave.setText("Cập nhật");
+        this.getTxtTarget().setText(String.valueOf(this.selectedBudget.getTarget()));
+        this.getBtnSave().setText("Cập nhật");
     }
     
     public void setParentController(String parentController){
@@ -128,16 +128,16 @@ public class BudgetCreatePageController implements Initializable {
             Users currentUser = ManageUser.getCurrentUser();
 
             if (currentUser != null) {
-                List<Category> cates = categoryServices.getCategoriesByUserId(currentUser.getId());
+                List<Category> cates = getCategoryServices().getCategoriesByUserId(currentUser.getId());
 
-                this.categoryItems.clear();
-                this.categoryItems.add("Thêm danh mục");
+                this.getCategoryItems().clear();
+                this.getCategoryItems().add("Thêm danh mục");
                 if (!cates.isEmpty()) {
-                    cates.forEach(c -> this.categoryItems.add(c));
+                    cates.forEach(c -> this.getCategoryItems().add(c));
                 }
-                this.cbCategories.setItems(categoryItems);
+                this.getCbCategories().setItems(getCategoryItems());
 
-                this.cbCategories.setCellFactory(params -> new ListCell<>() {
+                this.getCbCategories().setCellFactory(params -> new ListCell<>() {
                     @Override
                     protected void updateItem(Object item, boolean empty) {
                         super.updateItem(item, empty);
@@ -151,7 +151,7 @@ public class BudgetCreatePageController implements Initializable {
                     }
                 });
 
-                this.cbCategories.setButtonCell(new ListCell<>() {
+                this.getCbCategories().setButtonCell(new ListCell<>() {
                     @Override
                     protected void updateItem(Object item, boolean empty) {
                         super.updateItem(item, empty);
@@ -187,7 +187,7 @@ public class BudgetCreatePageController implements Initializable {
      */
     public void addBudget(ActionEvent e) throws SQLException {
         try {
-            Category categoryId = (Category) this.cbCategories.getSelectionModel().getSelectedItem();
+            Category categoryId = (Category) this.getCbCategories().getSelectionModel().getSelectedItem();
             
             if (categoryId == null) {
                 MessageBox.getAlert(AppConfigs.ERROR_CATEGORY_IS_NULL, Alert.AlertType.WARNING).showAndWait();
@@ -196,24 +196,24 @@ public class BudgetCreatePageController implements Initializable {
             
             Users currentUser = ManageUser.getCurrentUser();
 
-            Double target = Double.valueOf(this.txtTarget.getText());
+            Double target = Double.valueOf(this.getTxtTarget().getText());
             
             if (target.isNaN() || target <= 0) {
                 // MessageBox.getAlert(AppConfigs.ERROR_TARGET_IS_NEGATIVE, Alert.AlertType.WARNING).showAndWait();
-                MessageErrorField.ErrorFieldHbox(txtTarget, AppConfigs.ERROR_TARGET_IS_NEGATIVE);
+                MessageErrorField.ErrorFieldHbox(getTxtTarget(), AppConfigs.ERROR_TARGET_IS_NEGATIVE);
                 return; 
             } else if (target <= 100000) {
                 // MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
-                MessageErrorField.ErrorFieldHbox(txtTarget, AppConfigs.ERROR_TARGET_LESS_THAN_MIN);
+                MessageErrorField.ErrorFieldHbox(getTxtTarget(), AppConfigs.ERROR_TARGET_LESS_THAN_MIN);
                 return;
             } else {
-                MessageErrorField.ErrorFieldHboxOff(txtTarget);
+                MessageErrorField.ErrorFieldHboxOff(getTxtTarget());
             }
             
             Double amount = 0.00;
 
-            Date startDate = java.sql.Date.valueOf(this.dpStartDate.getValue());
-            Date endDate = java.sql.Date.valueOf(this.dpEndDate.getValue());
+            Date startDate = java.sql.Date.valueOf(this.getDpStartDate().getValue());
+            Date endDate = java.sql.Date.valueOf(this.getDpEndDate().getValue());
             Date createdAt = new Date();
             
             if (startDate == null || endDate == null || startDate.after(endDate)) {
@@ -223,11 +223,11 @@ public class BudgetCreatePageController implements Initializable {
 
             DatePickerUtils.setVietnameseDateFormat(createdAt);
 
-            if (this.btnSave.getText().equals("Cập nhật")) {
+            if (this.getBtnSave().getText().equals("Cập nhật")) {
                 // Cập nhật ngân sách.
                 Budget budget = new Budget(this.selectedBudget.getId(), categoryId, target, startDate, endDate);
             
-                var results = budgetServices.updateBudget(budget);
+                var results = getBudgetServices().updateBudget(budget);
             
                 boolean success = (boolean) results.get("success");
                 String msg = (String) results.get("message");
@@ -242,7 +242,7 @@ public class BudgetCreatePageController implements Initializable {
                 
                 Budget budget = new Budget(categoryId, currentUser, amount, target, startDate, endDate, createdAt);
                 
-                var results = budgetServices.createBudget(budget);
+                var results = getBudgetServices().createBudget(budget);
             
                 boolean success = (boolean) results.get("success");
                 String msg = (String) results.get("message");
@@ -258,7 +258,7 @@ public class BudgetCreatePageController implements Initializable {
                                         
                                         budget.setId(idSameBudget);
                                         
-                                        var resultsUpdate = budgetServices.updateBudget(budget);
+                                        var resultsUpdate = getBudgetServices().updateBudget(budget);
                                         
                                         Boolean successUpdate = (boolean) resultsUpdate.get("success");
                                         String msgUpdate = (String) resultsUpdate.get("message");
@@ -293,7 +293,7 @@ public class BudgetCreatePageController implements Initializable {
             categoryCreatePageController.setParentController("budgetCreatePage");
 
             // chuyển trang qua account 
-            Stage stage = (Stage) btnSave.getScene().getWindow();
+            Stage stage = (Stage) getBtnSave().getScene().getWindow();
             stage.setScene(new Scene(root));
             
             loadCategories();
@@ -310,11 +310,137 @@ public class BudgetCreatePageController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("budgetHomePage.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) btnSave.getScene().getWindow();
+            Stage stage = (Stage) getBtnSave().getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang chủ !";
             MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
+    }
+
+    /**
+     * @return the btnCancel
+     */
+    public Button getBtnCancel() {
+        return btnCancel;
+    }
+
+    /**
+     * @param btnCancel the btnCancel to set
+     */
+    public void setBtnCancel(Button btnCancel) {
+        this.btnCancel = btnCancel;
+    }
+
+    /**
+     * @return the btnSave
+     */
+    public Button getBtnSave() {
+        return btnSave;
+    }
+
+    /**
+     * @param btnSave the btnSave to set
+     */
+    public void setBtnSave(Button btnSave) {
+        this.btnSave = btnSave;
+    }
+
+    /**
+     * @return the cbCategories
+     */
+    public ComboBox<Object> getCbCategories() {
+        return cbCategories;
+    }
+
+    /**
+     * @param cbCategories the cbCategories to set
+     */
+    public void setCbCategories(ComboBox<Object> cbCategories) {
+        this.cbCategories = cbCategories;
+    }
+
+    /**
+     * @return the txtTarget
+     */
+    public TextField getTxtTarget() {
+        return txtTarget;
+    }
+
+    /**
+     * @param txtTarget the txtTarget to set
+     */
+    public void setTxtTarget(TextField txtTarget) {
+        this.txtTarget = txtTarget;
+    }
+
+    /**
+     * @return the dpStartDate
+     */
+    public DatePicker getDpStartDate() {
+        return dpStartDate;
+    }
+
+    /**
+     * @param dpStartDate the dpStartDate to set
+     */
+    public void setDpStartDate(DatePicker dpStartDate) {
+        this.dpStartDate = dpStartDate;
+    }
+
+    /**
+     * @return the dpEndDate
+     */
+    public DatePicker getDpEndDate() {
+        return dpEndDate;
+    }
+
+    /**
+     * @param dpEndDate the dpEndDate to set
+     */
+    public void setDpEndDate(DatePicker dpEndDate) {
+        this.dpEndDate = dpEndDate;
+    }
+
+    /**
+     * @return the categoryServices
+     */
+    public static CategoryServices getCategoryServices() {
+        return categoryServices;
+    }
+
+    /**
+     * @param aCategoryServices the categoryServices to set
+     */
+    public static void setCategoryServices(CategoryServices aCategoryServices) {
+        categoryServices = aCategoryServices;
+    }
+
+    /**
+     * @return the budgetServices
+     */
+    public static BudgetServices getBudgetServices() {
+        return budgetServices;
+    }
+
+    /**
+     * @param aBudgetServices the budgetServices to set
+     */
+    public static void setBudgetServices(BudgetServices aBudgetServices) {
+        budgetServices = aBudgetServices;
+    }
+
+    /**
+     * @return the categoryItems
+     */
+    public ObservableList<Object> getCategoryItems() {
+        return categoryItems;
+    }
+
+    /**
+     * @param categoryItems the categoryItems to set
+     */
+    public void setCategoryItems(ObservableList<Object> categoryItems) {
+        this.categoryItems = categoryItems;
     }
 }

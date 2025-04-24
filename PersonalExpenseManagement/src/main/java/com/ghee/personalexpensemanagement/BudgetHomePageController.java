@@ -92,6 +92,7 @@ public class BudgetHomePageController implements Initializable {
         
         this.tabPane.getSelectionModel().select(1);
         
+        this.listViewBudgets.setStyle("-fx-border-radius: 15px; -fx-background-radius: 15px;");
         loadBudgetsData();
     } 
     
@@ -264,6 +265,7 @@ public class BudgetHomePageController implements Initializable {
                             lblToday.setStyle("-fx-font-size: 10px;");
                             
                             Button btnDelete = new Button("Xóa");
+                            btnDelete.setStyle("-fx-background-color: #FF6B6B; ");
                             
                             btnDelete.setOnAction(event -> {
                                 MessageBox.getYesNoAlert("Bạn có chắc chắn muốn xóa ngân sách này không?", Alert.AlertType.CONFIRMATION)
@@ -290,7 +292,9 @@ public class BudgetHomePageController implements Initializable {
                             HBox hBox = new HBox(10);
                             
                             VBox vBox = new VBox(5, hboxTitle, lblRemainingAmount, progressBarContainer, lblToday);
+                            
                             hBox.getChildren().addAll(vBox, btnDelete);
+                            hBox.setStyle("-fx-stroke-width: 2px; -fx-border-radius: 12px;-fx-background-radius: 12px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6); -fx-border-color: black; -fx-border-width: 2px; -fx-padding: 5px;");
                             
                             HBox.setHgrow(vBox, Priority.ALWAYS);
                             vBox.setMaxWidth(Double.MAX_VALUE);

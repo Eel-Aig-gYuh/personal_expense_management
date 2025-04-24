@@ -126,17 +126,27 @@ public class TransactionServices {
     
     /**
      * Xoá giao dịch.
-     * @param transactionId
+     * @param transaction
+     * 
      * @return
      * @throws SQLException 
      */
-    public boolean deleteTransaction(int transactionId) throws SQLException{
+    public boolean deleteTransaction(Transaction transaction) throws SQLException{
         try (Connection conn = JdbcUtils.getConn()) {
-            String sql = "DELETE FROM transaction WHERE id = ?";
-            PreparedStatement stm = conn.prepareCall(sql);
-            stm.setInt(1, transactionId);
+            String sql = "{CALL DeleteTransaction (?, ?, ?, ?)}";
+            CallableStatement callableStatement = conn.prepareCall(sql);
+            callableStatement.setInt(1, transaction.getId());
+            callableStatement.setInt(2, transaction.getUserId().getId());
+            
+            callableStatement.registerOutParameter(3, Types.BOOLEAN);
+            callableStatement.registerOutParameter(4, Types.VARCHAR);
 
-            return stm.executeUpdate() > 0;
+            callableStatement.execute();
+            
+            boolean success = callableStatement.getBoolean(3);
+            String message = callableStatement.getString(4);
+            
+            return success;
         }
     }
     
