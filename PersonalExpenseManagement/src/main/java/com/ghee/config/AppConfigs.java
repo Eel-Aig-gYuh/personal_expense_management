@@ -14,16 +14,33 @@ public class AppConfigs {
     
     // ^ và $ đảm bảo kiểm tra toàn bộ chuỗi
     // .+ là kiểm tra không rỗng.
-    public static String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*(),.?\":{}|<>]).+$";
+    public static String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*(),.?\":{}|<>/\\[]]).+$";
+    public static String PATTERN_STRING = "^(?=.*[A-Z])(?=.*[a-z]).+$";
+    public static String PATTERN_CHAR = ".*[^a-zA-Z\\s].*";
+    public static String PATTERN_NUMBER = "^(?=.*[0-9])$";
+    public static String PATTERN_SPACE = "^.*\\s+.*$";
+    public static String PATTERN_EMAIL = "^(?=.*[@.]).+$";
+    
     public static int LENGHT_OF_ACCOUNT = 7;
+    public static int LENGHT_OF_LASTNAME = 50;
+    public static int LENGHT_OF_FIRSTNAME = 10;
     
     public static String NULL_USERNAME = "Vui lòng điền tên tài khoản !";
     public static String NULL_PASSWORD = "Vui lòng điền mật khẩu !";
+    
     public static String NULL_FIRSTNAME = "Vui lòng điền tên của bạn !";
-    public static String NULL_LASTNAME = "Vui lòng điền họ và chữ lót của bạn của bạn !";
-
+    public static String NULL_LASTNAME = "Vui lòng điền họ và chữ lót của bạn !";
+    
+    public static String ERROR_LASTNAME_PATTERN_CHAR = "Họ và chữ lót không được chứa ký tự đặc biệt!";
+    public static String ERROR_LASTNAME_PATTERN_NUMBER = "Họ và chữ lót không được chứa số!";
+    public static String ERROR_LASTNAME_OUT_OF_LENGHT = "Họ và chữ lót không được dài quá " + LENGHT_OF_LASTNAME + " ký tự!";
+    
+    public static String ERROR_FIRSTNAME_PATTERN_CHAR = "Tên không được chứa ký tự đặc biệt!";
+    public static String ERROR_FIRSTNAME_PATTERN_NUMBER = "Tên không được chứa số!";
+    public static String ERROR_FIRSTNAME_OUT_OF_LENGHT = "Tên không được dài quá " + LENGHT_OF_FIRSTNAME + " ký tự!";
+    
     public static String ERROR_NOT_ENOUGH_INFORMATION = "Vui lòng điền đầy đủ thông tin !";
-    public static String ERROR_EMAIL_PATTERN = "Vui lòng điền email hợp lệ! Ví dụ: example@";
+    public static String ERROR_EMAIL_PATTERN = "Email không hợp lệ";
     
     public static String ERROR_LENGHT_OF_USERNAME = "Độ dài không hợp lệ! \n Vui lòng nhập lại tên tài khoản phải trên 7 ký tự !";
     public static String ERROR_LENGHT_OF_PASSWORD = "Độ dài không hợp lệ! \n Vui lòng nhập lại mật khẩu phải trên 7 ký tự !";
@@ -33,6 +50,7 @@ public class AppConfigs {
     
     // ================ BUDGET
     public static int MIN_TARGET = 100000;
+    public static int MAX_TARGET = 100000;
     
     public static String ERROR_CATEGORY_IS_NULL = "Vui lòng chọn một danh mục cho ngân sách !";
     public static String ERROR_TARGET_IS_NEGATIVE = "Vui lòng điền mục tiêu ngân sách không âm !";

@@ -88,6 +88,9 @@ public class CategoryServices {
             
             results.put("success", success);
             results.put("message", message);
+        } catch (EnumConstantNotPresentException ex) {
+            results.put("success", false);
+            results.put("message", "Lỗi: Loại không phù hợp với danh mục, chỉ có thể là 'Thu' hoặc 'Chi'.");
         }
         
         return results;

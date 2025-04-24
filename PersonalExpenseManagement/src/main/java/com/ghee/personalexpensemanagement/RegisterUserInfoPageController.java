@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -56,7 +57,47 @@ public class RegisterUserInfoPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.firstnameField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue.isBlank()) {
+                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.NULL_FIRSTNAME);
+                
+            } else if (newValue.matches(AppConfigs.PATTERN_CHAR)) {
+                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+               
+            } else if (newValue.matches(AppConfigs.PATTERN_NUMBER)) {
+                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+                
+            } else if (newValue.length() > AppConfigs.LENGHT_OF_FIRSTNAME) {
+                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+                
+            } else {
+                MessageErrorField.ErrorFieldHboxOff(firstnameField);
+            }
+        });
         
+        this.lastnameField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue.matches("^().+$")) {
+                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.NULL_LASTNAME);
+            } else if (newValue.matches(AppConfigs.PATTERN_CHAR)) {
+                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+            } else if (newValue.matches(AppConfigs.PATTERN_NUMBER)) {
+                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+            } else if (newValue.length() > AppConfigs.LENGHT_OF_LASTNAME) {
+                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+                
+            } else {
+                MessageErrorField.ErrorFieldHboxOff(lastnameField);
+            }
+        });
+        
+        this.emailField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue.isBlank() || !newValue.matches(AppConfigs.PATTERN_EMAIL) || newValue.matches(AppConfigs.PATTERN_SPACE)) {
+                MessageErrorField.ErrorFieldHbox(emailField, AppConfigs.ERROR_EMAIL_PATTERN);
+            } 
+            else {
+                MessageErrorField.ErrorFieldHboxOff(emailField);
+            }
+        });
     }
     
     public void setUserData(String firstname, String lastname, String email, String avatarUrl, String role, Date createAt) {
@@ -110,9 +151,8 @@ public class RegisterUserInfoPageController implements Initializable {
             }
         }
     }
-    
   
-    public void goToAccountPage() throws IOException {
+    public void goToAccountPage(ActionEvent e) throws IOException {
         String firstname = this.firstnameField.getText().trim();
         String lastname = this.lastnameField.getText().trim();
         String email = this.emailField.getText().trim();
@@ -123,26 +163,46 @@ public class RegisterUserInfoPageController implements Initializable {
         boolean hasError = false;
         
         // check firstname
-        if (firstname.equals("")) {
+        if (firstname.isBlank()) {
             MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.NULL_FIRSTNAME);
+            hasError = true;
+        } else if (firstname.matches(AppConfigs.PATTERN_CHAR)) {
+            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+            hasError = true;
+        } else if (firstname.matches(AppConfigs.PATTERN_NUMBER)) {
+            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+            hasError = true;
+        } else if (firstname.length() > AppConfigs.LENGHT_OF_FIRSTNAME) {
+            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
             hasError = true;
         } else {
             MessageErrorField.ErrorFieldHboxOff(firstnameField);
         }
-        
+
         // check lastname
-        if (lastname.equals("")) {
+        if (lastname.isBlank()) {
             MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.NULL_LASTNAME);
             hasError = true;
-        } else {
+        } else if (lastname.matches(AppConfigs.PATTERN_CHAR)) {
+            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+            hasError = true;
+        } else if (lastname.matches(AppConfigs.PATTERN_NUMBER)) {
+            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+            hasError = true;
+        } else if (lastname.length() > AppConfigs.LENGHT_OF_LASTNAME) {
+            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+            hasError = true;
+        } 
+        else {
             MessageErrorField.ErrorFieldHboxOff(lastnameField);
         }
         
         // check email
-        if (email.equals("") || !email.contains("@")) {
+        if (email.isBlank() || !email.matches(AppConfigs.PATTERN_EMAIL) || email.matches(AppConfigs.PATTERN_SPACE)) {
             MessageErrorField.ErrorFieldHbox(emailField, AppConfigs.ERROR_EMAIL_PATTERN);
             hasError = true;
-        } else {
+        } 
+        else {
             MessageErrorField.ErrorFieldHboxOff(emailField);
         }
         
