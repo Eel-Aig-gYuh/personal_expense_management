@@ -283,18 +283,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateCategory`(
     out p_message varchar(255)
 )
 BEGIN
+	DECLARE v_category_type ENUM('Thu', 'Chi');
+
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN
-        SET p_success = FALSE;
+        SET p_success = false;
         SET p_message = 'Lỗi: Không thể thêm danh mục. Vui lòng kiểm tra lại thông tin (có thể do lỗi cơ sở dữ liệu).';
         ROLLBACK;
     END;
     
     IF EXISTS (SELECT 1 FROM category WHERE category.name = p_name) THEN
-		SET p_success = FALSE;
+		SET p_success = false;
 		SET p_message = 'Lỗi: Danh mục đã tồn tại!';
 		ROLLBACK;
 	END IF;
+    
+    IF p_type NOT IN ('Thu', 'Chi') THEN 
+		SET p_success = false;
+        SET p_message = 'Lỗi: Loại danh mục chỉ được phép là "Thu" hoặc "Chi"';
+    END IF;
     
     START TRANSACTION;
     
@@ -728,6 +735,18 @@ BEGIN
 
     START TRANSACTION;
     
+    SET @valid_budget = (
+		SELECT id
+        FROM budget
+        WHERE id = p_budget_id
+    );
+    
+    IF @valid_budget IS NULL THEN
+		SET p_success = false;
+        SET p_message = 'Lỗi: Không tồn tại ngân sách !';
+		ROLLBACK;
+    END IF;
+    
     -- Kiểm tra ngày hợp lệ
 	IF p_start_date > p_end_date OR p_end_date < CURDATE() THEN
 		SET p_success = false;
@@ -890,4 +909,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-24 14:12:02
+-- Dump completed on 2025-04-24 14:58:35

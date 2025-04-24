@@ -43,6 +43,9 @@ public class AppConfigs {
     public static String ERROR_AMOUNT = "Vui lòng điền số tiền hợp lệ !";
     public static String ERROR_LENGHT_DESCRIPTION = "Vui lòng nhập miêu tả có độ dài nhỏ hơn 255 ký tự !";
     
+    // ================ CATEGORY
+    public static String ERROR_INVALID_TYPE = "Vui lòng chọn loại ngân sách hợp lệ, thu hoặc chi.";
+    
     // ================ NO INFORMATION
     public static String NO_DATA_TRANSACTION = "Danh sách giao dịch hiện đang trống, vui lòng thêm giao dịch !";
     
