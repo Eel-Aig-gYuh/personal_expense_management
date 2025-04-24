@@ -11,7 +11,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 .VBox {
     -fx-background-color: linear-gradient(to bottom, #000428, #004e92); /* Sleek blue-black gradient background */
-    -fx-alignment: center;
+    
     -fx-padding: 30px;
     -fx-spacing: 25px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6);
@@ -40,7 +40,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .label-description {
     -fx-font-weight: bold;
     -fx-min-width: 180px;
-    -fx-text-alignment: right;
+    -fx-text-alignment: center;
+    -fx-spacing: 25px;
+    -fx-alignment: center;
     -fx-text-fill: #ffffff;
     -fx-font-family: 'Arial', sans-serif;
     -fx-font-size: 20px;

@@ -2,16 +2,24 @@
 .VBox {
     -fx-background-color: linear-gradient(to bottom, #000428, #004e92);
     -fx-alignment: center;
-    -fx-padding: 30px;
+    -fx-padding: 20px;
     -fx-spacing: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6);
+}
+
+.vbox-container {
+    -fx-background-color: white;
+    -fx-margin: 20px;
+    -fx-padding: 20px 30px 10px 30px;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6);
 }
 
 /* Cải tiến HBox */
 .HBox {
-    -fx-alignment: center;
     -fx-spacing: 40px;
-    -fx-padding: 15px;
+    -fx-padding: 0px 0px 0px 0px;
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 15px;
     -fx-border-radius: 15px;
@@ -20,41 +28,49 @@
 }
 
 
-
 /* Nhãn mô tả */
 .label-description {
     -fx-font-family: "Arial";
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
+    -fx-alignment: center;
+    -fx-padding: 0 0 10px 0;
+}
+
+.label-out-time {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
     -fx-alignment: center;
     -fx-padding: 0 0 10px 0;
 }
 
 /* Hiển thị số tiền */
 .amount-display {
-    -fx-font-size: 20px;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    
     -fx-font-weight: bold;
     -fx-font-family: 'Arial', sans-serif;
 }
 
 .spent-amount {
     -fx-font-weight: bold;
-    -fx-font-size: 20px;
+    -fx-font-size: 14px;
     -fx-text-fill: #FF6B6B; /* Màu đỏ nhạt cho số đã chi */
 }
 
 .remaining-amount {
     -fx-font-weight: bold;
-    -fx-font-size: 20px;
+    
+    -fx-font-size: 14px;
     -fx-text-fill: #6BCB77; /* Màu xanh lá nhạt cho số còn lại */
 }
 
 /* Phạm vi ngày */
 .date-range {
-    -fx-font-size: 20px;
-    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
     -fx-font-family: 'Arial', sans-serif;
 }
 
@@ -81,9 +97,12 @@
 .delete-button {
     -fx-background-color: rgba(255, 107, 107, 0.2);
     -fx-text-fill: #FF6B6B;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
     -fx-border-color: rgba(255, 107, 107, 0.5);
     -fx-font-size: 20px;
     -fx-font-family: 'Arial', sans-serif;
+    -fx-cursor: hand;
 }
 
 .delete-button:hover {
@@ -112,7 +131,7 @@
      -fx-font-family: "Arial";
     -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-alignment: center;
     -fx-padding: 5px 0;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
@@ -152,8 +171,8 @@
 /* Container chứa 2 nút */
 .nav-button-container {
     -fx-alignment: CENTER; /* Căn giữa theo chiều ngang */
-    -fx-spacing: 20px; /* Khoảng cách giữa 2 nút */
-    -fx-padding: 10px 0; /* Padding trên/dưới */
+    -fx-spacing: 310px; /* Khoảng cách giữa 2 nút */
+    -fx-padding: 0px 0px 0px 0px; /* Padding trên/dưới */
 }
 
 /* ----- LINE CHART STYLING ----- */
@@ -164,7 +183,7 @@
 
 /* Vùng biểu đồ */
 .chart-content {
-    -fx-background-color: transparent;
+    
     -fx-padding: 0;
 }
 
@@ -172,39 +191,40 @@
 .chart-vertical-grid-lines, 
 .chart-horizontal-grid-lines {
     -fx-stroke: rgba(255, 255, 255, 0.1);
-    -fx-stroke-width: 0.5;
+    -fx-stroke-width: 1;
 }
 
 /* Trục X/Y */
 .axis {
-    -fx-tick-label-fill: white;
+    -fx-tick-label-fill: black;
     -fx-font-family: "Arial";
     -fx-font-size: 15px;
     -fx-tick-length: 5;
 }
 
 .axis-label {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
 }
 
-/* Đường trục chính */
+ /*Đường trục chính*/ 
 .axis-tick-mark, 
 .axis-minor-tick-mark {
+    -fx-stroke-width: 2px;
     -fx-stroke: rgba(255, 255, 255, 0.3);
 }
 
-/* Đường line trên biểu đồ */
+ /*Đường line trên biểu đồ*/ 
 .chart-series-line {
     -fx-stroke-width: 2px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);
 }
 
 /* Màu cho các dòng (tùy chỉnh theo số series) */
-.default-color0.chart-series-line { -fx-stroke: #6BCB77; } /* Xanh lá */
-.default-color1.chart-series-line { -fx-stroke: #FF6B6B; } /* Đỏ */
-.default-color2.chart-series-line { -fx-stroke: #FFD166; } /* Vàng */
+.default-color0.chart-series-line { -fx-stroke: #6BCB77; }  Xanh lá 
+.default-color1.chart-series-line { -fx-stroke: #FF6B6B; }  Đỏ 
+.default-color2.chart-series-line { -fx-stroke: #FFD166; }  Vàng 
 
 /* Điểm dữ liệu (symbol) */
 .chart-line-symbol {

@@ -178,8 +178,21 @@ public class TransactionCreatePageController implements Initializable {
         try {
             Users currentUser = ManageUser.getCurrentUser();
             Category categoryId = (Category) this.cbCategories.getSelectionModel().getSelectedItem();
+            
+            if (categoryId == null) {
+                MessageBox.getAlert(AppConfigs.ERROR_CATEGORY_IS_NULL, Alert.AlertType.WARNING).showAndWait();
+                return; 
+            }
+            
             Wallet walletId = walletServices.getWalletById(currentUser.getId());
             
+            if (this.txtTarget.getText().trim().equals("") || Double.parseDouble(this.txtTarget.getText()) <= 0) {
+                MessageErrorField.ErrorFieldHbox(this.txtTarget, AppConfigs.ERROR_TARGET_IS_NEGATIVE);
+                return; 
+            } 
+            else {
+                MessageErrorField.ErrorFieldHboxOff(this.txtTarget);
+            }
             Double amount = Double.valueOf(this.txtTarget.getText());
             
             Date transactionDate = java.sql.Date.valueOf(this.dpTransactionDate.getValue());
@@ -188,8 +201,10 @@ public class TransactionCreatePageController implements Initializable {
             
             String description = this.txtDescription.getText();
             if (description.length() >= 255 ) {
-                MessageBox.getAlert(AppConfigs.ERROR_LENGHT_DESCRIPTION, Alert.AlertType.ERROR).showAndWait();
+                MessageErrorField.ErrorFieldHbox(txtDescription, AppConfigs.ERROR_LENGHT_DESCRIPTION);
                 return ;
+            } else {
+                MessageErrorField.ErrorFieldHboxOff(this.txtDescription);
             }
             
             Transaction transaction = new Transaction(currentUser, categoryId, walletId, amount, transactionDate, description, createdAt);
@@ -226,13 +241,19 @@ public class TransactionCreatePageController implements Initializable {
         try {
             Users currentUser = ManageUser.getCurrentUser();
             Category categoryId = (Category) this.cbCategories.getSelectionModel().getSelectedItem();
+            if (categoryId == null) {
+                MessageBox.getAlert(AppConfigs.ERROR_CATEGORY_IS_NULL, Alert.AlertType.WARNING).showAndWait();
+                return; 
+            }
+            
             Double amount = Double.valueOf(this.txtTarget.getText());
             
-            if (this.txtTarget.getText().trim().equals("")) {
-                MessageErrorField.ErrorFieldHbox(txtTarget, AppConfigs.ERROR_AMOUNT);
-                return;
-            } else {
-                MessageErrorField.ErrorFieldHboxOff(txtTarget);
+            if (amount.isNaN() || amount <= 0) {
+                MessageErrorField.ErrorFieldHbox(this.txtTarget, AppConfigs.ERROR_AMOUNT);
+                return; 
+            } 
+            else {
+                MessageErrorField.ErrorFieldHboxOff(this.txtTarget);
             }
             
             Date transactionDate = java.sql.Date.valueOf(this.dpTransactionDate.getValue());

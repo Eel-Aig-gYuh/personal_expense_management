@@ -4,6 +4,7 @@
  */
 package com.ghee.personalexpensemanagement;
 
+import com.ghee.config.AppConfigs;
 import com.ghee.formatter.MoneyFormat;
 import com.ghee.pojo.Budget;
 import com.ghee.pojo.Transaction;
@@ -35,6 +36,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -48,6 +50,7 @@ public class BudgetViewTransactionPageController implements Initializable {
     @FXML private Button btnGoBack;
     
     @FXML private Label lblCategoryName;
+    @FXML private Label lblNoDatas;
     
     @FXML private ListView listViewTransactions;
     
@@ -87,7 +90,17 @@ public class BudgetViewTransactionPageController implements Initializable {
             // Lấy danh sách giao dịch
             List<Transaction> transactions = transactionServices.getTransactionByUserIdAdnDateRange(currentUser.getId(), startDate, endDate);
             // System.out.println(transactions);
-
+            
+            if (transactions.isEmpty()) {
+                lblNoDatas.setVisible(true);
+                this.listViewTransactions.setVisible(false);
+                lblNoDatas.setText(AppConfigs.NO_DATA_TRANSACTION);
+                return;
+            }
+            
+            this.listViewTransactions.setVisible(true);
+            lblNoDatas.setVisible(false);
+            
             // Nhóm các giao dịch theo ngày
             Map<Date, List<Transaction>> transactionByDate = transactions.stream()
                     .collect(Collectors.groupingBy(Transaction::getTransactionDate, TreeMap::new, Collectors.toList()));
@@ -98,6 +111,7 @@ public class BudgetViewTransactionPageController implements Initializable {
                 
                 // Lọc theo cate và type = chi.
                 dailyTransaction.forEach(dt -> {
+                    System.err.println("Log: " + dt.getCategoryId().getName());
                     if (dt.getCategoryId().getName().equals(this.selectedBudget.getCategoryId().getName()) && dt.getCategoryId().getType().equals("Chi")) {
                         displayItems.add(dt);
                     }
@@ -119,6 +133,8 @@ public class BudgetViewTransactionPageController implements Initializable {
                         setGraphic(null);
                     } else {
                         HBox hbox = new HBox(10);
+                        hbox.setStyle("-fx-stroke-width: 2px; -fx-background-color: white; -fx-border-radius: 12px 12px 0px 0px;-fx-background-radius: 12px 12px 0px 0px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6); -fx-border-color: black; -fx-border-width: 1px; -fx-padding: 10px;");
+                           
                         if (item instanceof Date) {
                             // Hiển thị ngày;
                             LocalDate date = LocalDate.parse(item.toString());
@@ -146,7 +162,10 @@ public class BudgetViewTransactionPageController implements Initializable {
                             lblDailyTotal.setStyle(dailyTotal > 0 ? styleThu : styleChi + "-fx-text-alignment: right;");
 
                             hbox.getChildren().addAll(hboxDate, lblDailyTotal);
-
+                            
+                            HBox.setHgrow(hboxDate, Priority.ALWAYS);
+                            hboxDate.setMaxWidth(Double.MAX_VALUE);
+                            
                             setGraphic(hbox);
                         }
                         if (item instanceof Transaction) {
@@ -163,6 +182,13 @@ public class BudgetViewTransactionPageController implements Initializable {
                             lblAmount.setStyle(((Transaction) item).getCategoryId().getType().equals("Thu") ? styleThu : styleChi);
 
                             hbox.getChildren().addAll(lblCategoryName, lblAmount);
+                            
+                            HBox.setHgrow(lblCategoryName, Priority.ALWAYS);
+                            lblCategoryName.setMaxWidth(Double.MAX_VALUE);
+                            
+                            
+                            hbox.setStyle("-fx-cursor: hand; -fx-stroke-width: 2px; -fx-background-color: white; -fx-border-radius: 12px 12px 0px 0px;-fx-background-radius: 12px 12px 0px 0px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6); -fx-border-color: black; -fx-border-width: 1px; -fx-padding: 10px;");
+                            
                             setGraphic(hbox);
                         }
                     }

@@ -10,15 +10,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="788.0" prefWidth="602.0" styleClass="VBox" stylesheets="@../../../styles/transactioncreatepage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.TransactionCreatePageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="708.0" prefWidth="540.0" styleClass="VBox" stylesheets="@../../../styles/transactioncreatepage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.TransactionCreatePageController">
    <children>
-      <HBox prefHeight="49.0" prefWidth="601.0">
+      <HBox prefHeight="49.0" prefWidth="601.0" styleClass="hbox-title">
          <children>
             <Button mnemonicParsing="false" onAction="#goBack" prefHeight="61.0" prefWidth="92.0" styleClass="button-huy" text="Hủy">
                <font>
                   <Font size="25.0" />
                </font></Button>
-            <Label fx:id="lblTitle" prefHeight="56.0" prefWidth="239.0" styleClass="hbox-title-1" text=" Thêm Giao Dịch" textFill="WHITE">
+            <Label fx:id="lblTitle" prefHeight="62.0" prefWidth="262.0" styleClass="hbox-title-1" text="Thêm Giao Dịch" textFill="WHITE">
                <font>
                   <Font size="25.0" />
                </font></Label>
@@ -44,12 +44,12 @@
          </children>
       </HBox>
       <Label styleClass="label-description" text="Chi tiết" />
-      <TextArea fx:id="txtDescription" prefHeight="67.0" prefWidth="604.0" styleClass="TextArea">
+      <TextArea fx:id="txtDescription" prefHeight="178.0" prefWidth="500.0" styleClass="TextArea">
          <font>
             <Font size="20.0" />
          </font>
       </TextArea>
       <DatePicker fx:id="dpTransactionDate" styleClass="label-input" />
-      <Button fx:id="btnSave" mnemonicParsing="false" onAction="#addTransaction" styleClass="button_secondary" text="Lưu" />
+      <Button fx:id="btnSave" mnemonicParsing="false" onAction="#addTransaction" prefHeight="47.0" prefWidth="510.0" styleClass="button_secondary" text="Lưu" />
    </children>
 </VBox>
