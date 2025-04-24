@@ -152,6 +152,8 @@ public class CategoryServicesTestSuit {
         // Second creation with same name - should also succeed (business rule change)
         Category category2 = createTestCategory(); // Same name
         Map<String, Object> secondResult = categoryServices.createCategory(category2);
+        System.out.println("Category 1 name: " + category1.getName());
+        System.out.println("Category 2 name: " + category2.getName());
 
         assertTrue((boolean) secondResult.get("success"),
                 "Second creation with same name should succeed according to business rule");
@@ -170,8 +172,8 @@ public class CategoryServicesTestSuit {
     private Category createTestCategory() {
         Category category = new Category();
         category.setUserId(testUser);
-        category.setType("EXPENSE");
-        category.setName("Test Category " + System.currentTimeMillis());
+        category.setType("Chi");
+        category.setName("Test Category ");
         return category;
     }
 }

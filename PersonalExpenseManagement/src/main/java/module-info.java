@@ -13,4 +13,5 @@ module com.ghee.personalexpensemanagement {
     exports com.ghee.personalexpensemanagement;
     exports com.ghee.services;
     exports com.ghee.pojo;
+    exports com.ghee.utils;
 }
