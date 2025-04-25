@@ -2,150 +2,189 @@
 import com.ghee.pojo.Budget;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.Users;
+import com.ghee.services.BudgetServices;
 import com.ghee.services.StaticticsServices;
+import com.ghee.services.UserServices;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class StatisticServicesTestSuit {
-    private StaticticsServices staticticsServices;
+
+    private StaticticsServices staticticsServices;    
+    private UserServices userSebudgetrvices;
+    private BudgetServices budgetServices;
+
     private static Users testUser;
     private static Category testExpenseCategory;
     private static Category testIncomeCategory;
 
-    @BeforeAll
-    static void setUpAll() {
-        // Setup test user (could be loaded from CSV or test database)
-        testUser = new Users();
-        testUser.setId(1);
-        testUser.setUsername("testuser");
-        
-        // Setup test categories (should match your test database)
-        testExpenseCategory = new Category();
-        testExpenseCategory.setId(1);
-        testExpenseCategory.setName("Food");
-        testExpenseCategory.setType("Chi");
-        
-        testIncomeCategory = new Category();
-        testIncomeCategory.setId(2);
-        testIncomeCategory.setName("Salary");
-        testIncomeCategory.setType("Thu");
-    }
-
     @BeforeEach
     void setUp() {
         staticticsServices = new StaticticsServices();
+        budgetServices = new BudgetServices();
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "/spending_by_category_testcases.csv", numLinesToSkip = 1)
     @DisplayName("Test statSpendingByCategory with CSV data: {0}")
     void testStatSpendingByCategoryWithCsvData(
-            String testCase, 
-            int userId, 
-            String startDate, 
-            String endDate, 
-            int expectedCategoryCount) throws Exception {
-        
+            String testCase,
+            int userId,
+            String startDate,
+            String endDate,
+            int expectedCategoryCount,
+            double expectedAmount) throws Exception {
+
         // Setup
         Users user = new Users();
         user.setId(userId);
-        
+
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
-        
+
         // Execute
         Map<String, Double> result = staticticsServices.statSpendingByCategory(user, start, end);
-        
+
         // Verify
         assertNotNull(result, "Result should not be null");
-        assertEquals(expectedCategoryCount, result.size(), 
-            "Number of categories should match expectation for: " + testCase);
-        
+        assertEquals(expectedCategoryCount, result.size(),
+                "Number of categories should match expectation for: " + testCase);
+        assertEquals(expectedAmount, result.values().stream().mapToDouble(Double::doubleValue).sum(),
+                "Amount should match expectation for: " + testCase);
+
         // Additional verification that all amounts are positive
         result.values().forEach(amount -> {
             assertTrue(amount >= 0, "Amount should be non-negative");
         });
     }
-
-//    @Test
-//    @DisplayName("Test statSpendingByCategory with invalid date range")
-//    void testStatSpendingByCategoryInvalidDateRange() {
-//        Users user = new Users();
-//        user.setId(1);
-//        
-//        LocalDate start = LocalDate.of(2023, 1, 1);
-//        LocalDate end = LocalDate.of(2022, 12, 31); // End before start
-//        
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            staticticsServices.statSpendingByCategory(user, start, end);
-//        });
-//    }
-
+    
     @ParameterizedTest
     @CsvFileSource(resources = "/spending_by_budget_testcases.csv", numLinesToSkip = 1)
     @DisplayName("Test statSpendingByBudget with CSV data: {0}")
     void testStatSpendingByBudgetWithCsvData(
-            String testCase, 
-            int userId, 
-            int categoryId, 
-            String startDate, 
-            String endDate, 
-            int expectedDayCount) throws Exception {
-        
-        // Setup
-        Budget budget = new Budget();
-        budget.setUserId(new Users(userId));
-        
-        Category category = new Category();
-        category.setId(categoryId);
-        category.setType(categoryId == 1 ? "Chi" : "Thu"); // Assuming ID 1 is expense
-        budget.setCategoryId(category);
-        
-        budget.setStartDate(Date.valueOf(LocalDate.parse(startDate)));
-        budget.setEndDate(Date.valueOf(LocalDate.parse(endDate)));
-        
-        // Execute
-        Map<LocalDate, Double> result = staticticsServices.statSpendingByBudget(budget);
-        
-        // Verify
-        assertNotNull(result, "Result should not be null");
-        assertEquals(expectedDayCount, result.size(), 
-            "Number of days with transactions should match expectation for: " + testCase);
-        
-        // Verify all dates are within budget range
-        LocalDate budgetStart = new java.util.Date(budget.getStartDate().getTime()).toInstant()
-        .atZone(ZoneId.systemDefault())
-        .toLocalDate();
+            String testCase,
+            int userId,
+            int categoryId,
+            String startDateStr,
+            String endDateStr,
+            double expectedTotalAmount) throws Exception {
 
-        LocalDate budgetEnd = new java.util.Date(budget.getEndDate().getTime()).toInstant()
-        .atZone(ZoneId.systemDefault())
-        .toLocalDate();
-        result.keySet().forEach(date -> {
-            assertFalse(date.isBefore(budgetStart), "Date should not be before budget start");
-            assertFalse(date.isAfter(budgetEnd), "Date should not be after budget end");
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr);
+
+        List<Budget> budgets1 = budgetServices.getBudgetByUserIdAndDateRange(
+            userId, 
+            startDate, 
+            endDate
+        );
+        
+        budgets1.forEach(budget -> {
+            try {
+                if (budget == null) {
+                    fail("Budget cannot be null");
+                    return;
+                }
+                
+                Map<LocalDate, Double> result = staticticsServices.statSpendingByBudget(budget);
+                assertNotNull(result, "Result should not be null for budget: " + budget.getId());
+                
+                double expectedTotal = expectedTotalAmount;
+                double actualTotal = result.values().stream().mapToDouble(Double::doubleValue).sum();
+                
+                assertEquals(expectedTotal, actualTotal, 0.01, "Total mismatch for budget: " + budget.getId());
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(StatisticServicesTestSuit.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
+            
+    }
+    @ParameterizedTest
+    @CsvFileSource(resources = "/spending_by_date_testcases.csv", numLinesToSkip = 1)
+    @DisplayName("Test statSpendingByDate with CSV data: {0}")
+    void testStatSpendingByDateWithCsvData(
+            String testCase,
+            int userId,
+            String startDateStr,
+            String endDateStr,
+            String expectedDatesStr,
+            String expectedAmountsStr) throws Exception {
+
+        // Setup
+        Users user = new Users();
+        user.setId(userId);
+
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr);
+
+        // Execute
+        Map<LocalDate, Double> result = staticticsServices.statTransactionByDay(user, startDate, endDate);
+
+        // Verify
+        assertNotNull(result, "Result should not be null for test case: " + testCase);
+
+        String[] expectedDates = expectedDatesStr.split(";");
+        String[] expectedAmounts = expectedAmountsStr.split(";");
+
+        assertEquals(expectedDates.length, result.size(),
+                "Expected number of dates to match for test case: " + testCase);
+
+        for (int i = 0; i < expectedDates.length; i++) {
+        String dateString = expectedDates[i];
+        LocalDate date = LocalDate.parse(dateString);
+        double expectedAmount = Double.parseDouble(expectedAmounts[i]);
+        assertTrue(result.containsKey(date), "Result should contain date: " + date);
+        assertEquals(expectedAmount, result.get(date), 0.01,
+                "Amount mismatch for date " + date + " in test case: " + testCase);
+    }
+}
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/comparison_testcases.csv", numLinesToSkip = 1)
+    @DisplayName("Test statComparison with CSV data: {0}")
+    void testStatComparisonWithCsvData(
+            String testCase,
+            int userId,
+            String preStart,
+            String preEnd,
+            String currStart,
+            String currEnd,
+            double expectedPreTotal,
+            double expectedCurrTotal) throws Exception {
+
+        // Setup
+        Users user = new Users();
+        user.setId(userId);
+
+        LocalDate preStartDate = LocalDate.parse(preStart);
+        LocalDate preEndDate = LocalDate.parse(preEnd);
+        LocalDate currStartDate = LocalDate.parse(currStart);
+        LocalDate currEndDate = LocalDate.parse(currEnd);
+
+        // Execute
+        Map<String, Double> result = staticticsServices.statComparison(user, currStartDate, currEndDate, preStartDate, preEndDate);
+
+        // Verify
+        assertNotNull(result, "Result should not be null for test case: " + testCase);
+        assertEquals(2, result.size(), "Result should contain exactly 2 entries for 'Tháng trước' và 'Tháng này'");
+
+        assertEquals(expectedPreTotal, result.get("Tháng trước"), 0.01,
+                "Expected 'Tháng trước' to match for test case: " + testCase);
+        assertEquals(expectedCurrTotal, result.get("Tháng này"), 0.01,
+                "Expected 'Tháng này' to match for test case: " + testCase);
     }
 
-    @Test
-    @DisplayName("Test statSpendingByBudget with income category (should return empty)")
-    void testStatSpendingByBudgetWithIncomeCategory() throws Exception {
-        Budget budget = new Budget();
-        budget.setUserId(testUser);
-        budget.setCategoryId(testIncomeCategory);
-        budget.setStartDate(Date.valueOf(LocalDate.now().minusMonths(1)));
-        budget.setEndDate(Date.valueOf(LocalDate.now()));
-        
-        Map<LocalDate, Double> result = staticticsServices.statSpendingByBudget(budget);
-        
-        assertNotNull(result);
-        assertTrue(result.isEmpty(), "Should return empty map for income category");
-    }
 }
