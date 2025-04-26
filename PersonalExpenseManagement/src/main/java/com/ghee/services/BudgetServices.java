@@ -74,11 +74,13 @@ public class BudgetServices {
 
         try (Connection conn = JdbcUtils.getConn()) {
             String query = " SELECT * FROM budget "
-                    + " WHERE user_id = ? AND start_date <= ? AND end_date >= ? ";
+                         + " WHERE user_id = ? AND start_date BETWEEN ? AND ? AND end_date BETWEEN ? AND ? ";
             PreparedStatement stm = conn.prepareCall(query);
             stm.setInt(1, userId);
-            stm.setDate(2, java.sql.Date.valueOf(endDate));
-            stm.setDate(3, java.sql.Date.valueOf(startDate));
+            stm.setDate(2, java.sql.Date.valueOf(startDate));
+            stm.setDate(3, java.sql.Date.valueOf(endDate));
+            stm.setDate(4, java.sql.Date.valueOf(startDate));
+            stm.setDate(5, java.sql.Date.valueOf(endDate));
 
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
