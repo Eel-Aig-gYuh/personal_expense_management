@@ -76,10 +76,6 @@ public class UserServices {
      */
     public Users loginUser(String username, String password) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-            if (username.trim() == null) {
-                return null;
-            }
-
             String procedureCall = "{CALL LoginUser(?)}";
             CallableStatement callableStatement = conn.prepareCall(procedureCall);
 

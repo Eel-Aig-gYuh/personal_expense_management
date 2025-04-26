@@ -14,6 +14,8 @@ import com.ghee.utils.MessageErrorField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -73,8 +75,12 @@ public class CategoryCreatePageController implements Initializable {
                 } else {
                     MessageErrorField.ErrorFieldHboxOff(txtName);
                 }
-                
+          
                 String type = rdoChi.isSelected() ? "Chi" : "Thu";
+                if (!type.equals("Chi") || !type.equals("Thu")) {
+                    MessageBox.getAlert(AppConfigs.ERROR_INVALID_TYPE, Alert.AlertType.WARNING).showAndWait();
+                    return;
+                }
                 
                 Category category = new Category(currentUser, type, name);
                 

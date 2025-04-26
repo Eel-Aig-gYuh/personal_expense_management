@@ -110,7 +110,7 @@ public class TransactionServiceTestSuit {
         assertTrue((boolean) addResult.get("success"));
 
         // Now delete it
-        boolean deleteResult = transactionServices.deleteTransaction(transaction.getId());
+        boolean deleteResult = transactionServices.deleteTransaction(transaction);
         assertTrue(deleteResult);
     }
 

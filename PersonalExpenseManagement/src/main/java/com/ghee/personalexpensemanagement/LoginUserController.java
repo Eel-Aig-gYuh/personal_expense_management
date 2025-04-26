@@ -81,9 +81,6 @@ public class LoginUserController implements Initializable {
     }
 
     public void login() throws IOException {
-        String username = this.usernameField.getText().trim();
-        String password = this.passwordField.getText().trim();
-        
         boolean hasError = false;
 
         if (this.usernameField.getText().trim().equals("")) {
@@ -102,6 +99,9 @@ public class LoginUserController implements Initializable {
 
         if (!hasError) {
             try {
+                String username = this.usernameField.getText().trim();
+                String password = this.passwordField.getText().trim();
+        
                 Users user = s.loginUser(username, password);
 
                 if (user != null) {
