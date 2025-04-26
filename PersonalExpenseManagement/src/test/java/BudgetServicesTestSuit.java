@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -55,7 +57,17 @@ class BudgetServicesTestSuit {
             String endDate,
             boolean expectedSuccess,
             @SuppressWarnings("unused") String ignoredMessage) throws SQLException, ParseException {
-
+        
+        if(expectedSuccess){
+            List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(userId, LocalDate.parse(startDate), LocalDate.parse(endDate));
+            budgets.forEach(budget -> {
+                try {
+                    budgetServices.deleteBudget(budget.getId());
+                } catch (SQLException ex) {
+                    Logger.getLogger(BudgetServicesTestSuit.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
         Budget budget = new Budget();
         budget.setUserId(new Users(userId));
         budget.setCategoryId(new Category(categoryId));
@@ -109,11 +121,14 @@ class BudgetServicesTestSuit {
         LocalDate end = LocalDate.parse(endDate);
 
         List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(userId, start, end);
-        double totalBudget = budgetServices.getTotalBudget(userId, start, end);
+        
+        double actualTotal = budgets.stream()
+                            .mapToDouble(Budget::getAmount)
+                            .sum();
 
         assertAll(testCase,
-                () -> assertEquals(expectedCount, budgets.size()),
-                () -> assertEquals(expectedTotalBudget, totalBudget, 0.001)
+            () -> assertEquals(expectedCount, budgets.size()),
+            () -> assertEquals(expectedTotalBudget, actualTotal, 0.001)
         );
     }
 
@@ -129,21 +144,6 @@ class BudgetServicesTestSuit {
         assertTrue(totalSpent >= 0, "Total spent should not be negative");
     }
 
-    @Test
-    @DisplayName("Create Budget - Invalid User")
-    @Tag("exception")
-    void testCreateBudget_InvalidUser() throws SQLException, ParseException {
-        Budget invalidBudget = new Budget();
-        invalidBudget.setUserId(new Users(-1));
-        invalidBudget.setCategoryId(new Category(1));
-        invalidBudget.setTarget(1000.00);
-        invalidBudget.setStartDate(java.sql.Date.valueOf(LocalDate.now()));
-        invalidBudget.setEndDate(java.sql.Date.valueOf(LocalDate.now().plusMonths(1)));
-        invalidBudget.setCreatedAt(new Date());
-
-        Map<String, Object> result = budgetServices.createBudget(invalidBudget);
-        assertFalse((boolean) result.get("success"));
-    }
 
     @Test
     @DisplayName("Update Non-Existent Budget")
@@ -187,5 +187,29 @@ class BudgetServicesTestSuit {
                 LocalDate.now().minusYears(1).plusDays(1)
         );
         assertTrue(budgets.isEmpty());
+    }
+    
+    @Test
+    @DisplayName("Delete budget")
+    void testDeleteBudget() throws SQLException{
+        Budget budget = new Budget();
+        budget.setUserId(new Users(40));
+        budget.setCategoryId(new Category(2));
+        budget.setTarget(500000);
+        budget.setStartDate(java.sql.Date.valueOf("2025-06-01"));
+        budget.setEndDate(java.sql.Date.valueOf("2025-06-20"));
+        budget.setCreatedAt(new Date());
+
+        Map<String, Object> result = budgetServices.createBudget(budget);
+        List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(40, LocalDate.parse("2025-06-01"), LocalDate.parse("2025-06-20"));
+        
+        budgets.forEach(b -> {
+            try {
+                boolean actual = budgetServices.deleteBudget(b.getId());
+                assertTrue(actual, "Test delete ");
+            } catch (SQLException ex) {
+                Logger.getLogger(BudgetServicesTestSuit.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
 }

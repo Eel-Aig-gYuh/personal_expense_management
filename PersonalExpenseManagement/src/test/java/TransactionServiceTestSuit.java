@@ -117,6 +117,7 @@ public class TransactionServiceTestSuit {
     // Test for getting transactions by date range
     @ParameterizedTest
     @CsvFileSource(resources = "/transaction_date_range_test_cases.csv", numLinesToSkip = 1)
+    @DisplayName("get transaction by date : {0}")
     void testGetTransactionsByDateRange(String testCase,
             String startDateStr,
             String endDateStr,
