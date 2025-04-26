@@ -70,6 +70,16 @@ public class CategoryServices {
     public Map<String, Object> createCategory (Category category) throws SQLException {
         Map<String, Object> results = new HashMap<>();
         
+        List<String> validType = new ArrayList<>();
+        validType.add("Thu");
+        validType.add("Chi");
+        
+        if (!validType.contains(category.getType())) {
+            results.put("success", false);
+            results.put("message", "Lỗi: Loại không phù hợp với danh mục, chỉ có thể là 'Thu' hoặc 'Chi'.");
+            return results;
+        }
+        
         try (Connection conn = JdbcUtils.getConn()) {
             String procedureCall = "{Call CreateCategory (?, ?, ?, ?, ?)}";
             CallableStatement callableStatement = conn.prepareCall(procedureCall);
