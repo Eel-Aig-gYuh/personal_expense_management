@@ -208,7 +208,7 @@ public class BudgetCreatePageController implements Initializable {
                 return;
             } else if (target >= AppConfigs.MAX_TARGET) {
                 // MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
-                MessageErrorField.ErrorFieldHbox(getTxtTarget(), AppConfigs.ERROR_TARGET_LESS_THAN_MIN);
+                MessageErrorField.ErrorFieldHbox(getTxtTarget(), AppConfigs.ERROR_TARGET_LESS_THAN_MAX);
                 return; 
             }
             else {

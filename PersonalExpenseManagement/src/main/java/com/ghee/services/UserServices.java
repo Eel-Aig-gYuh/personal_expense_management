@@ -87,7 +87,7 @@ public class UserServices {
                 Users user = new Users();
 
                 String hashedPassword = rs.getString("password");
-                System.out.printf("Password trong DB: ", hashedPassword);
+                // System.out.printf("Password trong DB: ", hashedPassword);
 
                 // Kiểm tra mật khẩu
                 if (hashedPassword != null && BCrypt.checkpw(password, hashedPassword)) {
