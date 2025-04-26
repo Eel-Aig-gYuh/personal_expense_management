@@ -215,6 +215,13 @@ BEGIN
         SET p_message = 'Lỗi: Ngân sách đang nhỏ hơn giới hạn ngân sách cho phép.';
         ROLLBACK;
     END IF;
+    
+    -- Kiểm tra ngân sách tối đa
+	IF p_target >= 100000000 THEN 
+		SET p_success = false;
+        SET p_message = 'Lỗi: Ngân sách đang vượt hơn giới hạn ngân sách cho phép.';
+        ROLLBACK;
+    END IF;
 
     -- Kiểm tra ngày hợp lệ
     IF p_start_date > p_end_date OR p_end_date < CURDATE() THEN
@@ -883,4 +890,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-26 14:04:31
+-- Dump completed on 2025-04-26 14:25:43
