@@ -28,6 +28,9 @@ public class AppConfigs {
     public static String NULL_USERNAME = "Vui lòng điền tên tài khoản !";
     public static String NULL_PASSWORD = "Vui lòng điền mật khẩu !";
     
+    public static String ERROR_HAS_SPACE_USERNAME = "Tài khoản không chứa khoảng trắng!";
+    public static String ERROR_HAS_SPACE_PASSWORD = "Mật khẩu không chứa khoảng trắng!";
+    
     public static String NULL_FIRSTNAME = "Vui lòng điền tên của bạn !";
     public static String NULL_LASTNAME = "Vui lòng điền họ và chữ lót của bạn !";
     
