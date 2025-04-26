@@ -392,7 +392,7 @@ BEGIN
             SET p_message = 'Lỗi: Số tiền không được âm!';
             ROLLBACK;
 		-- Kiểm tra số tiền thuộc khoảng từ 10 000 -> 100 000 000
-		ELSEIF p_amount <= 10000 OR p_amount >= 100000000 THEN
+		ELSEIF p_amount < 10000 OR p_amount > 100000000 THEN
 			SET p_success = FALSE;
             SET p_message = 'Lỗi: Số tiền vượt quá ngưỡng cho phép!';
             ROLLBACK;
@@ -821,6 +821,11 @@ BEGIN
             SET p_success = FALSE;
             SET p_message = 'Lỗi: Số tiền không được âm!';
             ROLLBACK;
+		-- Kiểm tra số tiền thuộc khoảng từ 10 000 -> 100 000 000
+		ELSEIF p_amount < 10000 OR p_amount > 100000000 THEN
+			SET p_success = FALSE;
+            SET p_message = 'Lỗi: Số tiền vượt quá ngưỡng cho phép!';
+            ROLLBACK;
         -- Kiểm tra ngày giao dịch không vượt quá ngày hiện tại
         ELSEIF p_transaction_date > CURDATE() THEN
             SET p_success = FALSE;
@@ -890,4 +895,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-26 14:25:43
+-- Dump completed on 2025-04-26 19:50:10
