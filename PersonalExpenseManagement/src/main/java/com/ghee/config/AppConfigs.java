@@ -63,8 +63,15 @@ public class AppConfigs {
     public static String ERROR_DATE_IS_NOT_CORRECT = "Vui lòng điền ngày phù hợp !";
     
     // ================ TRANSACTION
+    public static int MIN_TRANSACTION = 10000;
+    public static int MAX_TRANSACTION = 100000000;
+    
+    public static String ERROR_TRANSACTION_IS_NEGATIVE = "Vui lòng điền giao dịch không âm !";
     public static String ERROR_AMOUNT = "Vui lòng điền số tiền hợp lệ !";
     public static String ERROR_LENGHT_DESCRIPTION = "Vui lòng nhập miêu tả có độ dài nhỏ hơn 255 ký tự !";
+    public static String ERROR_TRANSACTION_LESS_THAN_MIN = String.format("Vui lòng điền giao dịch không NHỎ hơn %d", MIN_TRANSACTION);
+    public static String ERROR_TRANSACTION_LESS_THAN_MAX = String.format("Vui lòng điền giao dịch không VƯỢT hơn %d", MAX_TRANSACTION);
+    
     
     // ================ CATEGORY
     public static String ERROR_INVALID_TYPE = "Vui lòng chọn loại ngân sách hợp lệ, thu hoặc chi.";

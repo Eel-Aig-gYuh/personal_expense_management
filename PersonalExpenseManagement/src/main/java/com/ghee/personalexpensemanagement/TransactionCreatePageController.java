@@ -186,15 +186,25 @@ public class TransactionCreatePageController implements Initializable {
             
             Wallet walletId = walletServices.getWalletById(currentUser.getId());
             
-            if (this.txtTarget.getText().trim().equals("") || Double.parseDouble(this.txtTarget.getText()) <= 0) {
-                MessageErrorField.ErrorFieldHbox(this.txtTarget, AppConfigs.ERROR_TARGET_IS_NEGATIVE);
+            Double amount = Double.valueOf(this.txtTarget.getText());
+            
+            if (this.txtTarget.getText().isBlank() || amount.isNaN() || Double.parseDouble(this.txtTarget.getText()) <= 0) {
+                MessageErrorField.ErrorFieldHbox(this.txtTarget, AppConfigs.ERROR_TRANSACTION_IS_NEGATIVE);
                 return; 
-            } 
+            }
+            else if (amount <= AppConfigs.MIN_TRANSACTION) {
+                // MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
+                MessageErrorField.ErrorFieldHbox(this.txtTarget, AppConfigs.ERROR_TRANSACTION_LESS_THAN_MIN);
+                return;
+            } else if (amount >= AppConfigs.MAX_TRANSACTION) {
+                // MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
+                MessageErrorField.ErrorFieldHbox(this.txtTarget, AppConfigs.ERROR_TRANSACTION_LESS_THAN_MIN);
+                return; 
+            }
             else {
                 MessageErrorField.ErrorFieldHboxOff(this.txtTarget);
             }
-            Double amount = Double.valueOf(this.txtTarget.getText());
-            
+     
             Date transactionDate = java.sql.Date.valueOf(this.dpTransactionDate.getValue());
             Date createdAt = new Date();
             DatePickerUtils.setVietnameseDateFormat(createdAt);
