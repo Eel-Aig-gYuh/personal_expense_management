@@ -22,7 +22,7 @@ public class MessageErrorField {
         try {
             errorMsg.setId(txt.toString() + "error");
             // System.out.println(txt.getId() + "error");
-            errorMsg.setStyle("-fx-text-fill: #FF6B6B; -fx-font-weight: bold; -fx-margin-top: 5px");
+            errorMsg.setStyle("-fx-text-fill: #FF6B6B; -fx-font-weight: bold; -fx-margin-top: 5px; -fx-font-size: 9px");
 
             HBox parent = (HBox) txt.getParent();
             int index = parent.getChildren().indexOf(txt);

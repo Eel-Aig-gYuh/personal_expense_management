@@ -44,9 +44,9 @@ public class RegisterUserAccountPageController implements Initializable {
     @FXML
     private TextField usernameField;
     @FXML
-    private PasswordField passwordField;
+    private TextField passwordField;
     @FXML
-    private PasswordField confirmPasswordField;
+    private TextField confirmPasswordField;
 
     private UserServices s = null;
 
@@ -80,13 +80,11 @@ public class RegisterUserAccountPageController implements Initializable {
         
         this.passwordField.textProperty().addListener((obs, oldValue, newValue) -> {
             System.err.printf("do dai pass: %d\n", newValue.length());
-            int lenght = newValue.length();
             
             if (newValue.isBlank()) {
-                MessageErrorField.ErrorFieldHboxOff(passwordField);
                 MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.NULL_PASSWORD);
             } 
-            else if (lenght <= AppConfigs.LENGHT_OF_ACCOUNT) {
+            else if (newValue.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
                 // System.err.println(newValue.length());
                 MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_LENGHT_OF_PASSWORD);
             }
