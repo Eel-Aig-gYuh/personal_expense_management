@@ -192,11 +192,11 @@ public class TransactionCreatePageController implements Initializable {
                 MessageErrorField.ErrorFieldHbox(this.txtTarget, AppConfigs.ERROR_TRANSACTION_IS_NEGATIVE);
                 return; 
             }
-            else if (amount <= AppConfigs.MIN_TRANSACTION) {
+            else if (amount < AppConfigs.MIN_TRANSACTION) {
                 // MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
                 MessageErrorField.ErrorFieldHbox(this.txtTarget, AppConfigs.ERROR_TRANSACTION_LESS_THAN_MIN);
                 return;
-            } else if (amount >= AppConfigs.MAX_TRANSACTION) {
+            } else if (amount > AppConfigs.MAX_TRANSACTION) {
                 // MessageBox.getAlert(AppConfigs.ERROR_TARGET_LESS_THAN_MIN, Alert.AlertType.WARNING).showAndWait();
                 MessageErrorField.ErrorFieldHbox(this.txtTarget, AppConfigs.ERROR_TRANSACTION_LESS_THAN_MIN);
                 return; 
