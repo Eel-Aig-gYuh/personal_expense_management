@@ -15,10 +15,10 @@ public class AppConfigs {
     // ^ và $ đảm bảo kiểm tra toàn bộ chuỗi
     // .+ là kiểm tra không rỗng.
     public static String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*(),.?\":{}|<>/\\[]]).+$";
-    public static String PATTERN_STRING = "^(?=.*[A-Z])(?=.*[a-z]).+$";
-    public static String PATTERN_CHAR = ".*[^a-zA-Z\\s].*";
-    public static String PATTERN_NUMBER = "^(?=.*[0-9])$";
-    public static String PATTERN_SPACE = "^.*\\s+.*$";
+    public static String PATTERN_STRING = "^[\\\\p{L}]+$";
+    public static String PATTERN_SPECIAL_CHAR = ".*[!@#$%^&*(),.?\":{}|\\[\\]<>/\\\\].*";
+    public static String PATTERN_NUMBER = ".*\\d+.*";
+    public static String PATTERN_SPACE = ".*\\s+.*";
     public static String PATTERN_EMAIL = "^(?=.*[@.]).+$";
     
     public static int LENGHT_OF_ACCOUNT = 7;
@@ -50,11 +50,13 @@ public class AppConfigs {
     
     // ================ BUDGET
     public static int MIN_TARGET = 100000;
-    public static int MAX_TARGET = 100000;
+    public static int MAX_TARGET = 100000000;
     
     public static String ERROR_CATEGORY_IS_NULL = "Vui lòng chọn một danh mục cho ngân sách !";
     public static String ERROR_TARGET_IS_NEGATIVE = "Vui lòng điền mục tiêu ngân sách không âm !";
-    public static String ERROR_TARGET_LESS_THAN_MIN = String.format("Vui lòng điền mục tiêu ngân sách không nhỏ hơn %d", MIN_TARGET);
+    public static String ERROR_TARGET_LESS_THAN_MIN = String.format("Vui lòng điền mục tiêu ngân sách không NHỎ hơn %d", MIN_TARGET);
+    public static String ERROR_TARGET_LESS_THAN_MAX = String.format("Vui lòng điền mục tiêu ngân sách không VƯỢT hơn %d", MAX_TARGET);
+    
     public static String ERROR_DATE_IS_NOT_CORRECT = "Vui lòng điền ngày phù hợp !";
     
     // ================ TRANSACTION

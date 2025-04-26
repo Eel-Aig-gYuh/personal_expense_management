@@ -57,39 +57,46 @@ public class RegisterUserInfoPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // check firstname 
         this.firstnameField.textProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue.isBlank()) {
                 MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.NULL_FIRSTNAME);
                 
-            } else if (newValue.matches(AppConfigs.PATTERN_CHAR)) {
+            } else if (newValue.matches(AppConfigs.PATTERN_SPECIAL_CHAR)) {
                 MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
                
             } else if (newValue.matches(AppConfigs.PATTERN_NUMBER)) {
-                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_NUMBER);
                 
             } else if (newValue.length() > AppConfigs.LENGHT_OF_FIRSTNAME) {
-                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_OUT_OF_LENGHT);
                 
             } else {
                 MessageErrorField.ErrorFieldHboxOff(firstnameField);
             }
         });
         
+        // check lastname 
         this.lastnameField.textProperty().addListener((obs, oldValue, newValue) -> {
-            if (!newValue.matches("^().+$")) {
+            if (newValue.isBlank()) {
                 MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.NULL_LASTNAME);
-            } else if (newValue.matches(AppConfigs.PATTERN_CHAR)) {
+            } 
+            else if (newValue.matches(AppConfigs.PATTERN_SPECIAL_CHAR)) {
+                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_CHAR);
+            } 
+            else if (newValue.matches(AppConfigs.PATTERN_NUMBER)) {
                 MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
-            } else if (newValue.matches(AppConfigs.PATTERN_NUMBER)) {
-                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
-            } else if (newValue.length() > AppConfigs.LENGHT_OF_LASTNAME) {
-                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+            } 
+            else if (newValue.length() > AppConfigs.LENGHT_OF_LASTNAME) {
+                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_OUT_OF_LENGHT);
                 
-            } else {
+            } 
+            else {
                 MessageErrorField.ErrorFieldHboxOff(lastnameField);
             }
         });
         
+        // check email
         this.emailField.textProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue.isBlank() || !newValue.matches(AppConfigs.PATTERN_EMAIL) || newValue.matches(AppConfigs.PATTERN_SPACE)) {
                 MessageErrorField.ErrorFieldHbox(emailField, AppConfigs.ERROR_EMAIL_PATTERN);
@@ -157,6 +164,8 @@ public class RegisterUserInfoPageController implements Initializable {
         String lastname = this.lastnameField.getText().trim();
         String email = this.emailField.getText().trim();
         
+        System.out.println(firstname);
+        
         String role = "User";
         Date createAt = new Date();
         
@@ -166,14 +175,14 @@ public class RegisterUserInfoPageController implements Initializable {
         if (firstname.isBlank()) {
             MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.NULL_FIRSTNAME);
             hasError = true;
-        } else if (firstname.matches(AppConfigs.PATTERN_CHAR)) {
+        } else if (firstname.matches(AppConfigs.PATTERN_SPECIAL_CHAR)) {
             MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
             hasError = true;
         } else if (firstname.matches(AppConfigs.PATTERN_NUMBER)) {
-            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_NUMBER);
             hasError = true;
         } else if (firstname.length() > AppConfigs.LENGHT_OF_FIRSTNAME) {
-            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_OUT_OF_LENGHT);
             hasError = true;
         } else {
             MessageErrorField.ErrorFieldHboxOff(firstnameField);
@@ -183,14 +192,14 @@ public class RegisterUserInfoPageController implements Initializable {
         if (lastname.isBlank()) {
             MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.NULL_LASTNAME);
             hasError = true;
-        } else if (lastname.matches(AppConfigs.PATTERN_CHAR)) {
-            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+        } else if (lastname.matches(AppConfigs.PATTERN_SPECIAL_CHAR)) {
+            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_CHAR);
             hasError = true;
         } else if (lastname.matches(AppConfigs.PATTERN_NUMBER)) {
             MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
             hasError = true;
         } else if (lastname.length() > AppConfigs.LENGHT_OF_LASTNAME) {
-            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_OUT_OF_LENGHT);
             hasError = true;
         } 
         else {
