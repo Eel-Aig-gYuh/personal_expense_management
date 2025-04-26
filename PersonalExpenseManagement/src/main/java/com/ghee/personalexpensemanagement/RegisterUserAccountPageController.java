@@ -61,14 +61,17 @@ public class RegisterUserAccountPageController implements Initializable {
         this.s = new UserServices();
         
         this.usernameField.textProperty().addListener((obs, oldValue, newValue) -> {
+            // System.err.println(newValue.length());
+            
             if (newValue.isBlank()) {
                 MessageErrorField.ErrorFieldHbox(usernameField, AppConfigs.NULL_USERNAME);
             } 
             else if (newValue.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
+                // System.err.printf("lenght username: %d \n", newValue.length());
                 MessageErrorField.ErrorFieldHbox(usernameField, AppConfigs.ERROR_LENGHT_OF_USERNAME);
             }
             else if (newValue.matches(AppConfigs.PATTERN_SPACE)) {
-                MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_HAS_SPACE_USERNAME);
+                MessageErrorField.ErrorFieldHbox(usernameField, AppConfigs.ERROR_HAS_SPACE_USERNAME);
             }
             else {
                 MessageErrorField.ErrorFieldHboxOff(usernameField);
@@ -76,15 +79,20 @@ public class RegisterUserAccountPageController implements Initializable {
         });
         
         this.passwordField.textProperty().addListener((obs, oldValue, newValue) -> {
+            System.err.printf("do dai pass: %d\n", newValue.length());
+            int lenght = newValue.length();
+            
             if (newValue.isBlank()) {
+                MessageErrorField.ErrorFieldHboxOff(passwordField);
                 MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.NULL_PASSWORD);
             } 
-            else if (newValue.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
+            else if (lenght <= AppConfigs.LENGHT_OF_ACCOUNT) {
+                // System.err.println(newValue.length());
                 MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_LENGHT_OF_PASSWORD);
             }
             else if (!newValue.matches(AppConfigs.PASSWORD_PATTERN)) {
                 MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_PASS_PATTERN);
-            } 
+            }
             else if (newValue.matches(AppConfigs.PATTERN_SPACE)) {
                 MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_HAS_SPACE_PASSWORD);
             }
@@ -92,6 +100,7 @@ public class RegisterUserAccountPageController implements Initializable {
                 MessageErrorField.ErrorFieldHboxOff(passwordField);
             }
         });
+        
         
         this.confirmPasswordField.textProperty().addListener((obs, oldValue, newValue) -> {
             if (!newValue.equals(this.passwordField.getText())) {
@@ -131,6 +140,7 @@ public class RegisterUserAccountPageController implements Initializable {
         } 
         else if (this.usernameField.getText().trim().matches(AppConfigs.PATTERN_SPACE)) {
             MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_HAS_SPACE_USERNAME);
+            hasError = true;
         }
         else {
             MessageErrorField.ErrorFieldHboxOff(usernameField);
@@ -142,6 +152,7 @@ public class RegisterUserAccountPageController implements Initializable {
         } 
         else if (this.passwordField.getText().trim().matches(AppConfigs.PATTERN_SPACE)) {
             MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_HAS_SPACE_PASSWORD);
+            hasError = true;
         }
         else {
             MessageErrorField.ErrorFieldHboxOff(passwordField);

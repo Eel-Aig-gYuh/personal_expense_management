@@ -21,7 +21,7 @@ public class MessageErrorField {
         Label errorMsg = new Label(errMsg);
         try {
             errorMsg.setId(txt.toString() + "error");
-            System.out.println(txt.getId() + "error");
+            // System.out.println(txt.getId() + "error");
             errorMsg.setStyle("-fx-text-fill: #FF6B6B; -fx-font-weight: bold; -fx-margin-top: 5px");
 
             HBox parent = (HBox) txt.getParent();
@@ -40,7 +40,7 @@ public class MessageErrorField {
         Label errorMsg = new Label(errMsg);
         try {
             errorMsg.setId(txt.toString() + "error");
-            System.out.println(txt.getId() + "error");
+            // System.out.println(txt.getId() + "error");
             errorMsg.setStyle("-fx-text-fill: #FF6B6B; -fx-font-weight: bold; -fx-margin-top: 5px");
 
             HBox parent = (HBox) txt.getParent();

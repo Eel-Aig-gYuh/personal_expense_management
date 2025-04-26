@@ -75,12 +75,8 @@ public class CategoryCreatePageController implements Initializable {
                 } else {
                     MessageErrorField.ErrorFieldHboxOff(txtName);
                 }
-          
-                String type = rdoChi.isSelected() ? "Chi" : "Thu";
-                if (!type.equals("Chi") || !type.equals("Thu")) {
-                    MessageBox.getAlert(AppConfigs.ERROR_INVALID_TYPE, Alert.AlertType.WARNING).showAndWait();
-                    return;
-                }
+                
+                String type = rdoChi.getText();
                 
                 Category category = new Category(currentUser, type, name);
                 
@@ -106,6 +102,7 @@ public class CategoryCreatePageController implements Initializable {
     public void goBack() {
         if (this.parentController.equals("budgetCreatePage")) {
             goToBudgetPage();
+            return;
         }
         goToTransactionPage();
     }

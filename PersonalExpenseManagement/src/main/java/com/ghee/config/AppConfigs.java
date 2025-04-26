@@ -14,7 +14,7 @@ public class AppConfigs {
     
     // ^ và $ đảm bảo kiểm tra toàn bộ chuỗi
     // .+ là kiểm tra không rỗng.
-    public static String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*(),.?\":{}|<>/\\[]]).+$";
+    public static String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*(),.?\":{}|<>/\\\\\\[\\]]).+$";
     public static String PATTERN_STRING = "^[\\\\p{L}]+$";
     public static String PATTERN_SPECIAL_CHAR = ".*[!@#$%^&*(),.?\":{}|\\[\\]<>/\\\\].*";
     public static String PATTERN_NUMBER = ".*\\d+.*";
@@ -45,8 +45,8 @@ public class AppConfigs {
     public static String ERROR_NOT_ENOUGH_INFORMATION = "Vui lòng điền đầy đủ thông tin !";
     public static String ERROR_EMAIL_PATTERN = "Email không hợp lệ";
     
-    public static String ERROR_LENGHT_OF_USERNAME = "Độ dài không hợp lệ! \n Vui lòng nhập lại tên tài khoản phải trên 7 ký tự !";
-    public static String ERROR_LENGHT_OF_PASSWORD = "Độ dài không hợp lệ! \n Vui lòng nhập lại mật khẩu phải trên 7 ký tự !";
+    public static String ERROR_LENGHT_OF_USERNAME = "Độ dài không hợp lệ! Vui lòng nhập phải trên 7 ký tự !";
+    public static String ERROR_LENGHT_OF_PASSWORD = "Độ dài không hợp lệ! Vui lòng nhập phải trên 7 ký tự !";
     
     public static String ERROR_PASS_PATTERN = "Lỗi mật khẩu không đủ mạnh!\n Phải có ít nhất 1 ký tự hoa, 1 ký tự thường, 1 số và 1 ký tự đặc biệt !";
     public static String ERROR_PASS_AND_CONFIRM = "Lỗi mật khẩu không trùng khớp, vui lòng nhập lại !";

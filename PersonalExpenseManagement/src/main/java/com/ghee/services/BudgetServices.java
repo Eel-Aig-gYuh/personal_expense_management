@@ -35,11 +35,15 @@ public class BudgetServices {
         try (Connection conn = JdbcUtils.getConn()) {
             String query = "SELECT COALESCE(SUM(target), 0) AS total_budget "
                     + "FROM budget "
-                    + "WHERE user_id = ? AND start_date <= ? AND end_date >= ? ";
+                    + "WHERE user_id = ? "
+                    + "AND start_date BETWEEN ? AND ? " 
+                    + "AND end_date BETWEEN ? AND ? ";
             PreparedStatement stm = conn.prepareCall(query);
             stm.setInt(1, userId);
-            stm.setDate(2, java.sql.Date.valueOf(endDate));
-            stm.setDate(3, java.sql.Date.valueOf(startDate));
+            stm.setDate(2, java.sql.Date.valueOf(startDate));
+            stm.setDate(3, java.sql.Date.valueOf(endDate));
+            stm.setDate(4, java.sql.Date.valueOf(startDate));
+            stm.setDate(5, java.sql.Date.valueOf(endDate));
 
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
@@ -54,7 +58,9 @@ public class BudgetServices {
             String query = "SELECT COALESCE(SUM(amount), 0) AS total_spent "
                     + "FROM transaction t "
                     + "JOIN category c ON t.category_id = c.id "
-                    + "WHERE t.user_id = ? AND c.type = 'Chi' AND t.transaction_date BETWEEN ? AND ?";
+                    + "WHERE t.user_id = ? "
+                    + "AND c.type = 'Chi' "
+                    + "AND t.transaction_date BETWEEN ? AND ? ";
             PreparedStatement stm = conn.prepareCall(query);
             stm.setInt(1, userId);
             stm.setDate(2, java.sql.Date.valueOf(startDate));

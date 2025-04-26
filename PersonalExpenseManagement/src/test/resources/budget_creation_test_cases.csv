@@ -1,5 +1,5 @@
 test_case,user_id,category_id,target,start_date,end_date,expected_success,expected_message
-Valid Budget 2,1,2,100000.00,2025-06-01,2025-06-03,false,Budget created failure
+Valid Budget 2,1,2,100000.00,2025-06-1,2025-06-03,false,Budget created failure
 Below Minimum Target,39,2,99999.99,2023-02-01,2023-02-28,false,Target must be at least 100000
 Zero Target,39,2,0.00,2023-02-01,2023-02-28,false,Target amount must be greater than 0
 Negative Target,39,3,-1,2023-03-01,2023-03-31,false,Target amount must be greater than 0
