@@ -1,5 +1,5 @@
 testCase,transactionId,userId,categoryId,walletId,amount,transactionDate,description,expectedResult
-Valid update,1,1,1,1,150.0,2023-01-01,Updated transaction,true
+Valid update,1,1,1,1,15000.0,2023-01-01,Updated transaction,true
 Non-existent transaction,999,1,1,1,100.0,2023-01-01,Non-existent,false
 Negative amount,1,1,1,1,-100.0,2023-01-01,Negative amount,false
 Change user,1,2,1,1,100.0,2023-01-01,Change user,true

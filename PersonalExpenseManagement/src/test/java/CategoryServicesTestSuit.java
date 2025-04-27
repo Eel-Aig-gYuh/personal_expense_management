@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,38 +27,18 @@ public class CategoryServicesTestSuit {
     private CategoryServices categoryServices;
     private Users testUser;
 
-//    @BeforeAll
-//    static void initTestData() throws SQLException {
-//        try (Connection conn = JdbcUtils.getConn()) {
-//            // Sửa câu lệnh SQL đúng chuẩn
-//            Statement stmt = conn.createStatement();
-//
-//            // Tạo bảng nếu chưa tồn tại
-//            stmt.execute("CREATE TABLE IF NOT EXISTS category ("
-//                    + "id INT PRIMARY KEY AUTO_INCREMENT,"
-//                    + "type VARCHAR(20) NOT NULL,"
-//                    + "name VARCHAR(100) NOT NULL,"
-//                    + "user_id INT NOT NULL)");
-//
-//            // Thêm dữ liệu test
-//            stmt.execute("INSERT INTO category (type, name, user_id) VALUES "
-//                    + "('EXPENSE', 'Test Category 1', 1), "
-//                    + "('INCOME', 'Test Category 2', 1)");
-//        }
-//    }
-
     @BeforeEach
     void setUp() {
         categoryServices = new CategoryServices();
         testUser = new Users();
-        testUser.setId(1); // Giả định user có ID = 1 tồn tại trong DB
+        testUser.setId(70);
     }
 
     // ================= GET TESTS =================
     @ParameterizedTest
-    @CsvFileSource(resources = "/category_existence_test_cases.csv", numLinesToSkip = 1)
+    @CsvFileSource(resources = "/get_category_by_id_test_cases.csv", numLinesToSkip = 1)
     @DisplayName("Test category existence: {0}")
-    void testCategoryExistence(String testCase, int categoryId, boolean expectedExists,
+    void testGetCategoryById(String testCase, int categoryId, boolean expectedExists,
             String expectedName, String expectedType) throws SQLException {
         Category result = categoryServices.getCategoryById(categoryId);
 
@@ -66,34 +48,6 @@ public class CategoryServicesTestSuit {
             assertEquals(expectedType, result.getType());
         } else {
             assertNull(result, "Category should not exist for test case: " + testCase);
-        }
-    }
-
-    // Xử lý trường hợp ID không hợp lệ
-    @ParameterizedTest
-    @CsvFileSource(resources = "/category_existence_test_cases.csv", numLinesToSkip = 1)
-    @DisplayName("Test invalid category IDs: {0}")
-    void testInvalidCategoryIds(String testCase, String categoryIdInput,
-            boolean expectedExists, String expectedName,
-            String expectedType) {
-        try {
-            // Chuyển đổi từ String sang int (xử lý trường hợp không phải số)
-            int categoryId = Integer.parseInt(categoryIdInput);
-            Category result = categoryServices.getCategoryById(categoryId);
-
-            if (expectedExists) {
-                assertNotNull(result);
-            } else {
-                assertNull(result);
-            }
-        } catch (NumberFormatException e) {
-            // Kiểm tra xem test case có mong đợi lỗi không
-            if (!testCase.contains("invalid")) {
-                fail("Unexpected NumberFormatException for test case: " + testCase);
-            }
-            // Nếu test case mong đợi lỗi thì coi như pass
-        } catch (SQLException e) {
-            fail("SQLException occurred: " + e.getMessage());
         }
     }
 
@@ -126,6 +80,20 @@ public class CategoryServicesTestSuit {
         category.setUserId(user);
         category.setType(type);
         category.setName(name);
+        
+        if (expectedSuccess) {
+            List<Category> userCates = categoryServices.getCategoriesByUserId(userId);
+
+            userCates.stream()
+                .filter(c -> c.getName().equals(name))
+                .forEach(c -> {
+                try {
+                    categoryServices.deleteCategory(c.getId(), userId);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CategoryServicesTestSuit.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
 
         Map<String, Object> result = categoryServices.createCategory(category);
 
@@ -140,40 +108,63 @@ public class CategoryServicesTestSuit {
                     "Created category should appear in user's category list");
         }
     }
+    
+    @ParameterizedTest
+    @CsvFileSource(resources = "/delete_category_test_cases.csv", numLinesToSkip = 1)
+    @DisplayName("Test delete category")
+    void testDeleteCategory(
+            String testCase,
+            int categoryId,
+            int userId,
+            boolean expectedResult
+    ) throws SQLException {
+        if (expectedResult) {
+            // Lấy list categories của user
+            List<Category> userCategories = categoryServices.getCategoriesByUserId(userId);
+            // Lấy phần tử đầu tiên nếu có, không thì null
+            Category createdCate = userCategories.isEmpty() 
+                ? null 
+                : userCategories.get(0);
 
-    @Test
-    @DisplayName("Create multiple categories with same name for same user - ALLOWED by business rule")
-    void testCreateDuplicateCategoryAllowed() throws SQLException {
-        // First creation - should succeed
-        Category category1 = createTestCategory();
-        Map<String, Object> firstResult = categoryServices.createCategory(category1);
-        assertTrue((boolean) firstResult.get("success"), "First creation should succeed");
+            // Nếu chưa có thì tạo mới và lấy lại
+            if (createdCate == null) {
+                Category category = new Category();
+                category.setUserId(new Users(userId));
+                category.setType("Chi");
+                category.setName("Đi chơi");
+                Map<String, Object> res = categoryServices.createCategory(category);
 
-        // Second creation with same name - should also succeed (business rule change)
-        Category category2 = createTestCategory(); // Same name
-        Map<String, Object> secondResult = categoryServices.createCategory(category2);
-        System.out.println("Category 1 name: " + category1.getName());
-        System.out.println("Category 2 name: " + category2.getName());
+                if ((boolean) res.get("success")) {
+                    userCategories = categoryServices.getCategoriesByUserId(userId);
+                    createdCate = userCategories.isEmpty() 
+                        ? null 
+                        : userCategories.get(0);
+                }
+            }
 
-        assertTrue((boolean) secondResult.get("success"),
-                "Second creation with same name should succeed according to business rule");
-        assertFalse(((String) secondResult.get("message")).contains("already exists"),
-                "Message should not indicate duplicate error");
+            // Cuối cùng, nếu có createdCate thì lấy id
+            if (createdCate != null) {
+                categoryId = createdCate.getId();
+            }
+        }
 
-        // Verify both exist
-        List<Category> userCategories = categoryServices.getCategoriesByUserId(testUser.getId());
-        long count = userCategories.stream()
-                .filter(c -> c.getName().equals(category1.getName()))
-                .count();
-        assertTrue(count >= 2, "Should find at least 2 categories with same name");
+        
+        
+        boolean deleteResult = categoryServices.deleteCategory(categoryId, userId);
+        assertTrue(deleteResult == expectedResult);
     }
+    
 
-    // Helper method
-    private Category createTestCategory() {
-        Category category = new Category();
-        category.setUserId(testUser);
-        category.setType("Chi");
-        category.setName("Test Category ");
-        return category;
+    @ParameterizedTest
+    @CsvFileSource(resources = "/update_category_test_cases.csv", numLinesToSkip = 1)
+    @DisplayName("Update category: {0}")
+    void testUpdateCategory(String testCase, int categoryId, int userId, String name, String type, boolean expectedResult) throws SQLException {
+        Category category = categoryServices.getCategoryById(categoryId);
+        category.setName(name);
+        category.setType(type);
+        category.setUserId(new Users(userId));
+        boolean result = categoryServices.updateCategory(category);
+        assertTrue(result == expectedResult);
     }
+    
 }

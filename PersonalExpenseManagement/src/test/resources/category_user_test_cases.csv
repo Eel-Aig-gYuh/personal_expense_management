@@ -1,4 +1,6 @@
 testCase,userId,expectedCount
-Valid user with categories,3,1
+Valid user with single category,3,1
+Valid user with categories,1,27
 User with no categories,99,0
 Non-existent user,9999,0
+Invalid user,-10,0

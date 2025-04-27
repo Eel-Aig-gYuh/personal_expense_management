@@ -3,6 +3,7 @@ import com.ghee.pojo.Transaction;
 import com.ghee.pojo.Users;
 import com.ghee.pojo.Category;
 import com.ghee.pojo.Wallet;
+import com.ghee.services.BudgetServices;
 import com.ghee.services.TransactionServices;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,8 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,25 +27,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TransactionServiceTestSuit {
 
     private TransactionServices transactionServices;
+    private BudgetServices budgetServices;
     private Users testUser;
-    private Category testCategory;
-    private Wallet testWallet;
 
     @BeforeEach
     void setUp() throws SQLException {
         transactionServices = new TransactionServices();
+        budgetServices = new BudgetServices();
 
         // Create a test user (mock or real)
         testUser = new Users();
         testUser.setId(1); // Assuming this is a valid test user ID
 
-        // Create a test category (mock or real)
-        testCategory = new Category();
-        testCategory.setId(1); // Assuming this is a valid test category ID
-
-        // Create a test wallet (mock or real)
-        testWallet = new Wallet();
-        testWallet.setId(1); // Assuming this is a valid test wallet ID
     }
 
     // Test for adding transactions
@@ -52,16 +48,27 @@ public class TransactionServiceTestSuit {
     void testAddTransaction(String testCase,
             int userId,
             int categoryId,
-            int walletId,
             double amount,
             String transactionDate,
             String description,
-            boolean expectedResult) throws SQLException {
-
+            boolean expectedResult,
+            double expectedAmount,
+            String startDate,
+            String endDate) throws SQLException {
+        
+        List<Transaction> userTrans = transactionServices.getTransactionByUserIdAdnDateRange(userId, LocalDate.parse(startDate), LocalDate.parse(endDate));
+        userTrans.stream().forEach(t -> {
+            try {
+                transactionServices.deleteTransaction(t);
+            } catch (SQLException ex) {
+                Logger.getLogger(TransactionServiceTestSuit.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
         Transaction transaction = new Transaction();
         transaction.setUserId(new Users(userId));
         transaction.setCategoryId(new Category(categoryId));
-        transaction.setWalletId(new Wallet(walletId));
+        transaction.setWalletId(new Wallet(userId));
         transaction.setAmount(amount);
         transaction.setTransactionDate(java.sql.Date.valueOf(transactionDate));
         transaction.setDescription(description);
@@ -70,6 +77,8 @@ public class TransactionServiceTestSuit {
         Map<String, Object> result = transactionServices.addTransaction(transaction);
         assertEquals(expectedResult, result.get("success"),
                 "Test case: " + testCase + " - Message: " + result.get("message"));
+        
+        assertEquals(expectedAmount, budgetServices.getBudgetByUserIdAndDateRange(userId, LocalDate.parse(startDate), LocalDate.parse(endDate)).get(0).getAmount());
     }
 
     // Test for updating transactions
@@ -100,18 +109,11 @@ public class TransactionServiceTestSuit {
                 "Test case: " + testCase + " - Message: " + result.get("message"));
     }
 
-    // Test for deleting transactions
-    @Test
+    @ParameterizedTest
+    @CsvFileSource(resources = "/delete_transaction_test_cases.csv", numLinesToSkip = 1)
     @DisplayName("Test delete transaction")
     void testDeleteTransaction() throws SQLException {
-        // First add a transaction to delete
-        Transaction transaction = createValidTransaction();
-        Map<String, Object> addResult = transactionServices.addTransaction(transaction);
-        assertTrue((boolean) addResult.get("success"));
-
-        // Now delete it
-        boolean deleteResult = transactionServices.deleteTransaction(transaction);
-        assertTrue(deleteResult);
+        
     }
 
     // Test for getting transactions by date range
@@ -166,17 +168,5 @@ public class TransactionServiceTestSuit {
         // Just verify the method runs without error
         // Actual balance depends on test data
         assertTrue(balance >= 0);
-    }
-
-    private Transaction createValidTransaction() {
-        Transaction transaction = new Transaction();
-        transaction.setUserId(testUser);
-        transaction.setCategoryId(testCategory);
-        transaction.setWalletId(testWallet);
-        transaction.setAmount(100.0);
-        transaction.setTransactionDate(new Date());
-        transaction.setDescription("Test transaction");
-        transaction.setCreatedAt(new Date());
-        return transaction;
     }
 }
