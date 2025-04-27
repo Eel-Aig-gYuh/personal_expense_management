@@ -19,6 +19,10 @@ public class UserServicesTestSuit {
 
     private UserServices userServices;
 
+    @BeforeEach
+    void setUp() throws SQLException {
+        userServices = new UserServices();
+    }
 
     // Registration Tests
     @ParameterizedTest
