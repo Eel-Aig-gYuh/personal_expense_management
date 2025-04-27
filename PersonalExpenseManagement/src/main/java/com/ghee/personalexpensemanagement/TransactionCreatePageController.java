@@ -226,7 +226,7 @@ public class TransactionCreatePageController implements Initializable {
                 String msg = (String) results.get("message");
                 
                 if (success) {
-                    MessageBox.getAlert(msg, Alert.AlertType.CONFIRMATION).showAndWait();
+                    MessageBox.getAlert(msg, Alert.AlertType.WARNING).showAndWait();
                     goBack();
                 }
                 else {
