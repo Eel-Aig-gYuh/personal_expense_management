@@ -192,7 +192,7 @@ public class BudgetHomePageController implements Initializable {
                             Label lblCategoryName = new Label(category.getName());
                             lblCategoryName.setStyle("-fx-font-weight: bold;");
                             
-                            Label lblTarget = new Label(String.format("         : %s đ", budget.getTarget()));
+                            Label lblTarget = new Label(String.format("         : %s đ", MoneyFormat.moneyFormat(budget.getTarget())));
                             lblTarget.setStyle("-fx-font-weight: bold;");
                             
                             HBox hboxTitle = new HBox();
@@ -255,13 +255,14 @@ public class BudgetHomePageController implements Initializable {
                             if (progress <= 0.8) {
                                 progressBarExcess.setVisible(false);
                             } else {
+                                // progressBarItem.setStyle("-fx-accent: red;");
                                 progressBarExcess.setVisible(true);
                             }
 
                             // Đặt hai ProgressBar vào StackPane
                             progressBarContainer.getChildren().addAll(progressBarItem, progressBarExcess);
 
-                            Label lblToday = new Label("Đã chi " + budget.getAmount() + " đ");
+                            Label lblToday = new Label("Đã chi " + MoneyFormat.moneyFormat(budget.getAmount()) + " đ");
                             lblToday.setStyle("-fx-font-size: 10px;");
                             
                             Button btnDelete = new Button("Xóa");
