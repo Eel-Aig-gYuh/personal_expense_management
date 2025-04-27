@@ -164,7 +164,7 @@ public class CategoryServices {
         Map<String, Object> results = new HashMap<>();
         
         try (Connection conn = JdbcUtils.getConn()) {
-            String query = "{CALL DELETE (?, ?, ?)}";
+            String query = "{CALL DeleteCategory (?, ?, ?)}";
             CallableStatement callableStatement = conn.prepareCall(query);
             
             callableStatement.setInt(1, categoryId);
