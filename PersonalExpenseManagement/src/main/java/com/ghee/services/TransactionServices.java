@@ -185,7 +185,7 @@ public class TransactionServices {
             results.put("success", success);
             results.put("message", message);
             
-            System.err.println(callableStatement.getString(9));
+            // System.err.println(callableStatement.getString(9));
         }
         return results;
     }
@@ -222,7 +222,7 @@ public class TransactionServices {
             results.put("success", success);
             results.put("message", message);
             
-            System.err.println(callableStatement.getString(9));
+            // System.err.println(callableStatement.getString(9));
            
         }
         catch (SQLException ex) {

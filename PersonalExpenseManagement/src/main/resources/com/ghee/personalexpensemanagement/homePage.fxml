@@ -85,7 +85,7 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label fx:id="lblNoData2" text="Label" />
+                                          <Label fx:id="lblNoData2" styleClass="chart-title" text="Label" />
                                           <BarChart fx:id="barChartComparison" prefHeight="148.0" prefWidth="497.0">
                                             <xAxis>
                                               <CategoryAxis side="BOTTOM" />

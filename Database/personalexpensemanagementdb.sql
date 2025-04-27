@@ -36,7 +36,7 @@ CREATE TABLE `budget` (
   KEY `category_id` (`category_id`),
   CONSTRAINT `budget_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `budget_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `budget` (
 
 LOCK TABLES `budget` WRITE;
 /*!40000 ALTER TABLE `budget` DISABLE KEYS */;
-INSERT INTO `budget` VALUES (1,2,2,800000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(2,2,3,80000001,100000000,'2025-04-27','2025-04-27','2025-04-27'),(3,1,1,10000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(4,1,1,0,100000000,'2025-04-29','2025-05-01','2025-04-27');
+INSERT INTO `budget` VALUES (1,2,2,800000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(2,2,3,80000001,100000000,'2025-04-27','2025-04-27','2025-04-27'),(3,1,1,810000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(4,1,1,0,100000000,'2025-04-29','2025-05-01','2025-04-27'),(6,1,5,0,15000000,'2025-04-27','2025-04-27','2025-04-27');
 /*!40000 ALTER TABLE `budget` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,12 +59,12 @@ DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `type` enum('Thu','Chi') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('Thu','Chi') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `category_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +73,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,1,'Chi','Đi chơi'),(2,2,'Chi','Đi chơi'),(3,2,'Chi','Đi ăn');
+INSERT INTO `category` VALUES (1,1,'Chi','Đi chơi'),(2,2,'Chi','Đi chơi'),(3,2,'Chi','Đi ăn'),(5,1,'Thu','Lương');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +91,7 @@ CREATE TABLE `transaction` (
   `wallet_id` int NOT NULL,
   `amount` double NOT NULL,
   `transaction_date` date NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -100,7 +100,7 @@ CREATE TABLE `transaction` (
   CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `transaction_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `transaction_ibfk_3` FOREIGN KEY (`wallet_id`) REFERENCES `wallet` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +109,7 @@ CREATE TABLE `transaction` (
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-INSERT INTO `transaction` VALUES (2,2,2,2,800000,'2025-04-27','','2025-04-27'),(3,2,3,2,80000001,'2025-04-27','','2025-04-27'),(6,1,1,1,10000,'2025-04-27','','2025-04-27');
+INSERT INTO `transaction` VALUES (2,2,2,2,800000,'2025-04-27','','2025-04-27'),(3,2,3,2,80000001,'2025-04-27','','2025-04-27'),(6,1,1,1,10000,'2025-04-27','','2025-04-27'),(29,1,5,1,10000000,'2025-04-27','','2025-04-27'),(30,1,1,1,800000,'2025-04-27','','2025-04-27'),(32,1,1,1,100000,'2025-04-10','','2025-04-27');
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,18 +122,18 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` enum('User','Admin') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'User',
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `first_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` enum('User','Admin') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'User',
   `created_at` date NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,7 +142,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'testuser1','$2a$10$.DaLkZOBn9qgG38iiLTfcOC8LeOjBiUH48ThoMBfaBLvKag3lnnI6','Huy','Le Gia',NULL,'admin@gmail.com','User','2025-04-27'),(2,'testuser2','$2a$10$5f4MXj0CC4c10ngEvh3aWONu4HDTo3kUvIEFqwd5tamYFnPf0c8fS','Hiển','Trần Thế',NULL,'hien123@gmail.com','User','2025-04-27');
+INSERT INTO `users` VALUES (1,'testuser1','$2a$10$.DaLkZOBn9qgG38iiLTfcOC8LeOjBiUH48ThoMBfaBLvKag3lnnI6','Huy','Le Gia',NULL,'admin@gmail.com','User','2025-04-27'),(2,'testuser2','$2a$10$5f4MXj0CC4c10ngEvh3aWONu4HDTo3kUvIEFqwd5tamYFnPf0c8fS','Hiển','Trần Thế',NULL,'hien123@gmail.com','User','2025-04-27'),(3,'testuser3','$2a$10$TgWSvS2feU4ttkkXCVpc4uFD2AZhT1yEHxUs9FiKD8NMMpO0jRpR2','Lam','Le',NULL,'lam@gmail.com','User','2025-04-27');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +168,7 @@ CREATE TABLE `wallet` (
 
 LOCK TABLES `wallet` WRITE;
 /*!40000 ALTER TABLE `wallet` DISABLE KEYS */;
-INSERT INTO `wallet` VALUES (1,-10000,'2025-04-27'),(2,-80800001,'2025-04-27');
+INSERT INTO `wallet` VALUES (1,9090000,'2025-04-27'),(2,-80800001,'2025-04-27'),(3,0,'2025-04-27');
 /*!40000 ALTER TABLE `wallet` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -350,7 +350,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateTransaction`(
     out p_success boolean,
     out p_message varchar(255)
 )
-BEGIN
+BEGIN main_block: BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN
         SET p_success = FALSE;
@@ -445,13 +445,15 @@ BEGIN
 						SET p_success = false;
                         SET p_message = 'Cảnh báo: Giao dịch vượt ngân sách! \nVui lòng chọn giao dịch khác!';
 						ROLLBACK;
+                        LEAVE main_block;
                     END IF;
 					
 					-- Kiểm tra xem tổng số tiền có vượt quá 80% ngân sách hay không
 					IF @budget_target > 0 AND (@total_amount / @budget_target) > 0.8 THEN
+						SET p_success = NULL;
 						SET p_message = CONCAT('Cảnh báo: Giao dịch vượt quá 80% ngân sách ', @p_name);
 					ELSE
-						SET p_message = "";
+						SET p_message = " ";
 					END IF;
                  END IF;
              END IF;
@@ -494,10 +496,15 @@ BEGIN
             END IF;
 
             SET p_success = TRUE;
-            SET p_message = CONCAT(p_message, '\nThêm giao dịch thành công!');
+            IF p_message IS NOT NULL THEN
+				SET p_message = CONCAT(p_message, '\nThêm giao dịch thành công!');
+			ELSE
+				SET p_message = 'Thêm giao dịch thành công!';
+			END IF;
             COMMIT;
         END IF;
     END IF;
+END main_block;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -972,7 +979,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateTransaction`(
     out p_success boolean,
     out p_message varchar(255)
 )
-BEGIN
+BEGIN main_block: BEGIN
 	DECLARE old_amount DOUBLE;
     DECLARE old_category_id INT;
     DECLARE old_transaction_date DATE;
@@ -1059,8 +1066,9 @@ BEGIN
 				SELECT id, target, amount INTO @budget_id, @budget_target, @budget_amount
 				FROM budget
 				WHERE user_id = p_user_id
-				AND category_id = p_category_id
-				AND p_transaction_date BETWEEN start_date AND end_date
+					AND category_id = p_category_id
+					AND p_transaction_date BETWEEN start_date AND end_date
+                ORDER BY target ASC
 				LIMIT 1;
  
 				-- Nếu tồn tại ngân sách
@@ -1068,14 +1076,16 @@ BEGIN
 					-- Tính tổng số tiền giao dịch trong khoảng thời gian ngân sách (bao gồm giao dịch mới)
 					SET @total_amount = @budget_amount + p_amount;
  
-					IF @total_amount > @budget_target THEN 
+					IF p_amount > @budget_target THEN 
 						SET p_success = false;
-                        SET p_message = 'Cảnh báo: Giao dịch vượt ngân sách! \nVui lòng chọn giao dịch khác!';
+                        SET p_message = CONCAT('Cảnh báo: Giao dịch vượt ngân sách! \nVui lòng chọn giao dịch khác!', @total_amount, ' ', @budget_target );
 						ROLLBACK;
+                        LEAVE main_block;
                     END IF;
  
 					-- Kiểm tra xem tổng số tiền có vượt quá 80% ngân sách hay không
 					IF @budget_target > 0 AND (@total_amount / @budget_target) > 0.8 THEN
+						SET p_success = NULL;
 						SET p_message = CONCAT('Cảnh báo: Giao dịch vượt quá 80% ngân sách ', @p_name);
 					ELSE
 						SET p_message = "";
@@ -1164,12 +1174,17 @@ BEGIN
 			WHERE id = p_transaction_id;
             
 			SET p_success = true;
-			SET p_message = CONCAT(p_message, '\nCập nhật giao dịch thành công!');
+			IF p_message IS NOT NULL THEN
+				SET p_message = CONCAT(p_message, '\nThêm giao dịch thành công!');
+			ELSE
+				SET p_message = 'Cập nhật giao dịch thành công!';
+			END IF;
 			COMMIT;
             
         END IF;
 
     END IF;
+END main_block;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1186,4 +1201,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-27 20:59:05
+-- Dump completed on 2025-04-27 23:44:24

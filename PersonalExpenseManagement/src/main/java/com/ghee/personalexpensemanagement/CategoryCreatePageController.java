@@ -76,7 +76,7 @@ public class CategoryCreatePageController implements Initializable {
                     MessageErrorField.ErrorFieldHboxOff(txtName);
                 }
                 
-                String type = rdoChi.getText();
+                String type = rdoChi.isSelected()? "Chi" : "Thu";
                 
                 Category category = new Category(currentUser, type, name);
                 

@@ -13,6 +13,7 @@ import com.ghee.services.CategoryServices;
 import com.ghee.services.TransactionServices;
 import com.ghee.services.WalletServices;
 import com.ghee.formatter.DatePickerUtils;
+import com.ghee.formatter.MoneyFormat;
 import com.ghee.utils.ManageUser;
 import com.ghee.utils.MessageBox;
 import com.ghee.utils.MessageErrorField;
@@ -106,7 +107,7 @@ public class TransactionCreatePageController implements Initializable {
             else 
                 lblTitle.setText("THÊM GIAO DỊCH");
             
-            txtTarget.setText(String.valueOf(this.selectedTransaction.getAmount()));
+            txtTarget.setText(MoneyFormat.moneyFormat(this.selectedTransaction.getAmount()));
             txtDescription.setText(this.selectedTransaction.getDescription());
             
             dpTransactionDate.setValue(LocalDate.parse(this.selectedTransaction.getTransactionDate().toString()));
