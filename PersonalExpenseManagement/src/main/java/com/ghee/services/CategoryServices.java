@@ -112,18 +112,44 @@ public class CategoryServices {
      * @return
      * @throws SQLException 
      */
-    public boolean updateCategory(Category category) throws SQLException {
-        try (Connection conn = JdbcUtils.getConn()) {
-            String query = "UPDATE Category SET name = ?, type = ? WHERE id = ? AND user_id = ?";
-            PreparedStatement stm = conn.prepareCall(query);
-            
-            stm.setString(1, category.getName());
-            stm.setString(2, category.getType());
-            stm.setInt(3, category.getId());
-            stm.setInt(4, category.getUserId().getId());
-            
-            return stm.executeUpdate() > 0;
+    public Map<String, Object> updateCategory(Category category) throws SQLException {
+        Map<String, Object> results = new HashMap<>();
+        
+        List<String> validType = new ArrayList<>();
+        validType.add("Thu");
+        validType.add("Chi");
+        
+        if (!validType.contains(category.getType())) {
+            results.put("success", false);
+            results.put("message", "Lỗi: Loại không phù hợp với danh mục, chỉ có thể là 'Thu' hoặc 'Chi'.");
+            return results;
         }
+        
+        try (Connection conn = JdbcUtils.getConn()) {
+            String query = "{CALL UpdateCategory(?, ?, ?, ?, ?, ?)}";
+            CallableStatement callableStatement = conn.prepareCall(query);
+            
+            callableStatement.setString(1, category.getName());
+            callableStatement.setString(2, category.getType());
+            callableStatement.setInt(3, category.getId());
+            callableStatement.setInt(4, category.getUserId().getId());
+            
+            callableStatement.registerOutParameter(5, Types.BOOLEAN);
+            callableStatement.registerOutParameter(6, Types.VARCHAR);
+            
+            callableStatement.execute();
+            
+            boolean success = callableStatement.getBoolean(5);
+            String message = callableStatement.getString(6);
+            
+            results.put("success", success);
+            results.put("message", message);
+        } catch (EnumConstantNotPresentException ex) {
+            results.put("success", false);
+            results.put("message", "Lỗi: Loại không phù hợp với danh mục, chỉ có thể là 'Thu' hoặc 'Chi'.");
+        }
+        
+        return results;
     }
     
     // ==================== DELETE
@@ -134,15 +160,26 @@ public class CategoryServices {
      * @return
      * @throws SQLException 
      */
-    public boolean deleteCategory(int categoryId, int userId) throws SQLException {
+    public Map<String, Object> deleteCategory(int categoryId, int userId) throws SQLException {
+        Map<String, Object> results = new HashMap<>();
+        
         try (Connection conn = JdbcUtils.getConn()) {
-            String query = "DELETE FROM Category WHERE id = ? AND user_id = ?";
-            PreparedStatement stm = conn.prepareStatement(query);
+            String query = "{CALL DELETE (?, ?, ?)}";
+            CallableStatement callableStatement = conn.prepareCall(query);
             
-            stm.setInt(1, categoryId);
-            stm.setInt(2, userId);
+            callableStatement.setInt(1, categoryId);
+            callableStatement.registerOutParameter(2, Types.BOOLEAN);
+            callableStatement.registerOutParameter(3, Types.VARCHAR);
           
-            return stm.executeUpdate() > 0;
+            callableStatement.execute();
+            
+            boolean success = callableStatement.getBoolean(2);
+            String message = callableStatement.getString(3);
+            
+            results.put("success", success);
+            results.put("message", message);
         }
+        
+        return results;
     }
 }
