@@ -3,21 +3,19 @@ import com.ghee.pojo.Category;
 import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Users;
 import com.ghee.services.CategoryServices;
-import java.sql.Connection;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -84,15 +82,21 @@ public class CategoryServicesTestSuit {
         if (expectedSuccess) {
             List<Category> userCates = categoryServices.getCategoriesByUserId(userId);
 
-            userCates.stream()
+            List<Category> filteredCategories = userCates.stream()
                 .filter(c -> c.getName().equals(name))
-                .forEach(c -> {
-                try {
-                    categoryServices.deleteCategory(c.getId(), userId);
-                } catch (SQLException ex) {
-                    Logger.getLogger(CategoryServicesTestSuit.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
+                .collect(Collectors.toList());
+
+            if (!filteredCategories.isEmpty()) {
+                filteredCategories.forEach(c -> {
+                    try {
+                        categoryServices.deleteCategory(c.getId(), userId);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(CategoryServicesTestSuit.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+            } else {
+                System.out.println("Không tìm thấy category để xóa");
+            }
         }
 
         Map<String, Object> result = categoryServices.createCategory(category);
@@ -150,8 +154,8 @@ public class CategoryServicesTestSuit {
 
         
         
-        boolean deleteResult = categoryServices.deleteCategory(categoryId, userId);
-        assertTrue(deleteResult == expectedResult);
+        Map<String, Object> deleteResult = categoryServices.deleteCategory(categoryId, userId);
+        assertTrue((boolean)deleteResult.get("success") == expectedResult);
     }
     
 
@@ -163,8 +167,8 @@ public class CategoryServicesTestSuit {
         category.setName(name);
         category.setType(type);
         category.setUserId(new Users(userId));
-        boolean result = categoryServices.updateCategory(category);
-        assertTrue(result == expectedResult);
+        Map<String, Object> result = categoryServices.updateCategory(category);
+        assertTrue((boolean)result.get("success") == expectedResult);
     }
     
 }

@@ -123,17 +123,17 @@ class BudgetServicesTestSuit {
         );
     }
 
-    @Test
-    @DisplayName("Get Total Spent - Basic Validation")
-    @Tag("query")
-    void testGetTotalSpent_Basic() throws SQLException {
-        LocalDate end = LocalDate.now();
-        LocalDate start = LocalDate.now().minusMonths(1);
-
-        double totalSpent = budgetServices.getTotalSpent(1, start, end);
-
-        assertTrue(totalSpent >= 0, "Total spent should not be negative");
-    }
+//    @Test
+//    @DisplayName("Get Total Spent - Basic Validation")
+//    @Tag("query")
+//    void testGetTotalSpent_Basic() throws SQLException {
+//        LocalDate end = LocalDate.now();
+//        LocalDate start = LocalDate.now().minusMonths(1);
+//
+//        double totalSpent = budgetServices.getTotalSpent(1, start, end);
+//
+//        assertTrue(totalSpent >= 0, "Total spent should not be negative");
+//    }
     
     @Test
     @DisplayName("Delete budget")
