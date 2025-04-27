@@ -172,7 +172,7 @@ public class BudgetCreatePageController implements Initializable {
     } 
     
     public void deleteCategory(Category category) {
-        System.err.println("lasdk");
+        // System.err.println("lasdk");
     }
     
     public void updateCategory(Category category) {

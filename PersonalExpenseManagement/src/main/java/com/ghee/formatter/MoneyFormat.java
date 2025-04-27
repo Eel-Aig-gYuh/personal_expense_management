@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
  */
 public class MoneyFormat {
     public static String moneyFormat(double value) {
-        DecimalFormat df = new DecimalFormat("#,###");
+        DecimalFormat df = new DecimalFormat("###,###,###");
         
         return df.format(value);
     }

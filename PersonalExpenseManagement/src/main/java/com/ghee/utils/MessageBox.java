@@ -23,11 +23,7 @@ public class MessageBox {
      * @return 
      */
     public static Alert getAlert(String content, Alert.AlertType types){
-        Alert alert = new Alert(types, "", ButtonType.OK);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        
-        return alert;
+        return new Alert(types, content, ButtonType.OK);
     }
     
     public static Alert getYesNoAlert(String content, Alert.AlertType types){
