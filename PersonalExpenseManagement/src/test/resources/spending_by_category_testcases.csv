@@ -1,4 +1,4 @@
 test_case,user_id,start_date,end_date,expected_category_count,expected_amount
 "Food current month spending",2,2025-04-01,2025-04-30,1,170000.0
-"Last year full year",2,2023-01-01,2023-12-31,1,300700.0
+"Month last year",420,2023-01-01,2023-12-31,1,60000.0
 "Future dates (empty)",1,2024-01-01,2024-01-31,0,0.0
