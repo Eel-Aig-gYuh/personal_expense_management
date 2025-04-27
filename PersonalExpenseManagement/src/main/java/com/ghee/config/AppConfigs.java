@@ -48,7 +48,7 @@ public class AppConfigs {
     public static String ERROR_LENGHT_OF_USERNAME = "Độ dài không hợp lệ! Vui lòng nhập phải trên 7 ký tự !";
     public static String ERROR_LENGHT_OF_PASSWORD = "Độ dài không hợp lệ! Vui lòng nhập phải trên 7 ký tự !";
     
-    public static String ERROR_PASS_PATTERN = "Lỗi mật khẩu không đủ mạnh!\n Phải có ít nhất 1 ký tự hoa, 1 ký tự thường, 1 số và 1 ký tự đặc biệt !";
+    public static String ERROR_PASS_PATTERN = "Lỗi mật khẩu không đủ mạnh!";
     public static String ERROR_PASS_AND_CONFIRM = "Lỗi mật khẩu không trùng khớp, vui lòng nhập lại !";
     
     // ================ BUDGET
@@ -56,7 +56,7 @@ public class AppConfigs {
     public static int MAX_TARGET = 100000000;
     
     public static String ERROR_CATEGORY_IS_NULL = "Vui lòng chọn một danh mục cho ngân sách !";
-    public static String ERROR_TARGET_IS_NEGATIVE = "Vui lòng điền mục tiêu ngân sách không âm !";
+    public static String ERROR_TARGET_IS_NEGATIVE = "Số tiền không hợp lệ !";
     public static String ERROR_TARGET_LESS_THAN_MIN = String.format("Vui lòng điền mục tiêu ngân sách không NHỎ hơn %d", MIN_TARGET);
     public static String ERROR_TARGET_LESS_THAN_MAX = String.format("Vui lòng điền mục tiêu ngân sách không VƯỢT hơn %d", MAX_TARGET);
     

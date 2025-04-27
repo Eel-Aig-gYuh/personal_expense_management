@@ -73,7 +73,7 @@ public class BudgetCreatePageController implements Initializable {
         this.selectedBudget = b;
         loadSelectedBudget();
     }
-
+    
     /**
      * Initializes the controller class.
      *
