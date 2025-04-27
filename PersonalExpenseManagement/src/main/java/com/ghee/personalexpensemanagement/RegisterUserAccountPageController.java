@@ -77,6 +77,7 @@ public class RegisterUserAccountPageController implements Initializable {
         });
         
         this.passwordField.textProperty().addListener((obs, oldValue, newValue) -> {
+            System.err.println(this.passwordField.getText());
             String errorMessage = validatePassword(newValue);
             if (errorMessage != null) {
                 MessageErrorField.ErrorFieldHbox(passwordField, errorMessage);
@@ -108,11 +109,11 @@ public class RegisterUserAccountPageController implements Initializable {
         if (password.matches(AppConfigs.PATTERN_SPACE)) {
             return AppConfigs.ERROR_HAS_SPACE_USERNAME;
         }
-        if (!password.matches(AppConfigs.PASSWORD_PATTERN)) {
-            return AppConfigs.ERROR_PASS_PATTERN;
-        }
         if (password.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
             return AppConfigs.ERROR_LENGHT_OF_PASSWORD;
+        }
+        if (!password.matches(AppConfigs.PASSWORD_PATTERN)) {
+            return AppConfigs.ERROR_PASS_PATTERN;
         }
         return null; // Không có lỗi
     }
