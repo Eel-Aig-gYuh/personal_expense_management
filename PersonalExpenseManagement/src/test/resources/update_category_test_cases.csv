@@ -1,5 +1,5 @@
 test_case,category_id,user_id,name,type,expected_results
 "Valid update",36,71,"Lương","Thu",true
 "Invalid type",36,71,"Lương","invalid",false
-"Empty name",36,71,"","Thu",true
+"Empty name",36,71,"","Thu",false
 "Empty type",36,71,"Lương","",false
