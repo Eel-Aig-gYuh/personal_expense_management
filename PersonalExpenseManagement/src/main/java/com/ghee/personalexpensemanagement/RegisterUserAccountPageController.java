@@ -48,7 +48,7 @@ public class RegisterUserAccountPageController implements Initializable {
     @FXML
     private TextField confirmPasswordField;
 
-    private UserServices s = null;
+    private final UserServices s = new UserServices();
 
     /**
      * Initializes the controller class.
@@ -58,8 +58,6 @@ public class RegisterUserAccountPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.s = new UserServices();
-        
         this.usernameField.textProperty().addListener((obs, oldValue, newValue) -> {
             // System.err.println(newValue.length());
             
@@ -79,22 +77,10 @@ public class RegisterUserAccountPageController implements Initializable {
         });
         
         this.passwordField.textProperty().addListener((obs, oldValue, newValue) -> {
-            System.err.printf("do dai pass: %d\n", newValue.length());
-            
-            if (newValue.isBlank()) {
-                MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.NULL_PASSWORD);
-            } 
-            else if (newValue.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
-                // System.err.println(newValue.length());
-                MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_LENGHT_OF_PASSWORD);
-            }
-            else if (!newValue.matches(AppConfigs.PASSWORD_PATTERN)) {
-                MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_PASS_PATTERN);
-            }
-            else if (newValue.matches(AppConfigs.PATTERN_SPACE)) {
-                MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_HAS_SPACE_PASSWORD);
-            }
-            else {
+            String errorMessage = validatePassword(newValue);
+            if (errorMessage != null) {
+                MessageErrorField.ErrorFieldHbox(passwordField, errorMessage);
+            } else {
                 MessageErrorField.ErrorFieldHboxOff(passwordField);
             }
         });
@@ -108,6 +94,27 @@ public class RegisterUserAccountPageController implements Initializable {
             }
         });
 
+    }
+    
+    /**
+     * 
+     * @param password
+     * @return 
+     */
+    public String validatePassword(String password) {
+        if (password.isBlank()) {
+            return AppConfigs.NULL_PASSWORD;
+        }
+        if (password.matches(AppConfigs.PATTERN_SPACE)) {
+            return AppConfigs.ERROR_HAS_SPACE_USERNAME;
+        }
+        if (!password.matches(AppConfigs.PASSWORD_PATTERN)) {
+            return AppConfigs.ERROR_PASS_PATTERN;
+        }
+        if (password.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
+            return AppConfigs.ERROR_LENGHT_OF_PASSWORD;
+        }
+        return null; // Không có lỗi
     }
 
     public void setUserData(String firstname, String lastname, String email, String avatarUrl, String role, Date createAt) {
