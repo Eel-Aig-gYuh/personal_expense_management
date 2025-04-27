@@ -4,7 +4,6 @@
  */
 package com.ghee.config;
 
-import com.ghee.formatter.MoneyFormat;
 
 /**
  *
@@ -59,8 +58,8 @@ public class AppConfigs {
     
     public static String ERROR_CATEGORY_IS_NULL = "Vui lòng chọn một danh mục cho ngân sách !";
     public static String ERROR_TARGET_IS_NEGATIVE = "Số tiền không hợp lệ !";
-    public static String ERROR_TARGET_LESS_THAN_MIN = String.format("Vui lòng điền mục tiêu ngân sách không NHỎ hơn %d", MoneyFormat.moneyFormat(MIN_TARGET));
-    public static String ERROR_TARGET_LESS_THAN_MAX = String.format("Vui lòng điền mục tiêu ngân sách không VƯỢT hơn %d", MoneyFormat.moneyFormat(MAX_TARGET));
+    public static String ERROR_TARGET_LESS_THAN_MIN = String.format("Vui lòng điền mục tiêu ngân sách không NHỎ hơn %d", MIN_TARGET);
+    public static String ERROR_TARGET_LESS_THAN_MAX = String.format("Vui lòng điền mục tiêu ngân sách không VƯỢT hơn %d", MAX_TARGET);
     
     public static String ERROR_DATE_IS_NOT_CORRECT = "Vui lòng điền ngày phù hợp !";
     

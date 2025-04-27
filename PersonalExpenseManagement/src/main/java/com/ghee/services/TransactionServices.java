@@ -9,6 +9,7 @@ import com.ghee.pojo.Category;
 import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Transaction;
 import com.ghee.pojo.Users;
+import com.ghee.pojo.Wallet;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -62,6 +63,9 @@ public class TransactionServices {
                 
                 Category category = categoryServices.getCategoryById(rs.getInt("category_id"));
                 transaction.setCategoryId(category);
+                
+                Wallet wallet = new Wallet(rs.getInt("wallet_id"));
+                transaction.setWalletId(wallet);
                 
                 transaction.setAmount(rs.getDouble("amount"));
                 transaction.setTransactionDate(rs.getDate("transaction_date"));
@@ -180,6 +184,8 @@ public class TransactionServices {
             
             results.put("success", success);
             results.put("message", message);
+            
+            System.err.println(callableStatement.getString(9));
         }
         return results;
     }
@@ -215,6 +221,8 @@ public class TransactionServices {
             
             results.put("success", success);
             results.put("message", message);
+            
+            System.err.println(callableStatement.getString(9));
            
         }
         catch (SQLException ex) {
