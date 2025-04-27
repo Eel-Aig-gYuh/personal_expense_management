@@ -300,6 +300,13 @@ BEGIN
         ROLLBACK;
     END;
     
+    -- Kiểm tra đầu vào
+    IF p_user_id IS NULL OR p_type IS NULL OR p_name IS NULL THEN
+		SET p_success = false;
+        SET p_message = 'Lỗi: Dữ liệu đầu vào rỗng.';
+        ROLLBACK;
+    END IF;
+    
     IF EXISTS (SELECT 1 FROM category WHERE category.name = p_name AND category.user_id = p_user_id) THEN
 		SET p_success = false;
 		SET p_message = 'Lỗi: Danh mục đã tồn tại!';
@@ -505,6 +512,57 @@ BEGIN main_block: BEGIN
         END IF;
     END IF;
 END main_block;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `DeleteCategory` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteCategory`(
+	in p_category_id int,
+    out p_success boolean,
+    out p_message varchar(255)
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        SET p_success = FALSE;
+        SET p_message = 'Lỗi hệ thống: Không thể xóa danh mục.';
+    END;
+
+    -- Kiểm tra category_id có tồn tại không
+    IF NOT EXISTS (SELECT 1 FROM Category WHERE id = p_category_id) THEN
+        SET p_success = FALSE;
+        SET p_message = 'Danh mục không tồn tại.';
+        
+    -- Kiểm tra xem danh mục có đang được sử dụng trong Budget không
+    ELSEIF EXISTS (SELECT 1 FROM Budget WHERE category_id = p_category_id) THEN
+        SET p_success = FALSE;
+        SET p_message = 'Không thể xóa danh mục vì vẫn còn ngân sách liên quan.';
+        
+    -- Kiểm tra xem danh mục có đang được sử dụng trong Transaction không
+    ELSEIF EXISTS (SELECT 1 FROM Transaction WHERE category_id = p_category_id) THEN
+        SET p_success = FALSE;
+        SET p_message = 'Không thể xóa danh mục vì vẫn còn giao dịch liên quan.';
+    ELSE
+    
+        -- Xóa danh mục
+        DELETE FROM Category WHERE id = p_category_id;
+
+        SET p_success = TRUE;
+        SET p_message = 'Xóa danh mục thành công.';
+        
+    END IF;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1201,4 +1259,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-27 23:44:24
+-- Dump completed on 2025-04-28  0:03:10
