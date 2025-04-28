@@ -9,15 +9,12 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.platform.runner.JUnitPlatform;
@@ -94,25 +91,29 @@ class StatisticServicesTestSuit {
             endDate
         );
         
-        budgets1.forEach(budget -> {
+        double actualTotal = 0;
+
+        for (Budget budget : budgets1) {
             try {
                 if (budget == null) {
                     fail("Budget cannot be null");
-                    return;
+                    continue;
                 }
-                
+
                 Map<LocalDate, Double> result = staticticsServices.statSpendingByBudget(budget);
                 assertNotNull(result, "Result should not be null for budget: " + budget.getId());
-                
-                double expectedTotal = expectedTotalAmount;
-                double actualTotal = result.values().stream().mapToDouble(Double::doubleValue).sum();
-                
-                assertEquals(expectedTotal, actualTotal, 0.01, "Total mismatch for budget: " + budget.getId());
-                
+                actualTotal += result.values().stream().mapToDouble(Double::doubleValue).sum();
+
             } catch (SQLException ex) {
                 Logger.getLogger(StatisticServicesTestSuit.class.getName()).log(Level.SEVERE, null, ex);
+                fail("SQLException occurred for budget: " + (budget != null ? budget.getId() : "null"));
             }
-        });
+        }
+
+        // Sau khi cộng tổng xong, mới kiểm tra:
+        double expectedTotal = expectedTotalAmount;
+        assertEquals(expectedTotal, actualTotal, 0.01, "Total mismatch between expected and actual total.");
+
             
     }
     @ParameterizedTest

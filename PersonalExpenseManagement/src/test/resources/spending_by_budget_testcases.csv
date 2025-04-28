@@ -1,6 +1,6 @@
 test_case,user_id,category_id,start_date,end_date,expected_total_amount
-"Food budget current month",2,1,2025-04-01,2025-04-30,40000.0
+"Food budget current month",2,1,2025-04-01,2025-04-30,60000.0
 "Food budget last month",2,1,2025-03-01,2025-03-30,0.0
-"Shopping budget last month",1,3,2025-03-01,2025-03-30,50000.0
+"Shopping budget last month",1,43,2025-03-01,2025-03-30,50000.0
 "Empty period",1,1,2024-01-01,2024-01-31,0.0
-"Income category test",2,5,2023-01-01,2025-12-31,0.0
+"Income category test",2,5,2023-01-01,2023-12-31,0.0

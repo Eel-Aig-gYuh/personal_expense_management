@@ -18,15 +18,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserServicesTestSuit {
 
     private UserServices userServices;
-    private Users validUser;
 
     @BeforeEach
     void setUp() throws SQLException {
         userServices = new UserServices();
-        // Create and register a valid test user
-        validUser = createValidUser();
-        Map<String, Object> regResult = userServices.registerUser(validUser);
-        assertTrue((boolean) regResult.get("success"), "Setup failed - could not register test user");
     }
 
     // Registration Tests

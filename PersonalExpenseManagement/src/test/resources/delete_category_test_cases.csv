@@ -1,0 +1,7 @@
+test_case,category_id,user_id,expected_result
+"Valid category",24,70,true
+"Non-existence category",100,70,false
+"User not match category",24,20,false
+"Category not match user",1,70,false
+"Invalid category",-10,74,false
+"Invalid user",24,-5,false

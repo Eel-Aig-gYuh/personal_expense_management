@@ -1,0 +1,7 @@
+test_case,user_id,start_date,expected_amount
+"Valid at boundary test 1",200,2025-03-31,20000.0
+"Valid at after boundary test 1",200,2025-04-01,40000.0
+"Valid at before boundary test 1",200,2025-03-30,20000.0
+"Valid at boundary test 2",200,2025-04-07,60000.0
+"Valid at before boundary test 2",200,2025-04-06,60000.0
+"Valid at after boundary test 2",200,2025-04-08,80000.0

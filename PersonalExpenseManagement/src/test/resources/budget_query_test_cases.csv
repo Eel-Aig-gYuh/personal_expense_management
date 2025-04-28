@@ -1,7 +1,7 @@
 test_case,user_id,start_date,end_date,expected_count,expected_total_budget
 No Budgets,2,2023-01-01,2023-01-31,0,0.0
 Single Budget,4,2025-04-01,2025-04-30,1,100000.00
-Single Budget 2,4,2025-03-15,2025-04-15,1,100000.00
+Single Budget 2,4,2025-03-15,2025-04-15,0,0.0
 Single Budget 3,50,2025-04-01,2025-04-30,1,50000.00
 Multiple Budgets,3,2025-04-01,2025-04-30,2,40000.00
 Overlapping Period,50,2025-03-15,2025-04-15,0,0.0

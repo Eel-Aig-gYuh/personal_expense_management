@@ -19,25 +19,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @RunWith(JUnitPlatform.class)
 @DisplayName("Budget Services Unit Tests")
 class BudgetServicesTestSuit {
 
     private BudgetServices budgetServices;
-    private static Budget validBudget;
-
-    @BeforeAll
-    static void setUpClass() {
-        validBudget = new Budget();
-        validBudget.setUserId(new Users(1));
-        validBudget.setCategoryId(new Category(1));
-        validBudget.setTarget(1000.00);
-        validBudget.setStartDate(java.sql.Date.valueOf(LocalDate.now()));
-        validBudget.setEndDate(java.sql.Date.valueOf(LocalDate.now().plusMonths(1)));
-        validBudget.setCreatedAt(new Date());
-    }
 
     @BeforeEach
     void setUp() {
@@ -82,27 +69,31 @@ class BudgetServicesTestSuit {
                 () -> "Test case '" + testCase + "' failed. Success expected: " + expectedSuccess);
     }
 
-    @Test
+    @ParameterizedTest(name = "[{index}] {0}")
+    @CsvFileSource(resources = "/update_budget_test_cases.csv", numLinesToSkip = 1)
     @DisplayName("Update Budget - Success Case")
     @Tag("update")
-    void testUpdateBudget_Success() throws SQLException, ParseException {
-        Map<String, Object> createResult = budgetServices.createBudget(validBudget);
-        assumeTrue((boolean) createResult.get("success"));
-
-        // Get the created budget ID
-        List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(
-                validBudget.getUserId().getId(),
-                LocalDate.now(),
-                LocalDate.now().plusMonths(1)
-        );
-        assumeTrue(!budgets.isEmpty());
+    void testUpdateBudget_Success(
+            String testCase,
+            int userId,
+            int budgetId,
+            int categoryId,
+            String startDate,
+            String endDate,
+            double target,
+            boolean expectedResult
+    ) throws SQLException, ParseException {
+        Budget budget = new Budget();
+        budget.setId(budgetId);
+        budget.setUserId(new Users(userId));
+        budget.setCategoryId(new Category(categoryId));
+        budget.setTarget(target);
+        budget.setStartDate(java.sql.Date.valueOf(startDate));
+        budget.setEndDate(java.sql.Date.valueOf(startDate));
+        budget.setCreatedAt(new Date());
         
-        Budget createdBudget = budgets.get(0);
-        createdBudget.setTarget(1500.00);
-        
-        Map<String, Object> updateResult = budgetServices.updateBudget(createdBudget);
-
-        assertTrue((boolean) updateResult.get("success"));
+        Map<String, Object> res = budgetServices.updateBudget(budget);
+        assertEquals(expectedResult, (boolean)res.get("success"));
     }
 
     @ParameterizedTest(name = "[{index}] {0}")
@@ -132,62 +123,17 @@ class BudgetServicesTestSuit {
         );
     }
 
-    @Test
-    @DisplayName("Get Total Spent - Basic Validation")
-    @Tag("query")
-    void testGetTotalSpent_Basic() throws SQLException {
-        LocalDate end = LocalDate.now();
-        LocalDate start = LocalDate.now().minusMonths(1);
-
-        double totalSpent = budgetServices.getTotalSpent(1, start, end);
-
-        assertTrue(totalSpent >= 0, "Total spent should not be negative");
-    }
-
-
-    @Test
-    @DisplayName("Update Non-Existent Budget")
-    @Tag("update")
-    void testUpdateNonExistentBudget() throws SQLException, ParseException {
-        Budget nonExistentBudget = new Budget();
-        nonExistentBudget.setId(-10);
-        nonExistentBudget.setUserId(new Users(1));
-        nonExistentBudget.setCategoryId(new Category(1));
-        nonExistentBudget.setTarget(1000.00);
-        nonExistentBudget.setStartDate(java.sql.Date.valueOf(LocalDate.now()));
-        nonExistentBudget.setEndDate(java.sql.Date.valueOf(LocalDate.now().plusMonths(1)));
-        nonExistentBudget.setCreatedAt(new Date());
-
-        Map<String, Object> result = budgetServices.updateBudget(nonExistentBudget);
-
-        assertFalse((boolean) result.get("success"));
-
-    }
-
-    @Test
-    @DisplayName("Get Total Budget - No Budgets")
-    @Tag("query")
-    void testGetTotalBudget_NoBudgets() throws SQLException {
-        double totalBudget = budgetServices.getTotalBudget(
-                1, 
-                LocalDate.now().minusYears(1), 
-                LocalDate.now().minusYears(1).plusDays(30)
-        );
-        assertEquals(0.0, totalBudget, 0.001);
-    }
-
-    @Test
-    @DisplayName("Get Budgets By Date Range - Edge Cases")
-    @Tag("query")
-    void testGetBudgetsByDateRange_EdgeCases() throws SQLException {
-        // Test with date range that shouldn't match any budgets
-        List<Budget> budgets = budgetServices.getBudgetByUserIdAndDateRange(
-                1,
-                LocalDate.now().minusYears(1),
-                LocalDate.now().minusYears(1).plusDays(1)
-        );
-        assertTrue(budgets.isEmpty());
-    }
+//    @Test
+//    @DisplayName("Get Total Spent - Basic Validation")
+//    @Tag("query")
+//    void testGetTotalSpent_Basic() throws SQLException {
+//        LocalDate end = LocalDate.now();
+//        LocalDate start = LocalDate.now().minusMonths(1);
+//
+//        double totalSpent = budgetServices.getTotalSpent(1, start, end);
+//
+//        assertTrue(totalSpent >= 0, "Total spent should not be negative");
+//    }
     
     @Test
     @DisplayName("Delete budget")

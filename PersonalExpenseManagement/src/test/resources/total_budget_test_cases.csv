@@ -1,1 +1,5 @@
-
+testCase,userId,startDate,endDate,expectedTotalBudget
+"Case 1: User có ngân sách đúng ngày",1,2025-06-01,2025-06-30,500000
+"Case 2: User không có ngân sách",2,2025-06-01,2025-06-30,0
+"Case 3: User có nhiều ngân sách",3,2025-05-01,2025-06-30,1500000
+"Case 4: Khoảng ngày không trùng",1,2024-01-01,2024-01-31,0
