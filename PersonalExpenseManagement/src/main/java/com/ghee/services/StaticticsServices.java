@@ -152,8 +152,8 @@ public class StaticticsServices {
             
             // thang truoc
             stm.setInt(1, userId.getId());
-            stm.setDate(2, Date.valueOf(currentDateStart));
-            stm.setDate(3, Date.valueOf(currentDateEnd));
+            stm.setDate(2, Date.valueOf(preDateStart));
+            stm.setDate(3, Date.valueOf(preDateEnd));
             
             ResultSet rs = stm.executeQuery();
             
