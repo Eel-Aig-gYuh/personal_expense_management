@@ -36,7 +36,7 @@ CREATE TABLE `budget` (
   KEY `category_id` (`category_id`),
   CONSTRAINT `budget_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `budget_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `budget` (
 
 LOCK TABLES `budget` WRITE;
 /*!40000 ALTER TABLE `budget` DISABLE KEYS */;
-INSERT INTO `budget` VALUES (1,2,2,800000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(2,2,3,80000001,100000000,'2025-04-27','2025-04-27','2025-04-27'),(3,1,1,810000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(4,1,1,0,100000000,'2025-04-29','2025-05-01','2025-04-27'),(6,1,5,0,15000000,'2025-04-27','2025-04-27','2025-04-27');
+INSERT INTO `budget` VALUES (1,2,2,800000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(2,2,3,80000001,100000000,'2025-04-27','2025-04-27','2025-04-27'),(3,1,1,810000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(4,1,1,0,100000000,'2025-04-29','2025-05-01','2025-04-27'),(6,1,5,0,15000000,'2025-04-27','2025-04-27','2025-04-27'),(8,4,6,4000001,5000000,'2025-04-28','2025-05-01','2025-04-28'),(9,4,6,0,15000000,'2025-05-01','2025-05-31','2025-04-28');
 /*!40000 ALTER TABLE `budget` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +64,7 @@ CREATE TABLE `category` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `category_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +73,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,1,'Chi','Đi chơi'),(2,2,'Chi','Đi chơi'),(3,2,'Chi','Đi ăn'),(5,1,'Thu','Lương');
+INSERT INTO `category` VALUES (1,1,'Chi','Đi chơi'),(2,2,'Chi','Đi chơi'),(3,2,'Chi','Đi ăn'),(5,1,'Thu','Lương'),(6,4,'Chi','Đi chơi');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,7 +100,7 @@ CREATE TABLE `transaction` (
   CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `transaction_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `transaction_ibfk_3` FOREIGN KEY (`wallet_id`) REFERENCES `wallet` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +109,7 @@ CREATE TABLE `transaction` (
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-INSERT INTO `transaction` VALUES (2,2,2,2,800000,'2025-04-27','','2025-04-27'),(3,2,3,2,80000001,'2025-04-27','','2025-04-27'),(6,1,1,1,10000,'2025-04-27','','2025-04-27'),(29,1,5,1,10000000,'2025-04-27','','2025-04-27'),(30,1,1,1,800000,'2025-04-27','','2025-04-27'),(32,1,1,1,100000,'2025-04-10','','2025-04-27');
+INSERT INTO `transaction` VALUES (2,2,2,2,800000,'2025-04-27','','2025-04-27'),(3,2,3,2,80000001,'2025-04-27','','2025-04-27'),(6,1,1,1,10000,'2025-04-27','','2025-04-27'),(29,1,5,1,10000000,'2025-04-27','','2025-04-27'),(30,1,1,1,800000,'2025-04-27','','2025-04-27'),(32,1,1,1,100000,'2025-04-10','','2025-04-27'),(33,4,6,4,4000001,'2025-04-28','','2025-04-28'),(34,4,6,4,5000000,'2025-04-25','','2025-04-28');
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,7 +133,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,7 +142,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'testuser1','$2a$10$.DaLkZOBn9qgG38iiLTfcOC8LeOjBiUH48ThoMBfaBLvKag3lnnI6','Huy','Le Gia',NULL,'admin@gmail.com','User','2025-04-27'),(2,'testuser2','$2a$10$5f4MXj0CC4c10ngEvh3aWONu4HDTo3kUvIEFqwd5tamYFnPf0c8fS','Hiển','Trần Thế',NULL,'hien123@gmail.com','User','2025-04-27'),(3,'testuser3','$2a$10$TgWSvS2feU4ttkkXCVpc4uFD2AZhT1yEHxUs9FiKD8NMMpO0jRpR2','Lam','Le',NULL,'lam@gmail.com','User','2025-04-27');
+INSERT INTO `users` VALUES (1,'testuser1','$2a$10$.DaLkZOBn9qgG38iiLTfcOC8LeOjBiUH48ThoMBfaBLvKag3lnnI6','Huy','Le Gia',NULL,'admin@gmail.com','User','2025-04-27'),(2,'testuser2','$2a$10$5f4MXj0CC4c10ngEvh3aWONu4HDTo3kUvIEFqwd5tamYFnPf0c8fS','Hiển','Trần Thế',NULL,'hien123@gmail.com','User','2025-04-27'),(3,'testuser3','$2a$10$TgWSvS2feU4ttkkXCVpc4uFD2AZhT1yEHxUs9FiKD8NMMpO0jRpR2','Lam','Le',NULL,'lam@gmail.com','User','2025-04-27'),(4,'testuser4','$2a$10$wptPun7.I/sKl7YpKjarE.oDVE/EOG9VsbfNwkQOfH5wUpnQCK0kW','Quân','Trần Nguyễn Trung',NULL,'quan123@gmail.com','User','2025-04-28');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +168,7 @@ CREATE TABLE `wallet` (
 
 LOCK TABLES `wallet` WRITE;
 /*!40000 ALTER TABLE `wallet` DISABLE KEYS */;
-INSERT INTO `wallet` VALUES (1,9090000,'2025-04-27'),(2,-80800001,'2025-04-27'),(3,0,'2025-04-27');
+INSERT INTO `wallet` VALUES (1,9090000,'2025-04-27'),(2,-80800001,'2025-04-27'),(3,0,'2025-04-27'),(4,-9000001,'2025-04-28');
 /*!40000 ALTER TABLE `wallet` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,7 +195,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateBudget`(
     out p_success boolean,
     out p_message varchar(255)
 )
-BEGIN
+BEGIN main_block: BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN
 		SET p_success = false;
@@ -238,8 +238,9 @@ BEGIN
 		-- Kiểm tra target không nhỏ hơn tổng chi tiêu
 		IF p_target < @total_expense THEN
 			SET p_success = false;
-			SET p_message = 'Lỗi: Ngân sách không được nhỏ hơn tổng chi tiêu hiện tại (' || @total_expense || ')!';
+			SET p_message = CONCAT('Lỗi: Ngân sách không được nhỏ hơn tổng chi tiêu hiện tại \n Chi tiêu ngân sách hiện tại: ', @total_expense);
 			ROLLBACK;
+            LEAVE main_block;
 		END IF;
         
         -- Kiểm tra nếu có một ngân sách trong cùng khoảng thời gian.
@@ -267,8 +268,7 @@ BEGIN
 			COMMIT;
         END IF;
     END IF;
-
-    
+END main_block;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -856,7 +856,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateBudget`(
     out p_success boolean,
     out p_message varchar(255)
 )
-BEGIN
+BEGIN main_block: BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN
 		SET p_success = false;
@@ -913,8 +913,9 @@ BEGIN
 	-- Kiểm tra target không nhỏ hơn tổng chi tiêu
 	IF p_target < @total_expense THEN
 		SET p_success = false;
-		SET p_message = 'Lỗi: Ngân sách không được nhỏ hơn tổng chi tiêu hiện tại (' || @total_expense || ')!';
+		SET p_message = CONCAT('Lỗi: Ngân sách không được nhỏ hơn tổng chi tiêu hiện tại \n Chi tiêu ngân sách hiện tại: ', @total_expense);
 		ROLLBACK;
+		LEAVE main_block;
 	END IF;
     
     -- Cập nhật ngân sách
@@ -931,6 +932,7 @@ BEGIN
 		SET p_message = 'Cập nhật ngân sách thành công!';
     END IF;
     COMMIT;
+END main_block;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1259,4 +1261,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-28  0:03:10
+-- Dump completed on 2025-04-28  9:03:54
