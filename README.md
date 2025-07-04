@@ -4,9 +4,9 @@
 - This is a group project for the **Software Testing** course, developed to help users manage their personal expenses.
 - Development period: **March 12, 2025 – April 28, 2025**.
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Eel-Aig-gYuh/personal_expense_management/main/Others/Img/loginPage.png" width="250" height="250"/>
-  <img src="https://raw.githubusercontent.com/Eel-Aig-gYuh/personal_expense_management/main/Others/Img/budgetPage.png" width="250" height="250"/>
-  <img src="https://raw.githubusercontent.com/Eel-Aig-gYuh/personal_expense_management/main/Others/Img/homePage.png" width="250" height="250"/>
+  <img src="https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Img/loginPage.png" width="250" height="250"/>
+  <img src="https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Img/budgetPage.png" width="250" height="250"/>
+  <img src="https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Img/homePage.png" width="250" height="250"/>
 </p>
 
 ---
@@ -95,6 +95,7 @@ PersonalExpenseManagement/
         </td>
     </tr> 
 </table>
+</br>
 
 ---
 
