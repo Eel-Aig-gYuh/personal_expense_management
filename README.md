@@ -16,9 +16,26 @@
 - [Liên hệ](#liên-hệ)
 - [Giấy phép](#giấy-phép)
 
-## I. Khởi động dự án
+## TÍNH NĂNG
+</hr>
+
+## CÔNG NGHỆ SỬ DỤNG
+</hr>
+- Java/JavaFX.
+- MySQL Workbench.
+
+## CÁCH CÀI ĐẶT
 </hr>
 ### 1. Chuẩn bị database </br>
 1.1. Tải database bằng cách down file: ./Database/personalexpensemanagementdb.sql </br>
 1.2. Vào SQL Workbench tạo schema mới và đặt tên là: personalexpensemanagementdb. </br>
 1.3. Sau khi đã tạo schema export database vào trong schema personalexpensemanagementdb vừa mới tạo.
+
+## HƯỚNG DẪN SỬ DỤNG
+</hr>
+
+## LIÊN HỆ
+</hr>
+
+## TÁC GIẢ
+</hr>
