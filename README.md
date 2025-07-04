@@ -57,8 +57,8 @@ PersonalExpenseManagement/
 PersonalExpenseManagement/
 ├── src/                   
 │   ├── test/                        
-│   │   ├── java/           # test các chức năng.
-│   │   ├── resources/      # test case.
+│   │   ├── java/                               # test các chức năng.
+│   │   ├── resources/                          # test case.
 ```
 
 
@@ -81,7 +81,7 @@ PersonalExpenseManagement/
 
 ## TÁC GIẢ
 - **[Lê Gia Huy](https://github.com/Eel-Aig-gYuh)**  
-  *Role*: developer/ quản lý tiến độ, phát triển sản phẩm.
+  *Role*: developer/quản lý tiến độ, phát triển sản phẩm.
 
 - **[hoaqhue](https://github.com/hoaqhue)**  
   *Role*: developer/unit test.
