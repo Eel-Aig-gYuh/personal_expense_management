@@ -5,6 +5,17 @@
 - Đây là dự án nhóm thực hiện trong môn kiểm thử, để quản lý chi tiêu cá nhân cho người tiêu dùng. </br>
 - Được phát triển vào khoảng Mar 12, 2025 và Apr 28, 2025. </br>
 
+## MỤC LỤC
+- [Giới thiệu](#giới-thiệu)
+- [Tính năng](#tính-năng)
+- [Công nghệ sử dụng](#công-nghệ-sử-dụng)
+- [Cách cài đặt](#cách-cài-đặt)
+- [Hướng dẫn sử dụng](#hướng-dẫn-sử-dụng)
+- [Kiểm thử](#kiểm-thử)
+- [Đóng góp](#đóng-góp)
+- [Liên hệ](#liên-hệ)
+- [Giấy phép](#giấy-phép)
+
 ## I. Khởi động dự án
 </hr>
 ### 1. Chuẩn bị database </br>
