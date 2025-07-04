@@ -12,10 +12,12 @@
 - [Hướng dẫn sử dụng](#hướng-dẫn-sử-dụng)
 - [Kiểm thử](#kiểm-thử)
 - [Liên hệ](#liên-hệ)
-- [TÁC GIẢ](#tác-giả)
+- [Tác Giả](#tác-giả)
 
 ## TÍNH NĂNG
-</hr>
+- Thêm và phân loại giao dịch.
+- Thiết lập ngân sách.
+- Bảo cáo tài chính.
 
 ## KIẾN TRÚC HỆ THỐNG 
 - Back-end: Java/MySQL. </br>
@@ -28,7 +30,10 @@
 1.1. Tải database bằng cách down file: **[this file](https://github.com/Eel-Aig-gYuh/personal_expense_management/tree/main/Database)** </br>
 1.2. Vào SQL Workbench tạo schema mới và đặt tên là: personalexpensemanagementdb. </br>
 1.3. Sau khi đã tạo schema export database vào trong schema personalexpensemanagementdb vừa mới tạo.
-### 2.  </br>
+### 2. Clone the repository
+    ```bash
+   git clone https://github.com/Eel-Aig-gYuh/personal_expense_management.git
+   ```
 
 ## HƯỚNG DẪN SỬ DỤNG
 </hr>
@@ -55,10 +60,10 @@
 
 ## TÁC GIẢ
 - **[Lê Gia Huy](https://github.com/Eel-Aig-gYuh)**  
-  *Role*: Quản lý tiến độ, hoàn thành và phát triển sản phẩm.
+  *Role*: developer/ quản lý tiến độ, phát triển sản phẩm.
 
 - **[hoaqhue](https://github.com/hoaqhue)**  
-  *Role*: unit test.
+  *Role*: developer/unit test.
 
 - **[NguyenThiMai2k4](https://github.com/NguyenThiMai2k4)** 
   *Role*: tester.
