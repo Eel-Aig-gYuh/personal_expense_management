@@ -1,0 +1,13 @@
+testCase,username,password,firstName,lastName,avatar,email,expectedResult
+Valid user,validUser2,Valid@1234,John,Doe,avatar.jpg,validuser2@example.com,true
+Empty username,,Valid@1234,John,Doe,avatar.jpg,emptyusername@example.com,false
+Missing firstname,user123456,Valid@1234,,Doe,avatar.jpg,missingfirstname@example.com,false
+All digit username,12345679,Valid@1234,John,Doe,avatar.jpg,digitusername2@example.com,true
+All fields empty,,,,,,,false
+SQL injection,admin'--,Valid@1234,John,Doe,avatar.jpg,sqlinjection@example.com,false
+XSS attempt,user123456,Valid@1234,<script>,Doe,avatar.jpg,xssattempt@example.com,false
+Weak password,user12347890,weak,John,Doe,avatar.jpg,weakpass@example.com,false
+No Uppercase,user_lower,secure123!,Jane,Doe,avatar.jpg,noupper@test.com,false
+No Lowercase,user_upper,SECURE123!,Bob,Smith,avatar.jpg,nolower@test.com,false
+No Digit,user_nodigit,SecurePass!,Alice,Jones,avatar.jpg,nodigit@test.com,false
+No Special Char,user_nospecial,SecurePass123,Charlie,Brown,avatar.jpg,nospecial@test.com,false

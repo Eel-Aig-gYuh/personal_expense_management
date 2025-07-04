@@ -1,0 +1,14 @@
+testCase,userId,categoryId,amount,transactionDate,description,expectedResult,expectedAmount,startDate,endDate
+Valid transaction at lower boundary,100,37,10000.0,2025-04-25,Test transaction,true,10000.0,2025-04-01,2025-04-30
+Invalid transaction at bellow lower boundary,100,37,9999.0,2025-04-05,Test transaction,false,0.0,2025-04-01,2025-04-30
+Valid transaction at above lower boundary,100,37,10001.0,2025-04-05,Test transaction,true,10001.0,2025-04-01,2025-04-30
+Valid transaction at upper boundary but over target,100,37,100000000.0,2025-04-05,Test transaction,true,100000000.0,2025-04-01,2025-04-30
+Valid transaction at bellow upper boundary,100,37,99999999.0,2025-04-05,Test transaction,true,99999999.0,2025-04-01,2025-04-30
+Over transaction upper boundary,100,37,150000000.0,2025-04-05,Test transaction,false,0.0,2025-04-01,2025-04-30
+Invalid transaction at above upper boundary,100,37,100000001.0,2025-04-05,Test transaction,false,0.0,2025-04-01,2025-04-30
+Negative amount,100,37,-100.0,2025-04-05,Invalid amount,false,0.0,2025-04-01,2025-04-30
+Zero amount,100,37,0.0,2025-04-05,Zero amount,false,0.0,2025-04-01,2025-04-30
+Future date,100,37,20000.0,2025-07-01,Future date,false,0.0,2025-04-01,2025-04-30
+Past date,100,37,20000.0,2025-02-01,Past date,true,0.0,2025-04-01,2025-04-30
+Invalid category,100,999,20000.0,2025-04-05,Invalid category,false,0.0,2025-04-01,2025-04-30
+Empty description,100,37,20000.0,2025-04-05,,true,20000.0,2025-04-01,2025-04-30

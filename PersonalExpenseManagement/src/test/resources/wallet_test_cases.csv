@@ -1,0 +1,5 @@
+test_case,user_id,expected_success
+Valid existing user,admin123,Admin@123,true
+Valid existing user,testuser1,Admin@123,true
+Valid existing user,testuser2,Admin@123,true
+Valid existing user,testuser5,Admin@123,true

@@ -32,7 +32,6 @@ import java.util.Date;
     @NamedQuery(name = "Transaction.findById", query = "SELECT t FROM Transaction t WHERE t.id = :id"),
     @NamedQuery(name = "Transaction.findByAmount", query = "SELECT t FROM Transaction t WHERE t.amount = :amount"),
     @NamedQuery(name = "Transaction.findByTransactionDate", query = "SELECT t FROM Transaction t WHERE t.transactionDate = :transactionDate"),
-    @NamedQuery(name = "Transaction.findByType", query = "SELECT t FROM Transaction t WHERE t.type = :type"),
     @NamedQuery(name = "Transaction.findByCreatedAt", query = "SELECT t FROM Transaction t WHERE t.createdAt = :createdAt")})
 public class Transaction implements Serializable {
 
@@ -52,9 +51,6 @@ public class Transaction implements Serializable {
     @Lob
     @Column(name = "description")
     private String description;
-    @Basic(optional = false)
-    @Column(name = "type")
-    private String type;
     @Basic(optional = false)
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
@@ -76,11 +72,13 @@ public class Transaction implements Serializable {
         this.id = id;
     }
 
-    public Transaction(Integer id, double amount, Date transactionDate, String type, Date createdAt) {
-        this.id = id;
+    public Transaction(Users userId, Category categoryId, Wallet walletId, double amount, Date transactionDate,String description, Date createdAt) {
+        this.userId = userId;
+        this.categoryId = categoryId;
+        this.walletId = walletId;
         this.amount = amount;
         this.transactionDate = transactionDate;
-        this.type = type;
+        this.description = description;
         this.createdAt = createdAt;
     }
 
@@ -114,14 +112,6 @@ public class Transaction implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Date getCreatedAt() {

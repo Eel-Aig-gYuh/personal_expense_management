@@ -1,0 +1,18 @@
+test_case,user_id,budget_id,category_id,start_date,end_date,target,expected_results
+"Invalid budget id",31,-5,-1,2025-05-26,2025-05-26,500000.00,false
+"Budget id non-existence",31,1000,-1,2025-05-26,2025-05-26,500000.00,false
+"Invalid category id",31,19,-1,2025-05-26,2025-05-26,500000.00,false
+"Invalid category id 2",31,19,999,2025-05-27,2025-05-28,500000.00,false
+"Valid all",31,19,4,2025-06-27,2025-06-28,100001.00,true
+"Invalid target",31,19,4,2025-07-29,2025-07-29,99999,false
+"Valid target at lower boundary",31,19,4,2025-08-29,2025-08-29,100000.00,true
+"Valid target at upper boundary",31,19,4,2025-09-29,2025-09-30,100000000.00,true
+"Invalid target at upper boundary",31,19,4,2025-10-26,2025-10-27,100000001.00,false
+"Valid target at upper boundary",31,19,4,2025-11-11,2025-11-25,99999999.00,true
+"Invalid to large target",31,19,4,2025-11-26,2025-11-27,150000000.00,false
+"Invalid too small target",31,19,4,2025-12-26,2025-12-27,50000.00,false
+"Invalid start date",31,19,4,2025-04-11,2025-11-25,999999.00,false
+"Valid current date",31,19,4,2025-11-11,2025-11-25,977899.00,true
+
+
+

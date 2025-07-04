@@ -1,0 +1,6 @@
+test_case,user_id,trans_id,expected_result,expected_amount,start_date,end_date
+"Valid delete",300,1,true,0.0,2025-04-01,2025-04-30
+"Invalid delete 1",300,9999,false,0.0,2025-04-01,2025-04-30
+"Invalid delete 2",300,-10,false,0.0,2025-04-01,2025-04-30
+"Invalid delete 2",300,93,false,0.0,2025-04-01,2025-04-30
+

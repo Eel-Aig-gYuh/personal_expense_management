@@ -8,12 +8,15 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.ghee.config.AppConfigs;
 import com.ghee.config.CloudinaryConfig;
+import com.ghee.utils.MessageBox;
+import com.ghee.utils.MessageErrorField;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,20 +37,14 @@ import javafx.stage.Stage;
  */
 public class RegisterUserInfoPageController implements Initializable {
 
-    @FXML
-    private TextField lastnameField;
-    @FXML
-    private TextField firstnameField;
-    @FXML 
-    private TextField emailField;
+    @FXML private TextField lastnameField;
+    @FXML private TextField firstnameField;
+    @FXML private TextField emailField;
     
-    @FXML
-    private Button uploadAvatarButton;
-    @FXML
-    private Button nextPageButton;
+    @FXML private Button uploadAvatarButton;
+    @FXML private Button nextPageButton;
     
-    @FXML 
-    private ImageView avatar;
+    @FXML private ImageView avatar;
     
     private String avatarPath;
     private Cloudinary cloudinary;
@@ -60,7 +57,66 @@ public class RegisterUserInfoPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // check firstname 
+        this.firstnameField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue.isBlank()) {
+                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.NULL_FIRSTNAME);
+                
+            } else if (newValue.matches(AppConfigs.PATTERN_SPECIAL_CHAR)) {
+                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+               
+            } else if (newValue.matches(AppConfigs.PATTERN_NUMBER)) {
+                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_NUMBER);
+                
+            } else if (newValue.length() > AppConfigs.LENGHT_OF_FIRSTNAME) {
+                MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_OUT_OF_LENGHT);
+                
+            } else {
+                MessageErrorField.ErrorFieldHboxOff(firstnameField);
+            }
+        });
         
+        // check lastname 
+        this.lastnameField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue.isBlank()) {
+                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.NULL_LASTNAME);
+            } 
+            else if (newValue.matches(AppConfigs.PATTERN_SPECIAL_CHAR)) {
+                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_CHAR);
+            } 
+            else if (newValue.matches(AppConfigs.PATTERN_NUMBER)) {
+                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+            } 
+            else if (newValue.length() > AppConfigs.LENGHT_OF_LASTNAME) {
+                MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_OUT_OF_LENGHT);
+                
+            } 
+            else {
+                MessageErrorField.ErrorFieldHboxOff(lastnameField);
+            }
+        });
+        
+        // check email
+        this.emailField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue.isBlank() || !newValue.matches(AppConfigs.PATTERN_EMAIL) || newValue.matches(AppConfigs.PATTERN_SPACE)) {
+                MessageErrorField.ErrorFieldHbox(emailField, AppConfigs.ERROR_EMAIL_PATTERN);
+            } 
+            else {
+                MessageErrorField.ErrorFieldHboxOff(emailField);
+            }
+        });
+    }
+    
+    public void setUserData(String firstname, String lastname, String email, String avatarUrl, String role, Date createAt) {
+        this.firstnameField.setText(firstname);
+        this.lastnameField.setText(lastname);
+        this.emailField.setText(email);
+        this.avatarPath = avatarUrl;
+        if (avatarPath != null) {
+            Image img = new Image(avatarPath);
+            this.avatar.setImage(img);
+        }
+            
     }
     
     /**
@@ -89,54 +145,93 @@ public class RegisterUserInfoPageController implements Initializable {
 
             } catch (IllegalStateException e) {
                 // Xử lý lỗi nếu thiếu thông tin Cloudinary trong file .env
-                Utils.getAlert("Không thể kết nối đến Cloudinary. Vui lòng kiểm tra file .env!", Alert.AlertType.ERROR).show();
+                MessageBox.getAlert("Không thể kết nối đến Cloudinary. Vui lòng kiểm tra file .env!", Alert.AlertType.ERROR).show();
 
             } catch (IOException e) {
                 // Xử lý lỗi khi upload ảnh
-                Utils.getAlert("Không thể upload ảnh lên Cloudinary: ", Alert.AlertType.ERROR).show();
+                MessageBox.getAlert("Không thể upload ảnh lên Cloudinary: ", Alert.AlertType.ERROR).show();
 
             } catch (Exception e) {
                 // Xử lý các ngoại lệ không mong muốn khác
-                Utils.getAlert("Đã xảy ra lỗi: ", Alert.AlertType.ERROR).show();
+                MessageBox.getAlert("Đã xảy ra lỗi: ", Alert.AlertType.ERROR).show();
                 
             }
         }
     }
-    
   
-    public void goToAccountPage() throws IOException {
-        String firstname = this.firstnameField.getText();
-        String lastname = this.lastnameField.getText();
-        String email = this.emailField.getText();
+    public void goToAccountPage(ActionEvent e) throws IOException {
+        String firstname = this.firstnameField.getText().trim();
+        String lastname = this.lastnameField.getText().trim();
+        String email = this.emailField.getText().trim();
+        
+        System.out.println(firstname);
         
         String role = "User";
         Date createAt = new Date();
         
-        if (firstname.trim().equals("") || lastname.trim().equals("") || email.trim().equals("")) {
-            Utils.getAlert(AppConfigs.ERROR_NOT_ENOUGH_INFORMATION, Alert.AlertType.WARNING).showAndWait();
-            return ;
+        boolean hasError = false;
+        
+        // check firstname
+        if (firstname.isBlank()) {
+            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.NULL_FIRSTNAME);
+            hasError = true;
+        } else if (firstname.matches(AppConfigs.PATTERN_SPECIAL_CHAR)) {
+            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_CHAR);
+            hasError = true;
+        } else if (firstname.matches(AppConfigs.PATTERN_NUMBER)) {
+            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_PATTERN_NUMBER);
+            hasError = true;
+        } else if (firstname.length() > AppConfigs.LENGHT_OF_FIRSTNAME) {
+            MessageErrorField.ErrorFieldHbox(firstnameField, AppConfigs.ERROR_FIRSTNAME_OUT_OF_LENGHT);
+            hasError = true;
+        } else {
+            MessageErrorField.ErrorFieldHboxOff(firstnameField);
+        }
+
+        // check lastname
+        if (lastname.isBlank()) {
+            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.NULL_LASTNAME);
+            hasError = true;
+        } else if (lastname.matches(AppConfigs.PATTERN_SPECIAL_CHAR)) {
+            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_CHAR);
+            hasError = true;
+        } else if (lastname.matches(AppConfigs.PATTERN_NUMBER)) {
+            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_PATTERN_NUMBER);
+            hasError = true;
+        } else if (lastname.length() > AppConfigs.LENGHT_OF_LASTNAME) {
+            MessageErrorField.ErrorFieldHbox(lastnameField, AppConfigs.ERROR_LASTNAME_OUT_OF_LENGHT);
+            hasError = true;
+        } 
+        else {
+            MessageErrorField.ErrorFieldHboxOff(lastnameField);
         }
         
-        if (!email.contains("@")) {
-            Utils.getAlert(AppConfigs.ERROR_EMAIL_PATTERN, Alert.AlertType.WARNING).showAndWait();
-            return ;
+        // check email
+        if (email.isBlank() || !email.matches(AppConfigs.PATTERN_EMAIL) || email.matches(AppConfigs.PATTERN_SPACE)) {
+            MessageErrorField.ErrorFieldHbox(emailField, AppConfigs.ERROR_EMAIL_PATTERN);
+            hasError = true;
+        } 
+        else {
+            MessageErrorField.ErrorFieldHboxOff(emailField);
         }
         
-        try {
-            // chuyển dữ liệu qua trang account 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("registerUserAccountPage.fxml"));
-            Parent root = loader.load();
+        if (!hasError) {
+            try {
+                // chuyển dữ liệu qua trang account 
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("registerUserAccountPage.fxml"));
+                Parent root = loader.load();
 
-            RegisterUserAccountPageController accountPageController = loader.getController();
+                // chuyển props qua page khác.
+                RegisterUserAccountPageController accountPageController = loader.getController();
+                accountPageController.setUserData(firstname, lastname, email, avatarPath, role, createAt);
 
-            accountPageController.setUserData(firstname, lastname, email, avatarPath, role, createAt);
-
-            // chuyển trang qua account 
-            Stage stage = (Stage) nextPageButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-        } catch (IOException ex){
-            String message = "Lỗi không thể chuyển sang trang kế tiếp !";
-            Utils.getAlert(message, Alert.AlertType.WARNING).show();
+                // chuyển trang qua account 
+                Stage stage = (Stage) nextPageButton.getScene().getWindow();
+                stage.setScene(new Scene(root));
+            } catch (IOException ex) {
+                String message = "Lỗi không thể chuyển sang trang kế tiếp !";
+                MessageBox.getAlert(message, Alert.AlertType.WARNING).show();
+            }
         }
     }
     
@@ -150,7 +245,7 @@ public class RegisterUserInfoPageController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang đăng ký !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 }

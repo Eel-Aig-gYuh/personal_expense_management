@@ -1,0 +1,9 @@
+testCase,username,password,expectedSuccess
+Valid login,user123456123,Valid@1234,true
+Wrong password,validUser_123,wrongpass,false
+Nonexistent user,nonexistent,ValidPass123!,false
+Empty username,,ValidPass123!,false
+Empty password,validUser_123,,false
+SQL injection,admin'--,anything,false
+SQL injection,' OR '1' == '1',anything,false
+XSS attempt,<script>,ValidPass123!,false

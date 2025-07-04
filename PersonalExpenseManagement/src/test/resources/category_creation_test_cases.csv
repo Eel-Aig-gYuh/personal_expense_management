@@ -1,0 +1,7 @@
+testCase,userId,type,name,expectedSuccess
+Valid category,1,Chi,Grocery,true
+Same name different type,1,Thu,Grocery,false
+Same name same type,1,Chi,Grocery,false
+Empty name,1,Chi,,false
+Empty type,1,,Rent,false
+Invalid type,1,rent,Test,false

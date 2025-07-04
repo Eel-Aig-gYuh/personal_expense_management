@@ -65,6 +65,19 @@ public class Category implements Serializable {
         this.type = type;
         this.name = name;
     }
+    
+    public Category(Integer id, Users userId, String type, String name) {
+        this.id = id;
+        this.userId = userId;
+        this.type = type;
+        this.name = name;
+    }
+    
+    public Category(Users userId, String type, String name) {
+        this.userId = userId;
+        this.type = type;
+        this.name = name;
+    }
 
     public Integer getId() {
         return id;
@@ -136,7 +149,7 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ghee.pojo.Category[ id=" + id + " ]";
+        return this.name + " ; Loại: " + this.type;
     }
     
 }

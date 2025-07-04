@@ -7,6 +7,8 @@ package com.ghee.personalexpensemanagement;
 import com.ghee.config.AppConfigs;
 import com.ghee.pojo.Users;
 import com.ghee.services.UserServices;
+import com.ghee.utils.MessageBox;
+import com.ghee.utils.MessageErrorField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -21,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -45,7 +48,7 @@ public class RegisterUserAccountPageController implements Initializable {
     @FXML
     private TextField confirmPasswordField;
 
-    private UserServices s = null;
+    private final UserServices s = new UserServices();
 
     /**
      * Initializes the controller class.
@@ -55,8 +58,64 @@ public class RegisterUserAccountPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.s = new UserServices();
+        this.usernameField.textProperty().addListener((obs, oldValue, newValue) -> {
+            // System.err.println(newValue.length());
+            
+            if (newValue.isBlank()) {
+                MessageErrorField.ErrorFieldHbox(usernameField, AppConfigs.NULL_USERNAME);
+            } 
+            else if (newValue.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
+                // System.err.printf("lenght username: %d \n", newValue.length());
+                MessageErrorField.ErrorFieldHbox(usernameField, AppConfigs.ERROR_LENGHT_OF_USERNAME);
+            }
+            else if (newValue.matches(AppConfigs.PATTERN_SPACE)) {
+                MessageErrorField.ErrorFieldHbox(usernameField, AppConfigs.ERROR_HAS_SPACE_USERNAME);
+            }
+            else {
+                MessageErrorField.ErrorFieldHboxOff(usernameField);
+            }
+        });
+        
+        this.passwordField.textProperty().addListener((obs, oldValue, newValue) -> {
+            System.err.println(this.passwordField.getText());
+            String errorMessage = validatePassword(newValue);
+            if (errorMessage != null) {
+                MessageErrorField.ErrorFieldHbox(passwordField, errorMessage);
+            } else {
+                MessageErrorField.ErrorFieldHboxOff(passwordField);
+            }
+        });
+        
+        
+        this.confirmPasswordField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue.equals(this.passwordField.getText())) {
+                MessageErrorField.ErrorFieldHbox(confirmPasswordField, AppConfigs.ERROR_PASS_AND_CONFIRM);
+            } else {
+                MessageErrorField.ErrorFieldHboxOff(confirmPasswordField);
+            }
+        });
 
+    }
+    
+    /**
+     * 
+     * @param password
+     * @return 
+     */
+    public String validatePassword(String password) {
+        if (password.isBlank()) {
+            return AppConfigs.NULL_PASSWORD;
+        }
+        if (password.matches(AppConfigs.PATTERN_SPACE)) {
+            return AppConfigs.ERROR_HAS_SPACE_USERNAME;
+        }
+        if (password.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
+            return AppConfigs.ERROR_LENGHT_OF_PASSWORD;
+        }
+        if (!password.matches(AppConfigs.PASSWORD_PATTERN)) {
+            return AppConfigs.ERROR_PASS_PATTERN;
+        }
+        return null; // Không có lỗi
     }
 
     public void setUserData(String firstname, String lastname, String email, String avatarUrl, String role, Date createAt) {
@@ -75,45 +134,88 @@ public class RegisterUserAccountPageController implements Initializable {
      * @throws java.lang.Exception
      */
     public void addUserHandler(ActionEvent e) throws Exception {
-        String username = this.usernameField.getText();
-        String password = this.passwordField.getText();
-        String confirmPassword = this.confirmPasswordField.getText();
-
+        String username = this.usernameField.getText().trim();
+        String password = this.passwordField.getText().trim();
+        String confirmPassword = this.confirmPasswordField.getText().trim();
+        
+        boolean hasError = false;
+        
+        if (this.usernameField.getText().trim().equals("")) {
+            MessageErrorField.ErrorFieldHbox(usernameField, AppConfigs.NULL_USERNAME);
+            hasError = true;
+        } 
+        else if (this.usernameField.getText().trim().matches(AppConfigs.PATTERN_SPACE)) {
+            MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_HAS_SPACE_USERNAME);
+            hasError = true;
+        }
+        else {
+            MessageErrorField.ErrorFieldHboxOff(usernameField);
+        }
+        
+        if (this.passwordField.getText().trim().equals("")) {
+            MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.NULL_PASSWORD);
+            hasError = true;
+        } 
+        else if (this.passwordField.getText().trim().matches(AppConfigs.PATTERN_SPACE)) {
+            MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_HAS_SPACE_PASSWORD);
+            hasError = true;
+        }
+        else {
+            MessageErrorField.ErrorFieldHboxOff(passwordField);
+        }
+        
         // check lenght
-        if (username.length() <= AppConfigs.LENGHT_OF_ACCOUNT || password.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
-            Utils.getAlert(AppConfigs.ERROR_LENGHT_OF_ACCOUNT, Alert.AlertType.ERROR).showAndWait();
+        if (username.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
+            MessageErrorField.ErrorFieldHbox(usernameField, AppConfigs.ERROR_LENGHT_OF_USERNAME);
             return;
+        } else {
+            MessageErrorField.ErrorFieldHboxOff(usernameField);
+        }
+        
+        if (password.length() <= AppConfigs.LENGHT_OF_ACCOUNT) {
+            MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_LENGHT_OF_PASSWORD);
+            return;
+        } else {
+            MessageErrorField.ErrorFieldHboxOff(passwordField);
+        }
+        
+        // check password pattern
+        if (!password.matches(AppConfigs.PASSWORD_PATTERN)) {
+            MessageErrorField.ErrorFieldHbox(passwordField, AppConfigs.ERROR_PASS_PATTERN);
+            return;
+        } else {
+            MessageErrorField.ErrorFieldHboxOff(passwordField);
         }
 
         // check password && confirm
         if (!password.equals(confirmPassword)) {
-            Utils.getAlert(AppConfigs.ERROR_PASS_AND_CONFIRM, Alert.AlertType.ERROR).showAndWait();
+            MessageErrorField.ErrorFieldHbox(confirmPasswordField, AppConfigs.ERROR_PASS_AND_CONFIRM);
             return;
+        } else {
+            MessageErrorField.ErrorFieldHboxOff(confirmPasswordField);
         }
-        
-        if (!password.matches(AppConfigs.PASSWORD_PATTERN)) {
-            Utils.getAlert(AppConfigs.ERROR_PASS_PATTERN, Alert.AlertType.ERROR).showAndWait();
-            return;
-        }
-        
-        
 
-        try {
-            Users user = new Users(username, password, firstname, lastname, email, role, createdAt);
+        if (!hasError) {
+            try {
+                Users user = new Users(username, password, firstname, lastname, email, role, createdAt);
 
-            var success = s.registerUser(user);
+                var results = s.registerUser(user);
+                var success = (boolean) results.get("success");
+                var msg = (String) results.get("message");
 
-            if (success) {
-                Utils.getAlert("Đăng ký thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
-                goToLoginPage();
-            } else {
-                Utils.getAlert("Đăng ký không thành công !", Alert.AlertType.WARNING).showAndWait();
+                if (!success) {
+                    System.err.println(msg);
+                    MessageBox.getAlert("Đăng ký không thành công ! " + msg, Alert.AlertType.WARNING).showAndWait();
+                } else {
+                    MessageBox.getAlert("Đăng ký thành công !", Alert.AlertType.CONFIRMATION).showAndWait();
+                    goToLoginPage();
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(RegisterUserAccountPageController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                System.err.println("ERROR: " + ex.getMessage());
             }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(RegisterUserAccountPageController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            System.err.println("ERROR: " + ex.getMessage());
         }
     }
 
@@ -127,7 +229,7 @@ public class RegisterUserAccountPageController implements Initializable {
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang đăng nhập !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 
@@ -135,13 +237,18 @@ public class RegisterUserAccountPageController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("registerUserInfoPage.fxml"));
             Parent root = loader.load();
+            
+            RegisterUserInfoPageController infoPageController = loader.getController();
+            infoPageController.setUserData(firstname, lastname, email, avatarUrl, role, createdAt);
 
+            // System.out.printf("%s - %s \n%s - %s\n%s - %s", firstname, lastname, email, avatarUrl, role, createdAt);
+            
             // chuyển trang qua account 
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException ex) {
             String message = "Không thể chuyển qua trang đăng ký !";
-            Utils.getAlert(message, Alert.AlertType.ERROR).show();
+            MessageBox.getAlert(message, Alert.AlertType.ERROR).show();
         }
     }
 }

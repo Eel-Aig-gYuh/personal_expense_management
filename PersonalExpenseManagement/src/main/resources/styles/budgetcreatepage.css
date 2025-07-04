@@ -1,7 +1,145 @@
 /*
- * Empty Stylesheet file.
- */
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
 
-.mainFxmlClass {
+ 
+    Created on : Mar 24, 2025, 7:18:13 PM
+    Author     : HP
 
+
+}*/
+
+.VBox {
+    -fx-background-color: linear-gradient(to bottom, #000428, #004e92); /* Sleek blue-black gradient background */
+    -fx-padding: 30px;
+    -fx-spacing: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6);
+}
+
+.HBox {
+    -fx-alignment: center;
+    -fx-spacing: 20px;
+    -fx-padding: 20px;
+}
+
+.subject {
+    -fx-font-weight: bold;
+    -fx-font-size: 42px;
+    -fx-alignment: center;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: 'Arial', sans-serif;
+}
+
+.label-description {
+    -fx-font-weight: bold;
+    -fx-min-width: 180px;
+    -fx-text-alignment: right;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 20px;
+}
+
+.label-input {
+    -fx-border-color: #888888;
+    -fx-border-width: 1px;
+    -fx-padding: 8px 12px;
+    -fx-min-width: 220px;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #004e92;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px 15px;
+    -fx-min-width: 280px;
+    -fx-background-radius: 10px;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 20px;
+}
+
+/* Style chung cho form */
+.budget-form {
+    -fx-spacing: 15px;
+    -fx-padding: 20px;
+}
+
+/* Điều chỉnh Combobox */
+.ComboBox {
+    -fx-background-color: white;
+    -fx-border-color: #004e92;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-font-size: 20px;
+    -fx-font-family:   'Arial', sans-serif;
+    -fx-pref-width: 280px; /* Cùng kích thước với label-input */
+    -fx-pref-height: 50px; /* Chiều cao vừa phải */
+    -fx-min-height: 50px;
+}
+
+.ComboBox .list-cell {
+    -fx-text-fill: #333333;
+    -fx-padding: 10px 15px; /* Cùng padding với label-input */
+    -fx-font-size: 20px;
+}
+
+.ComboBox .arrow-button {
+    -fx-background-color: #004e92;
+    -fx-background-radius: 0 10px 10px 0; /* Bo góc phù hợp */
+}
+
+/* Điều chỉnh DatePicker */
+.DatePicker {
+    -fx-background-color: white;
+    -fx-border-color: #004e92;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-font-size: 20px;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-pref-width: 280px; /* Cùng kích thước với label-input */
+    -fx-pref-height: 50px; /* Chiều cao vừa phải */
+    -fx-min-height: 50px;
+}
+
+.DatePicker .text-field {
+    -fx-font-size: 20px;
+    -fx-padding: 10px 15px; /* Cùng padding với label-input */
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px 0 0 10px;
+}
+
+.DatePicker .arrow-button {
+    -fx-background-color: #004e92;
+    -fx-background-radius: 0 10px 10px 0;
+    -fx-padding: 0 15px;
+}
+
+/* Căn chỉnh layout */
+.form-row {
+    -fx-alignment: center-left;
+    -fx-spacing: 15px;
+    -fx-padding: 5px 0;
+}
+
+.form-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: #ffffff;
+    -fx-min-width: 180px;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-weight: bold;
+}
+
+.save-button {
+    -fx-background-color: #004e92;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 25px;
+    -fx-background-radius: 5px;
+}
+
+.cancel-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: whitesmoke;
+    -fx-border-color: #004e92;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px 25px;
 }

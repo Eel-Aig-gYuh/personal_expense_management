@@ -4,6 +4,7 @@
  */
 package com.ghee.services;
 
+import com.ghee.config.AppConfigs;
 import com.ghee.pojo.JdbcUtils;
 import com.ghee.pojo.Users;
 import java.sql.CallableStatement;
@@ -11,6 +12,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
+import java.util.Map;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
@@ -23,9 +26,12 @@ public class UserServices {
      * hàm thêm user vào database.
      *
      * @param user
+     * @return 
      * @throws SQLException
      */
-    public boolean registerUser(Users user) throws SQLException {
+    public Map<String, Object> registerUser(Users user) throws SQLException {
+        Map<String, Object> results = new HashMap<>();
+        
         try (Connection conn = JdbcUtils.getConn()) {
             String procedureCall = "{CALL RegisterUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
             CallableStatement callableStatement = conn.prepareCall(procedureCall);
@@ -53,9 +59,10 @@ public class UserServices {
             boolean success = callableStatement.getBoolean(9);
             String message = callableStatement.getString(10);
 
-            System.out.println(success ? "SUCCESS: ": "FAILURE: " + message);
+            results.put("success", success);
+            results.put("message", message);
             
-            return success;
+            return results;
         }
     }
 
@@ -69,10 +76,6 @@ public class UserServices {
      */
     public Users loginUser(String username, String password) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-            if (username.trim() == null) {
-                return null;
-            }
-
             String procedureCall = "{CALL LoginUser(?)}";
             CallableStatement callableStatement = conn.prepareCall(procedureCall);
 
@@ -84,7 +87,7 @@ public class UserServices {
                 Users user = new Users();
 
                 String hashedPassword = rs.getString("password");
-                System.out.printf("Password trong DB: ", hashedPassword);
+                // System.out.printf("Password trong DB: ", hashedPassword);
 
                 // Kiểm tra mật khẩu
                 if (hashedPassword != null && BCrypt.checkpw(password, hashedPassword)) {
@@ -101,7 +104,7 @@ public class UserServices {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Lỗi kết nối sql.");
+            System.out.println(AppConfigs.ERROR_DATABASE);
         }
         return null;
     }

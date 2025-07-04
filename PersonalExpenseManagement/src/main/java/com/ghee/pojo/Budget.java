@@ -83,6 +83,14 @@ public class Budget implements Serializable {
         this.endDate = endDate;
         this.createdAt = createdAt;
     }
+    
+    public Budget(Integer id, Category categoryId, double target, Date startDate, Date endDate) {
+        this.id = id;
+        this.categoryId = categoryId;
+        this.target = target;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
     public Integer getId() {
         return id;
@@ -170,7 +178,7 @@ public class Budget implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ghee.pojo.Budget[ id=" + id + " ]";
+        return this.categoryId.getName();
     }
     
 }
