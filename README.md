@@ -31,9 +31,9 @@
 1.2. Vào SQL Workbench tạo schema mới và đặt tên là: personalexpensemanagementdb. </br>
 1.3. Sau khi đã tạo schema export database vào trong schema personalexpensemanagementdb vừa mới tạo.
 ### 2. Clone the repository
-    ```bash
+```bash
    git clone https://github.com/Eel-Aig-gYuh/personal_expense_management.git
-   ```
+```
 
 ## HƯỚNG DẪN SỬ DỤNG
 </hr>
