@@ -4,9 +4,9 @@
 - Đây là dự án nhóm thực hiện trong môn kiểm thử, để quản lý chi tiêu cá nhân cho người tiêu dùng. </br>
 - Được phát triển vào khoảng Mar 12, 2025 và Apr 28, 2025. </br>
 <p align="center">
+  <img src="https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Img/loginPage.png" width="250" height="250"/>
   <img src="https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Img/budgetPage.png" width="250" height="250"/>
   <img src="https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Img/homePage.png" width="250" height="250"/>
-  <img src="https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Img/loginPage.png" width="250" height="250"/>
 </p>
 
 </br>
