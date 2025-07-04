@@ -11,9 +11,8 @@
 - [Cách cài đặt](#cách-cài-đặt)
 - [Hướng dẫn sử dụng](#hướng-dẫn-sử-dụng)
 - [Kiểm thử](#kiểm-thử)
-- [Đóng góp](#đóng-góp)
 - [Liên hệ](#liên-hệ)
-- [Giấy phép](#giấy-phép)
+- [TÁC GIẢ](#tác-giả)
 
 ## TÍNH NĂNG
 </hr>
@@ -33,6 +32,9 @@
 
 ## HƯỚNG DẪN SỬ DỤNG
 </hr>
+
+## KIỂM THỬ
+
 
 ## LIÊN HỆ
 <table width="100" align='left'>
