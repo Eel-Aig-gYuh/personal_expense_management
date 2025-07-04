@@ -7,7 +7,7 @@
 ## MỤC LỤC
 - [Giới thiệu](#giới-thiệu)
 - [Tính năng](#tính-năng)
-- [Công nghệ sử dụng](#công-nghệ-sử-dụng)
+- [Kiến trúc hệ thống](#kiến-trúc-hệ-thống)
 - [Cách cài đặt](#cách-cài-đặt)
 - [Hướng dẫn sử dụng](#hướng-dẫn-sử-dụng)
 - [Kiểm thử](#kiểm-thử)
@@ -18,16 +18,18 @@
 ## TÍNH NĂNG
 </hr>
 
-## CÔNG NGHỆ SỬ DỤNG
-- Java/JavaFX. </br>
-- MySQL Workbench.
+## KIẾN TRÚC HỆ THỐNG 
+- Back-end: Java/MySQL. </br>
+- Front-end: JavaFX. </br>
+- Task Management: Git/Github.
 
 ## CÁCH CÀI ĐẶT
-</hr>
-### 1. Chuẩn bị database </br>
-1.1. Tải database bằng cách down file: ./Database/personalexpensemanagementdb.sql </br>
+
+### 1. Chuẩn bị cơ sở dữ liệu </br>
+1.1. Tải database bằng cách down file: **[this file](https://github.com/Eel-Aig-gYuh/personal_expense_management/tree/main/Database)** </br>
 1.2. Vào SQL Workbench tạo schema mới và đặt tên là: personalexpensemanagementdb. </br>
 1.3. Sau khi đã tạo schema export database vào trong schema personalexpensemanagementdb vừa mới tạo.
+### 2.  </br>
 
 ## HƯỚNG DẪN SỬ DỤNG
 </hr>
