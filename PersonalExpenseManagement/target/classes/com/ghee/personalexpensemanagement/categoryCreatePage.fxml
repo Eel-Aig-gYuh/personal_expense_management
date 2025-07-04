@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="651.0" styleClass="VBox" stylesheets="@../../../styles/categorycreatepage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.CategoryCreatePageController">
+   <children>
+      <HBox prefHeight="36.0" prefWidth="600.0" styleClass="hbox-title">
+         <children>
+            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#goBack" text="Hủy" />
+            <Label styleClass="subject" text="Tạo danh mục mới" textFill="WHITE">
+               <font>
+                  <Font size="25.0" />
+               </font></Label>
+         </children>
+      </HBox>
+      <HBox prefHeight="43.0" prefWidth="600.0" styleClass="HBox">
+         <children>
+            <Label styleClass="label-description" text="Tên nhóm">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets></Label>
+            <TextField fx:id="txtName" promptText="Tên nhóm" styleClass="label-input" />
+         </children>
+      </HBox>
+      <HBox prefHeight="56.0" prefWidth="600.0" styleClass="HBox">
+         <children>
+            <Label text="+/-" textFill="WHITE">
+               <font>
+                  <Font size="25.0" />
+               </font></Label>
+            <RadioButton fx:id="rdoThu" mnemonicParsing="false" text="Thu" textFill="WHITE">
+               <toggleGroup>
+                  <ToggleGroup fx:id="type" />
+               </toggleGroup>
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="rdoChi" mnemonicParsing="false" text="Chi" textFill="WHITE" toggleGroup="$type">
+               <font>
+                  <Font size="25.0" />
+               </font></RadioButton>
+         </children>
+      </HBox>
+      <Button fx:id="btnSave" mnemonicParsing="false" onAction="#addCategory" prefHeight="327.0" prefWidth="616.0" text="Lưu" />
+   </children>
+</VBox>

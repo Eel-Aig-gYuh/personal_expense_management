@@ -45,7 +45,7 @@ CREATE TABLE `budget` (
 
 LOCK TABLES `budget` WRITE;
 /*!40000 ALTER TABLE `budget` DISABLE KEYS */;
-INSERT INTO `budget` VALUES (1,2,2,800000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(2,2,3,80000001,100000000,'2025-04-27','2025-04-27','2025-04-27'),(3,1,1,10000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(4,1,1,0,100000000,'2025-04-29','2025-05-01','2025-04-27');
+INSERT INTO `budget` VALUES (1,2,2,800000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(2,2,3,80000001,100000000,'2025-04-27','2025-04-27','2025-04-27'),(3,1,1,910000,1000000,'2025-04-27','2025-04-27','2025-04-27'),(4,1,1,0,100000000,'2025-04-29','2025-05-01','2025-04-27');
 /*!40000 ALTER TABLE `budget` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,7 +100,7 @@ CREATE TABLE `transaction` (
   CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `transaction_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `transaction_ibfk_3` FOREIGN KEY (`wallet_id`) REFERENCES `wallet` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +109,7 @@ CREATE TABLE `transaction` (
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-INSERT INTO `transaction` VALUES (2,2,2,2,800000,'2025-04-27','','2025-04-27'),(3,2,3,2,80000001,'2025-04-27','','2025-04-27'),(6,1,1,1,10000,'2025-04-27','','2025-04-27');
+INSERT INTO `transaction` VALUES (2,2,2,2,800000,'2025-04-27','','2025-04-27'),(3,2,3,2,80000001,'2025-04-27','','2025-04-27'),(6,1,1,1,10000,'2025-04-27','','2025-04-27'),(22,1,1,1,900000,'2025-04-27','','2025-04-27');
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,7 +133,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,7 +142,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'testuser1','$2a$10$.DaLkZOBn9qgG38iiLTfcOC8LeOjBiUH48ThoMBfaBLvKag3lnnI6','Huy','Le Gia',NULL,'admin@gmail.com','User','2025-04-27'),(2,'testuser2','$2a$10$5f4MXj0CC4c10ngEvh3aWONu4HDTo3kUvIEFqwd5tamYFnPf0c8fS','Hiển','Trần Thế',NULL,'hien123@gmail.com','User','2025-04-27');
+INSERT INTO `users` VALUES (1,'testuser1','$2a$10$.DaLkZOBn9qgG38iiLTfcOC8LeOjBiUH48ThoMBfaBLvKag3lnnI6','Huy','Le Gia',NULL,'admin@gmail.com','User','2025-04-27'),(2,'testuser2','$2a$10$5f4MXj0CC4c10ngEvh3aWONu4HDTo3kUvIEFqwd5tamYFnPf0c8fS','Hiển','Trần Thế',NULL,'hien123@gmail.com','User','2025-04-27'),(3,'testuser3','$2a$10$TgWSvS2feU4ttkkXCVpc4uFD2AZhT1yEHxUs9FiKD8NMMpO0jRpR2','Lam','Le',NULL,'lam@gmail.com','User','2025-04-27');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +168,7 @@ CREATE TABLE `wallet` (
 
 LOCK TABLES `wallet` WRITE;
 /*!40000 ALTER TABLE `wallet` DISABLE KEYS */;
-INSERT INTO `wallet` VALUES (1,-10000,'2025-04-27'),(2,-80800001,'2025-04-27');
+INSERT INTO `wallet` VALUES (1,-910000,'2025-04-27'),(2,-80800001,'2025-04-27'),(3,0,'2025-04-27');
 /*!40000 ALTER TABLE `wallet` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -449,6 +449,7 @@ BEGIN
 					
 					-- Kiểm tra xem tổng số tiền có vượt quá 80% ngân sách hay không
 					IF @budget_target > 0 AND (@total_amount / @budget_target) > 0.8 THEN
+						SET p_success = NULL;
 						SET p_message = CONCAT('Cảnh báo: Giao dịch vượt quá 80% ngân sách ', @p_name);
 					ELSE
 						SET p_message = "";
@@ -1061,6 +1062,7 @@ BEGIN
 				WHERE user_id = p_user_id
 				AND category_id = p_category_id
 				AND p_transaction_date BETWEEN start_date AND end_date
+                ORDER BY target ASC
 				LIMIT 1;
  
 				-- Nếu tồn tại ngân sách
@@ -1076,6 +1078,7 @@ BEGIN
  
 					-- Kiểm tra xem tổng số tiền có vượt quá 80% ngân sách hay không
 					IF @budget_target > 0 AND (@total_amount / @budget_target) > 0.8 THEN
+						SET p_success = NULL;
 						SET p_message = CONCAT('Cảnh báo: Giao dịch vượt quá 80% ngân sách ', @p_name);
 					ELSE
 						SET p_message = "";
@@ -1186,4 +1189,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-27 20:59:05
+-- Dump completed on 2025-04-27 22:24:39

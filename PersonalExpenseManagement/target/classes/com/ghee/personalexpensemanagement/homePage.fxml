@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" maxHeight="850.0" maxWidth="800.0" minHeight="603.0" minWidth="592.0" prefHeight="701.0" prefWidth="800.0" scaleShape="false" styleClass="VBox" stylesheets="@../../../styles/homepage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghee.personalexpensemanagement.HomePageController">
+   <children>
+      <HBox prefHeight="43.0" prefWidth="600.0" styleClass="HBox">
+         <children>
+            <VBox prefHeight="108.0" prefWidth="433.0">
+               <children>
+                  <Label fx:id="welcomeLabel" text="Chào mừng" textFill="WHITE">
+                     <font>
+                        <Font size="25.0" />
+                     </font></Label>
+                  <Label fx:id="soDuLabel" text="0.00" textFill="WHITE">
+                     <font>
+                        <Font size="25.0" />
+                     </font></Label>
+                  <Label text="Tổng số dư" textFill="WHITE">
+                     <font>
+                        <Font size="25.0" />
+                     </font></Label>
+               </children>
+            </VBox>
+            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#goToLogin" prefHeight="48.0" prefWidth="220.0" styleClass="button_first" text="Đăng nhập" />
+            <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#logout" prefHeight="48.0" prefWidth="208.0" styleClass="button_secondary" text="Đăng xuất" />
+         </children>
+      </HBox>
+      <ScrollPane prefHeight="310.0" prefWidth="746.0" styleClass="scroll-container">
+         <content>
+            <VBox prefHeight="287.0" prefWidth="702.0">
+               <children>
+                  <HBox prefHeight="294.0" prefWidth="702.0">
+                     <children>
+                        <TabPane fx:id="tabPaneReport" prefHeight="218.0" prefWidth="526.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab fx:id="tabSpendingByBudget" text="Báo cáo ngân sách">
+                              <content>
+                                <AnchorPane fx:id="apSpendingByBudget" minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="497.0">
+                                       <children>
+                                          <Label fx:id="lblNoData" styleClass="chart-title" text="Label" />
+                                          <BarChart fx:id="barChart" layoutX="-1.0" layoutY="-2.0" prefHeight="138.0" prefWidth="500.0" styleClass="chart">
+                                            <xAxis>
+                                              <CategoryAxis side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis side="LEFT" />
+                                            </yAxis>
+                                          </BarChart>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                              <Tab fx:id="tabSpendingByDay" text="Báo cáo chi tiêu">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label fx:id="lblNoData1" layoutX="10.0" layoutY="10.0" styleClass="chart-title" text="Label" />
+                                          <LineChart fx:id="lineChartSpent" layoutX="-2.0" prefHeight="148.0" prefWidth="500.0">
+                                            <xAxis>
+                                              <CategoryAxis side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis side="LEFT" />
+                                            </yAxis>
+                                          </LineChart>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </Tab>
+                              <Tab fx:id="tabSpendingByComparison" text="So sánh chi tiêu">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label fx:id="lblNoData2" text="Label" />
+                                          <BarChart fx:id="barChartComparison" prefHeight="148.0" prefWidth="497.0">
+                                            <xAxis>
+                                              <CategoryAxis side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis side="LEFT" />
+                                            </yAxis>
+                                          </BarChart>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                        <ComboBox fx:id="cbTimeRange" prefHeight="27.0" prefWidth="146.0" styleClass="combo-box" />
+                     </children></HBox>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+      <HBox prefHeight="46.0" prefWidth="600.0" styleClass="HBox">
+         <children>
+            <Button fx:id="btnHomePage" mnemonicParsing="false" styleClass="control-button" text="Tổng quan" />
+            <Button fx:id="btnTransactionPage" mnemonicParsing="false" onAction="#goToTransactionHomePage" styleClass="control-button" text="Sổ giao dịch" />
+            <Button fx:id="btnAddTransaction" mnemonicParsing="false" onAction="#goToCreateTransactionPage" styleClass="control-button" text="+" />
+            <Button fx:id="btnBudgetPage" mnemonicParsing="false" onAction="#goToBudgetHomePage" styleClass="control-button" text="Ngân sách" />
+            <Button mnemonicParsing="false" styleClass="control-button" text="Tài khoản" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

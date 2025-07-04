@@ -294,12 +294,12 @@ public class HomePageController implements Initializable {
             
             if (transactionByDay.isEmpty() || transactionByDay.values().stream().allMatch(amount -> amount == 0.0)) {
                 this.lineChartSpent.getData().clear();
-                this.lineChartSpent.setVisible(true);
+                this.lineChartSpent.setVisible(false);
                 this.lblNoData1.setVisible(true);
                 this.lblNoData1.setText(AppConfigs.NO_DATA_TRANSACTION);
             }
             
-            this.tabSpendingByDay.setClosable(false);
+            this.lineChartSpent.setVisible(true);
             this.lblNoData1.setVisible(false);
             
             drawLineChartSpentByDay(transactionByDay, startDate, endDate);

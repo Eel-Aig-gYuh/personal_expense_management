@@ -11,43 +11,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 .VBox {
     -fx-background-color: linear-gradient(to bottom, #000428, #004e92); /* Sleek blue-black gradient background */
-    -fx-padding: 0px 20px 0px 20px;
-    -fx-spacing: 20px;
+    -fx-alignment: center;
+    -fx-padding: 30px;
+    -fx-spacing: 25px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0, 0, 6);
 }
 
 .HBox {
     -fx-alignment: center;
     -fx-spacing: 20px;
-    -fx-padding: 0px 0px 0px 0px;
+    -fx-padding: 20px;
 }
 
 .hbox-title {
-    -fx-padding: 10px 20px 20px 0px;
-    -fx-spacing: 50px;
+    -fx-spacing: 100px;
 }
 
-.hbox-title-1 {
-    -fx-background-color: rgba(255, 255, 255, 0.2);
-    -fx-text-fill: white;
-    -fx-font-size: 20px;
-    -fx-padding: 10px 20px;
-    -fx-background-radius: 8px;
-    -fx-border-radius: 8px;
-    -fx-border-width: 0;
-    -fx-alignment: center;
-}
-
-.button-huy{
-    -fx-spacing: 10;
-    -fx-background-color: transparent; /* Màu nền trong suốt */
-    -fx-text-fill: white;
-    -fx-padding: 10;
-    -fx-alignment: center;
-}
 .subject {
     -fx-font-weight: bold;
-    -fx-font-size: 42px;
+    -fx-font-size: 30px;
     -fx-alignment: center;
     -fx-text-fill: #ffffff;
     -fx-font-family:   'Arial', sans-serif;
@@ -77,12 +59,40 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-size: 20px;
 }
 
-.button_first {
+.ComboBox {
+    -fx-background-color: #ffffff;
+    -fx-pref-height: 100px; /* Độ cao */
+    -fx-font-size: 16px;
+    -fx-border-color: #004e92;
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-padding: 5px;
+    -fx-font-size: 18px;
+    -fx-font-family: 'Arial', sans-serif;
+}
+
+.DatePicker {
+    -fx-background-color: #ffffff;
+    -fx-pref-height: 50px; /* Độ cao */
+    -fx-font-size: 16px;
+    -fx-border-color: #004e92;
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-font-size: 18px;
+    -fx-font-family: 'Arial', sans-serif;
+}
+
+.ComboBox:hover, .DatePicker:hover {
+    -fx-border-color: #3a75c4; 
+}
+
+
+
+.button {
     -fx-background-color: #004e92;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-padding: 12px 25px;
-    -fx-spacing: 10px;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-font-family:   'Arial', sans-serif;
@@ -95,7 +105,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-padding: 12px 25px;
-    -fx-spacing: 10px;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-font-family:   'Arial', sans-serif;
@@ -103,10 +112,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-cursor: hand;
 }
 .button_secondary:hover {
-    -fx-background-color: #005f73; /* Màu xanh đậm hơn khi hover */
+    -fx-background-color: #005f73; /* Màu xanh đậm hơn khi hover */ 
 }
 
-.button_first:hover {
+.button:hover {
     -fx-background-color: #000428;
 }
 
@@ -114,26 +123,4 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: #ffffff;
     -fx-underline: true;
     -fx-cursor: hand;
-}
-.ScrollPane{
-    -fx-background-color: #0099cc;
-    -fx-background-radius: 10;
-}
-.TextArea{
-    -fx-min-height: 120px;
-}
-
-.ComboBox {
-    -fx-border-color: #888888;
-    -fx-border-width: 1px;
-    -fx-padding: 8px 12px;
-    -fx-min-width: 220px;
-    -fx-background-color: #ffffff;
-    -fx-border-color: #004e92;
-    -fx-border-radius: 10px;
-    -fx-padding: 10px 15px;
-    -fx-min-width: 280px;
-    -fx-background-radius: 10px;
-    -fx-font-family:   'Arial', sans-serif;
-    -fx-font-size: 17px;
 }
