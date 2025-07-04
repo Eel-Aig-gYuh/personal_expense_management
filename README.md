@@ -5,8 +5,8 @@
 - Được phát triển vào khoảng Mar 12, 2025 và Apr 28, 2025. </br>
 <p align="center">
   <img src="https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Img/budgetPage.png" width="250"/>
-  <img src="assets/slide2.png" width="250"/>
-  <img src="assets/slide3.png" width="250"/>
+  <img src="https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Img/homePage.png" width="250"/>
+  <img src="https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Img/loginPage.png" width="250"/>
 </p>
 
 </br>
