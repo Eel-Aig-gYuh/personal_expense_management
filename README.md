@@ -35,7 +35,27 @@
 </hr>
 
 ## LIÊN HỆ
-</hr>
+<table width="100" align='center'>
+    <tr>
+        <td align='center' width="60">
+            <a href="https://www.facebook.com/nhois031/"><img src="https://th.bing.com/th/id/OIP.K61w8tCEKaKN--vUwjeSSwHaHa?w=201&h=201&c=7&r=0&o=5&dpr=1.3&pid=1.7" width="60"></a>
+        </td>
+        <td align='center' width="60">
+            <a href="https://www.instagram.com/nhois031/"><img src="https://cdn-icons-png.flaticon.com/512/1409/1409946.png"></a>
+        </td>
+        <td align='center' width="60">
+            <a href="https://www.linkedin.com/in/huy-l%C3%AA-0871a92b8/"><img src="https://cdn-icons-png.flaticon.com/512/1409/1409945.png" width="60"></a>
+        </td>
+    </tr> 
+</table>
 
 ## TÁC GIẢ
-</hr>
+- **[Lê Gia Huy](https://github.com/Eel-Aig-gYuh)**  
+  *Role*: Quản lý tiến độ, hoàn thành và phát triển sản phẩm.
+
+- **[hoaqhue](https://github.com/hoaqhue)**  
+  *Role*: unit test.
+
+- **[NguyenThiMai2k4](https://github.com/NguyenThiMai2k4)** 
+  *Role*: tester.
+  
