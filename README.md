@@ -19,8 +19,7 @@
 </hr>
 
 ## CÔNG NGHỆ SỬ DỤNG
-</hr>
-- Java/JavaFX.
+- Java/JavaFX. </br>
 - MySQL Workbench.
 
 ## CÁCH CÀI ĐẶT
