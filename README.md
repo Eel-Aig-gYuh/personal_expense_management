@@ -20,6 +20,7 @@
 - Bảo cáo tài chính.
 
 ## KIẾN TRÚC HỆ THỐNG 
+- Tổng quan: theo kiến trúc MVC.
 - Back-end: Java/MySQL. </br>
 - Front-end: JavaFX. </br>
 - Task Management: Git/Github.
@@ -29,16 +30,36 @@
 ### 1. Chuẩn bị cơ sở dữ liệu </br>
 1.1. Tải database bằng cách down file: **[this file](https://github.com/Eel-Aig-gYuh/personal_expense_management/tree/main/Database)** </br>
 1.2. Vào SQL Workbench tạo schema mới và đặt tên là: personalexpensemanagementdb. </br>
-1.3. Sau khi đã tạo schema export database vào trong schema **[personalexpensemanagementdb]** vừa mới tạo.
+1.3. Sau khi đã tạo schema export database vào trong schema: **personalexpensemanagementdb** vừa mới tạo.
 ### 2. Clone the repository
 ```bash
    git clone https://github.com/Eel-Aig-gYuh/personal_expense_management.git
 ```
 
 ## HƯỚNG DẪN SỬ DỤNG
-</hr>
+- Chắc chắn bạn đã cài đặt Netbean và JDK phù hợp (Dự án hiện tại sử dụng Apache Netbeans IDE 25 và JDK 23).
+```
+PersonalExpenseManagement/
+├── src/                   
+│   ├── main/java/                               # sản phẩm
+│   │   ├── com.ghee.config                      # cấu hình
+│   │   ├── com.ghee.formatter                   # định dạng (ngày/tháng/năm, tiền VND, ...)
+│   │   ├── com.ghee.personalexpensemanagement   # tầng controller
+│   │   ├── com.ghee.pojo                        # đại diện cho table dưới csdl
+│   │   ├── com.ghee.service                     # tầng service
+│   │   ├── com.ghee.utils 
+```
+- Sau khi clone repository trỏ tới thư mục và **Run**.
 
 ## KIỂM THỬ
+- Chi tiết kiểm thử trong file: **[this file]()**
+```
+PersonalExpenseManagement/
+├── src/                   
+│   ├── test/                        
+│   │   ├── java/           # test các chức năng.
+│   │   ├── resources/      # test case.
+```
 
 
 ## LIÊN HỆ
