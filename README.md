@@ -6,8 +6,7 @@
 - Được phát triển vào khoảng Mar 12, 2025 và Apr 28, 2025. </br>
 
 ## I. Khởi động dự án
-</hr></br>
-
+</hr>
 ### 1. Chuẩn bị database </br>
 1.1. Tải database bằng cách down file: ./Database/personalexpensemanagementdb.sql </br>
 1.2. Vào SQL Workbench tạo schema mới và đặt tên là: personalexpensemanagementdb. </br>
