@@ -35,7 +35,7 @@
 </hr>
 
 ## LIÊN HỆ
-<table width="100" align='center'>
+<table width="100" align='left'>
     <tr>
         <td align='center' width="60">
             <a href="https://www.facebook.com/nhois031/"><img src="https://th.bing.com/th/id/OIP.K61w8tCEKaKN--vUwjeSSwHaHa?w=201&h=201&c=7&r=0&o=5&dpr=1.3&pid=1.7" width="60"></a>
