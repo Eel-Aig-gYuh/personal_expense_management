@@ -52,7 +52,7 @@ PersonalExpenseManagement/
 - Sau khi clone repository trỏ tới thư mục và **Run**.
 
 ## KIỂM THỬ
-- Chi tiết kiểm thử trong file: **[this file]()**
+- Chi tiết kiểm thử trong file: **[this file](https://github.com/Eel-Aig-gYuh/personal_expense_management/blob/main/Others/Nhom4_QuanLyChiTieu.xlsx)**
 ```
 PersonalExpenseManagement/
 ├── src/                   
