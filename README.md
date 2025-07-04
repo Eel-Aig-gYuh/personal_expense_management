@@ -1,7 +1,6 @@
 <h1>ỨNG DỤNG QUẢN LÝ CHI TIÊU CÁ NHÂN</h1>
 
 ## GIỚI THIỆU
-</hr></br>
 - Đây là dự án nhóm thực hiện trong môn kiểm thử, để quản lý chi tiêu cá nhân cho người tiêu dùng. </br>
 - Được phát triển vào khoảng Mar 12, 2025 và Apr 28, 2025. </br>
 
